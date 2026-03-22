@@ -1,0 +1,17 @@
+- generic [ref=e3]:
+  - paragraph [ref=e12]: Étape 2 sur 5
+  - generic [ref=e30]:
+    - img [ref=e32]
+    - generic [ref=e34]:
+      - heading "Quand est-ce que Amara a pointé le bout de son nez ?" [level=1] [ref=e35]
+      - paragraph [ref=e36]: Et est-ce un petit garçon ou une petite fille ?
+    - textbox [ref=e37]
+    - generic [ref=e38]:
+      - button "👦 Garçon" [ref=e39]
+      - button "👧 Fille" [ref=e40]
+  - generic [ref=e24]:
+    - button [ref=e41]:
+      - img [ref=e42]
+    - button "Continuer" [disabled] [ref=e25]:
+      - text: Continuer
+      - img [ref=e26]

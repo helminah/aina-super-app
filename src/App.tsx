@@ -11,9 +11,9 @@ import { RecipeDetailPage } from '@/pages/RecipeDetailPage';
 import { DoctorPage } from '@/pages/DoctorPage';
 
 export default function App() {
-  const { profile } = useBaby();
+  const { profile, babies } = useBaby();
 
-  if (!profile) {
+  if (babies.length === 0 || !profile) {
     return <OnboardingFlow />;
   }
 

@@ -1,9 +1,17 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import type { ChildProfile, WeightEntry, HeightEntry, HeadCircEntry, VaccineRecord, DailyLogEntry, MilestoneRecord, MealPlan } from '@/types/child';
 import { safeGet, safeSet } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
 
 interface BabyContextType {
+  // Multi-baby management
+  babies: ChildProfile[];
+  activeBabyId: string | null;
+  switchBaby: (id: string) => void;
+  addBaby: (p: ChildProfile) => void;
+  removeBaby: (id: string) => void;
+
+  // Active baby profile
   profile: ChildProfile | null;
   setProfile: (p: ChildProfile) => void;
   updateProfile: (updates: Partial<ChildProfile>) => void;
@@ -46,37 +54,138 @@ interface BabyContextType {
 
 const BabyContext = createContext<BabyContextType | null>(null);
 
+// Helper: per-baby storage keys
+function bk(babyId: string, key: string) {
+  return `aina-${babyId}-${key}`;
+}
+
 export function BabyProvider({ children }: { children: ReactNode }) {
-  const [profile, setProfileState] = useState<ChildProfile | null>(() => safeGet('aina-profile', null));
-  const [weightEntries, setWeightEntries] = useState<WeightEntry[]>(() => safeGet('aina-weights', []));
-  const [heightEntries, setHeightEntries] = useState<HeightEntry[]>(() => safeGet('aina-heights', []));
-  const [hcEntries, setHcEntries] = useState<HeadCircEntry[]>(() => safeGet('aina-hc', []));
-  const [vaccineRecords, setVaccineRecords] = useState<VaccineRecord[]>(() => safeGet('aina-vaccines', []));
-  const [dailyLogs, setDailyLogs] = useState<DailyLogEntry[]>(() => safeGet('aina-logs', []));
-  const [milestoneRecords, setMilestoneRecords] = useState<MilestoneRecord[]>(() => safeGet('aina-milestones', []));
-  const [mealPlan, setMealPlan] = useState<MealPlan>(() => safeGet('aina-mealplan', {}));
-  const [favorites, setFavorites] = useState<number[]>(() => safeGet('aina-favorites', []));
-  const [shoppingChecked, setShoppingChecked] = useState<string[]>(() => safeGet('aina-shopping-checked', []));
+  // Global state: list of babies and active baby ID
+  const [babies, setBabies] = useState<ChildProfile[]>(() => {
+    // Migration: if old single-profile exists, convert it
+    const oldProfile = safeGet<ChildProfile | null>('aina-profile', null);
+    const existing = safeGet<ChildProfile[]>('aina-babies', []);
+    if (existing.length > 0) return existing;
+    if (oldProfile) {
+      // Migrate old data to new per-baby keys
+      const id = oldProfile.id;
+      const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'mealplan', 'favorites', 'shopping-checked'];
+      keys.forEach(k => {
+        const oldVal = safeGet(`aina-${k}`, null);
+        if (oldVal !== null) {
+          safeSet(bk(id, k), oldVal);
+          localStorage.removeItem(`aina-${k}`);
+        }
+      });
+      localStorage.removeItem('aina-profile');
+      return [oldProfile];
+    }
+    return [];
+  });
 
-  // Persist everything on change
-  useEffect(() => { safeSet('aina-profile', profile); }, [profile]);
-  useEffect(() => { safeSet('aina-weights', weightEntries); }, [weightEntries]);
-  useEffect(() => { safeSet('aina-heights', heightEntries); }, [heightEntries]);
-  useEffect(() => { safeSet('aina-hc', hcEntries); }, [hcEntries]);
-  useEffect(() => { safeSet('aina-vaccines', vaccineRecords); }, [vaccineRecords]);
-  useEffect(() => { safeSet('aina-logs', dailyLogs); }, [dailyLogs]);
-  useEffect(() => { safeSet('aina-milestones', milestoneRecords); }, [milestoneRecords]);
-  useEffect(() => { safeSet('aina-mealplan', mealPlan); }, [mealPlan]);
-  useEffect(() => { safeSet('aina-favorites', favorites); }, [favorites]);
-  useEffect(() => { safeSet('aina-shopping-checked', shoppingChecked); }, [shoppingChecked]);
+  const [activeBabyId, setActiveBabyId] = useState<string | null>(() => {
+    const saved = safeGet<string | null>('aina-active-baby', null);
+    if (saved) return saved;
+    const oldProfile = safeGet<ChildProfile | null>('aina-profile', null);
+    const existing = safeGet<ChildProfile[]>('aina-babies', []);
+    if (existing.length > 0) return existing[0].id;
+    if (oldProfile) return oldProfile.id;
+    return null;
+  });
 
-  const setProfile = (p: ChildProfile) => setProfileState(p);
-  const updateProfile = (updates: Partial<ChildProfile>) => {
-    setProfileState(prev => prev ? { ...prev, ...updates } : null);
+  // Derive active profile
+  const profile = babies.find(b => b.id === activeBabyId) || null;
+  const bid = activeBabyId || '__none__';
+
+  // Per-baby data
+  const [weightEntries, setWeightEntries] = useState<WeightEntry[]>(() => safeGet(bk(bid, 'weights'), []));
+  const [heightEntries, setHeightEntries] = useState<HeightEntry[]>(() => safeGet(bk(bid, 'heights'), []));
+  const [hcEntries, setHcEntries] = useState<HeadCircEntry[]>(() => safeGet(bk(bid, 'hc'), []));
+  const [vaccineRecords, setVaccineRecords] = useState<VaccineRecord[]>(() => safeGet(bk(bid, 'vaccines'), []));
+  const [dailyLogs, setDailyLogs] = useState<DailyLogEntry[]>(() => safeGet(bk(bid, 'logs'), []));
+  const [milestoneRecords, setMilestoneRecords] = useState<MilestoneRecord[]>(() => safeGet(bk(bid, 'milestones'), []));
+  const [mealPlan, setMealPlan] = useState<MealPlan>(() => safeGet(bk(bid, 'mealplan'), {}));
+  const [favorites, setFavorites] = useState<number[]>(() => safeGet(bk(bid, 'favorites'), []));
+  const [shoppingChecked, setShoppingChecked] = useState<string[]>(() => safeGet(bk(bid, 'shopping-checked'), []));
+
+  // Persist global state
+  useEffect(() => { safeSet('aina-babies', babies); }, [babies]);
+  useEffect(() => { safeSet('aina-active-baby', activeBabyId); }, [activeBabyId]);
+
+  // Persist per-baby data
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'weights'), weightEntries); }, [weightEntries, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'heights'), heightEntries); }, [heightEntries, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'hc'), hcEntries); }, [hcEntries, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'vaccines'), vaccineRecords); }, [vaccineRecords, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'logs'), dailyLogs); }, [dailyLogs, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'milestones'), milestoneRecords); }, [milestoneRecords, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'mealplan'), mealPlan); }, [mealPlan, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'favorites'), favorites); }, [favorites, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'shopping-checked'), shoppingChecked); }, [shoppingChecked, activeBabyId]);
+
+  // Load baby data when switching
+  const loadBabyData = useCallback((id: string) => {
+    setWeightEntries(safeGet(bk(id, 'weights'), []));
+    setHeightEntries(safeGet(bk(id, 'heights'), []));
+    setHcEntries(safeGet(bk(id, 'hc'), []));
+    setVaccineRecords(safeGet(bk(id, 'vaccines'), []));
+    setDailyLogs(safeGet(bk(id, 'logs'), []));
+    setMilestoneRecords(safeGet(bk(id, 'milestones'), []));
+    setMealPlan(safeGet(bk(id, 'mealplan'), {}));
+    setFavorites(safeGet(bk(id, 'favorites'), []));
+    setShoppingChecked(safeGet(bk(id, 'shopping-checked'), []));
+  }, []);
+
+  const switchBaby = (id: string) => {
+    if (id === activeBabyId) return;
+    setActiveBabyId(id);
+    loadBabyData(id);
   };
+
+  const addBaby = (p: ChildProfile) => {
+    setBabies(prev => {
+      // Prevent duplicates
+      if (prev.some(b => b.id === p.id)) return prev;
+      return [...prev, p];
+    });
+    setActiveBabyId(p.id);
+    loadBabyData(p.id);
+  };
+
+  const removeBaby = (id: string) => {
+    // Clean up per-baby storage
+    const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'mealplan', 'favorites', 'shopping-checked'];
+    keys.forEach(k => localStorage.removeItem(bk(id, k)));
+
+    setBabies(prev => {
+      const next = prev.filter(b => b.id !== id);
+      if (activeBabyId === id) {
+        const newActive = next.length > 0 ? next[0].id : null;
+        setActiveBabyId(newActive);
+        if (newActive) loadBabyData(newActive);
+      }
+      return next;
+    });
+  };
+
+  // Legacy: setProfile used during onboarding to create first baby
+  const setProfile = (p: ChildProfile) => {
+    const exists = babies.find(b => b.id === p.id);
+    if (exists) {
+      setBabies(prev => prev.map(b => b.id === p.id ? p : b));
+    } else {
+      addBaby(p);
+    }
+  };
+
+  const updateProfile = (updates: Partial<ChildProfile>) => {
+    if (!activeBabyId) return;
+    setBabies(prev => prev.map(b => b.id === activeBabyId ? { ...b, ...updates } : b));
+  };
+
   const clearProfile = () => {
-    setProfileState(null);
-    localStorage.clear();
+    if (!activeBabyId) return;
+    removeBaby(activeBabyId);
   };
 
   const addWeight = (entry: WeightEntry) => setWeightEntries(prev => [...prev, entry].sort((a, b) => a.date.localeCompare(b.date)));
@@ -131,6 +240,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
 
   return (
     <BabyContext.Provider value={{
+      babies, activeBabyId, switchBaby, addBaby, removeBaby,
       profile, setProfile, updateProfile, clearProfile,
       weightEntries, addWeight, removeWeight,
       heightEntries, addHeight, removeHeight,

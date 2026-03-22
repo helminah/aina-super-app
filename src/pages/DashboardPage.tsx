@@ -19,9 +19,10 @@ import {
 } from 'lucide-react';
 
 export function DashboardPage() {
-  const { profile, isVaccineDone, weightEntries, dailyLogs, getLogsForDate } = useBaby();
+  const { profile, babies, activeBabyId, switchBaby, isVaccineDone, weightEntries, dailyLogs, getLogsForDate } = useBaby();
   const navigate = useNavigate();
   const [showEmergency, setShowEmergency] = useState(false);
+  const [showBabyMenu, setShowBabyMenu] = useState(false);
 
   if (!profile) return null;
 
@@ -110,9 +111,38 @@ export function DashboardPage() {
         {/* ── Editorial Header ── */}
         <div className="mb-6">
           <p className="text-sm text-bark-500 font-body">Bonjour, maman de</p>
-          <h1 className="font-heading text-3xl font-bold text-bark-800 tracking-tight">
-            {profile.name} <span className="inline-block">{'\ud83c\udf3f'}</span>
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="font-heading text-3xl font-bold text-bark-800 tracking-tight">
+              {profile.name} <span className="inline-block">{'\ud83c\udf3f'}</span>
+            </h1>
+            {babies.length > 1 && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowBabyMenu(!showBabyMenu)}
+                  className="w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center ml-1"
+                >
+                  <ChevronRight className={`w-4 h-4 text-forest-600 transition-transform ${showBabyMenu ? 'rotate-90' : ''}`} />
+                </button>
+                {showBabyMenu && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowBabyMenu(false)} />
+                    <div className="absolute top-10 left-0 z-20 bg-white rounded-xl shadow-lg p-2 min-w-[180px]">
+                      {babies.filter(b => b.id !== activeBabyId).map(baby => (
+                        <button
+                          key={baby.id}
+                          onClick={() => { switchBaby(baby.id); setShowBabyMenu(false); }}
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-ivory-100 transition-colors"
+                        >
+                          <span className="text-lg">{baby.sex === 'boy' ? '\ud83d\udc66' : '\ud83d\udc67'}</span>
+                          <span className="text-sm font-semibold text-bark-800">{baby.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
           <p className="text-sm text-forest-600 font-semibold mt-1">{ageText}</p>
         </div>
 

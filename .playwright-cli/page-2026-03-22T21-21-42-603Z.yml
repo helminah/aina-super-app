@@ -1,0 +1,64 @@
+- generic [ref=e3]:
+  - main [ref=e4]:
+    - generic [ref=e149]:
+      - heading "Profil" [level=1] [ref=e150]
+      - button "👧 Amara 6 mois" [ref=e152]:
+        - generic [ref=e153]:
+          - generic [ref=e154]: 👧
+          - generic [ref=e155]:
+            - paragraph [ref=e156]: Amara
+            - paragraph [ref=e157]: 6 mois
+        - img [ref=e158]
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]: 👧
+          - generic [ref=e163]:
+            - heading "Amara" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 6 mois
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - img [ref=e168]
+            - generic [ref=e170]: N\u00e9(e) le 15/09/2025
+          - generic [ref=e171]:
+            - img [ref=e172]
+            - generic [ref=e175]: "Poids de naissance : 3.2 kg"
+          - generic [ref=e176]:
+            - img [ref=e177]
+            - generic [ref=e183]: "Taille de naissance : 50 cm"
+          - generic [ref=e184]:
+            - img [ref=e185]
+            - generic [ref=e188]: 🇸🇳 Sénégal
+          - button "Modifier" [ref=e189]
+      - button "Ajouter un b\\u00e9b\\u00e9" [ref=e190]:
+        - img [ref=e191]
+        - text: Ajouter un b\u00e9b\u00e9
+      - generic [ref=e194]:
+        - heading "R\\u00e9glages" [level=3] [ref=e195]:
+          - img [ref=e196]
+          - text: R\u00e9glages
+        - generic [ref=e199]:
+          - paragraph [ref=e200]: Pays
+          - generic [ref=e201]:
+            - button "🇸🇳" [ref=e202]
+            - button "🇫🇷" [ref=e203]
+            - button "🇲🇬" [ref=e204]
+      - button "Supprimer Amara" [ref=e205]:
+        - img [ref=e206]
+        - text: Supprimer Amara
+  - navigation [ref=e82]:
+    - generic [ref=e83]:
+      - button "Accueil" [ref=e84]:
+        - img [ref=e86]
+        - generic [ref=e89]: Accueil
+      - button "Santé" [ref=e90]:
+        - img [ref=e91]
+        - generic [ref=e94]: Santé
+      - button "Nutrition" [ref=e95]:
+        - img [ref=e96]
+        - generic [ref=e101]: Nutrition
+      - button "Journal" [ref=e102]:
+        - img [ref=e103]
+        - generic [ref=e105]: Journal
+      - button "Profil" [active] [ref=e106]:
+        - img [ref=e107]
+        - generic [ref=e110]: Profil
