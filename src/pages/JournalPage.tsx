@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useBaby } from '@/contexts/BabyContext';
-import { format, subDays, addDays, isSameDay, isToday } from 'date-fns';
+import { format, subDays, isSameDay, isToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Baby, Moon, Droplets, Smile, Clock } from 'lucide-react';
@@ -37,14 +37,6 @@ export function JournalPage() {
 
   // Generate dates for horizontal scroller (14 days before, 7 after)
   const dates = Array.from({ length: 21 }, (_, i) => subDays(new Date(), 14 - i));
-
-  useEffect(() => {
-    // Scroll to today on mount
-    if (scrollRef.current) {
-      const todayEl = scrollRef.current.querySelector('[data-today="true"]');
-      if (todayEl) todayEl.scrollIntoView({ inline: 'center', behavior: 'smooth' });
-    }
-  }, []);
 
   const resetForm = () => {
     setFeedType('breast'); setFeedSide('left'); setFeedQty('');

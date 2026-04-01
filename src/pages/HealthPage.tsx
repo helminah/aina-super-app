@@ -5,7 +5,7 @@ import { milestones } from '@/data/milestones';
 import { weightBoys, weightGirls, heightBoys, heightGirls, hcBoys, hcGirls } from '@/data/oms-growth';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LineChart, Line, Area, AreaChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ComposedChart, Tooltip } from 'recharts';
+import { Line, Area, ResponsiveContainer, ComposedChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { ShieldCheck, TrendingUp, Brain, Check, Plus, X, Clock } from 'lucide-react';
 
 const healthTabs = [
@@ -34,32 +34,31 @@ export function HealthPage() {
   const ageMonths = getAgeInMonths(profile.birthDate);
   const countryVaccines = allVaccines.filter(v => v.country.includes(profile.country)).sort((a, b) => a.ageMonths - b.ageMonths);
 
-  // Growth chart data
-  const getOmsData = () => {
+  // Growth chart data - memoize OMS data based on metric and sex
+  const omsData = useMemo(() => {
     const isBoy = profile.sex === 'boy';
     switch (metric) {
       case 'weight': return isBoy ? weightBoys : weightGirls;
       case 'height': return isBoy ? heightBoys : heightGirls;
       case 'hc': return isBoy ? hcBoys : hcGirls;
     }
-  };
+  }, [metric, profile.sex]);
 
-  const getEntries = () => {
+  // Memoize entries based on metric and data
+  const entriesData = useMemo(() => {
     switch (metric) {
       case 'weight': return weightEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.weight }));
       case 'height': return heightEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.height }));
       case 'hc': return hcEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.circumference }));
     }
-  };
+  }, [metric, profile.birthDate, weightEntries, heightEntries, hcEntries]);
 
   const chartData = useMemo(() => {
-    const oms = getOmsData();
-    const entries = getEntries();
-    return oms.map(p => {
-      const child = entries.find(e => Math.abs(e.month - p.month) < 0.5);
+    return omsData.map(p => {
+      const child = entriesData.find(e => Math.abs(e.month - p.month) < 0.5);
       return { ...p, childValue: child?.value };
     });
-  }, [metric, weightEntries, heightEntries, hcEntries, profile]);
+  }, [omsData, entriesData]);
 
   const handleAddMeasure = () => {
     const val = parseFloat(measureValue);
@@ -238,14 +237,19 @@ export function HealthPage() {
           {/* Measurement history */}
           <div className="space-y-2">
             {(metric === 'weight' ? weightEntries : metric === 'height' ? heightEntries : hcEntries)
-              .slice().reverse().slice(0, 10).map((e, i) => (
-              <div key={i} className="bg-ivory-50 rounded-xl px-4 py-3 flex justify-between items-center">
-                <span className="text-sm text-bark-600">{new Date('date' in e ? e.date : '').toLocaleDateString('fr-FR')}</span>
-                <span className="font-heading font-bold text-bark-800">
-                  {'weight' in e ? `${(e as any).weight} kg` : 'height' in e ? `${(e as any).height} cm` : `${(e as any).circumference} cm`}
-                </span>
-              </div>
-            ))}
+              .slice().reverse().slice(0, 10).map((e, i) => {
+                const value = metric === 'weight'
+                  ? `${(e as any).weight} kg`
+                  : metric === 'height'
+                    ? `${(e as any).height} cm`
+                    : `${(e as any).circumference} cm`;
+                return (
+                  <div key={i} className="bg-ivory-50 rounded-xl px-4 py-3 flex justify-between items-center">
+                    <span className="text-sm text-bark-600">{new Date(e.date).toLocaleDateString('fr-FR')}</span>
+                    <span className="font-heading font-bold text-bark-800">{value}</span>
+                  </div>
+                );
+              })}
           </div>
 
           {/* Add Measurement Modal */}

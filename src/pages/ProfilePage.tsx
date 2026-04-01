@@ -3,11 +3,11 @@ import { useBaby } from '@/contexts/BabyContext';
 import { getAgeText } from '@/lib/age-utils';
 import { generateId } from '@/lib/utils';
 import type { Country, Sex, ChildProfile } from '@/types/child';
-import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin } from 'lucide-react';
+import { Calendar, Ruler, Weight, Settings, Trash2, UserPlus, X, Check, MapPin, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function ProfilePage() {
-  const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile, removeBaby } = useBaby();
+  const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile } = useBaby();
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(profile?.name || '');
   const [editWeight, setEditWeight] = useState(String(profile?.birthWeight || ''));
