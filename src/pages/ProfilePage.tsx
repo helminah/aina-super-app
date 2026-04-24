@@ -1,12 +1,20 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeText } from '@/lib/age-utils';
 import { generateId } from '@/lib/utils';
 import type { Country, Sex, ChildProfile } from '@/types/child';
-import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin } from 'lucide-react';
+import { COUNTRY_BY_CODE, COUNTRIES } from '@/data/countries';
+import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Helpers: renvoient flag + label depuis le code pays dynamique.
+const countryFlag  = (code: string) => COUNTRY_BY_CODE[code]?.flag  ?? '🏳️';
+const countryLabel = (code: string) => COUNTRY_BY_CODE[code]?.label ?? code;
+
 export function ProfilePage() {
+  const navigate = useNavigate();
   const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile, removeBaby } = useBaby();
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(profile?.name || '');
@@ -33,6 +41,7 @@ export function ProfilePage() {
       birthHeight: parseFloat(editHeight) || profile.birthHeight,
     });
     setEditing(false);
+    toast.success('Profil mis à jour ✓');
   };
 
   const handleAddBaby = () => {
@@ -51,6 +60,7 @@ export function ProfilePage() {
     addBaby(baby);
     setShowAddBaby(false);
     resetNewBabyForm();
+    toast.success('Bébé ajouté ! 🍼');
   };
 
   const resetNewBabyForm = () => {
@@ -62,11 +72,25 @@ export function ProfilePage() {
     setNewCountry(profile?.country || 'senegal');
   };
 
-  const countryLabels: Record<Country, string> = { senegal: '\u{1F1F8}\u{1F1F3} S\u00e9n\u00e9gal', france: '\u{1F1EB}\u{1F1F7} France', madagascar: '\u{1F1F2}\u{1F1EC} Madagascar' };
-
   return (
-    <div className="px-5 pt-6 pb-6 safe-top overflow-y-auto">
-      <h1 className="font-heading text-2xl font-bold text-bark-800 mb-5">Profil</h1>
+    <div className="pb-24 safe-top overflow-y-auto min-h-full">
+      {/* Hero violet \u2014 Profil (intime) */}
+      <div className="relative mesh-violet grain overflow-hidden pt-10 pb-14 px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10"
+        >
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-medium">Mon espace</p>
+          <h1 className="text-white text-5xl leading-none mt-1.5" style={{ fontFamily: 'Instrument Serif, serif' }}>
+            Profil
+          </h1>
+          <p className="text-white/85 text-sm mt-2 font-medium">B\u00e9b\u00e9s \u00b7 Param\u00e8tres \u00b7 Carnet</p>
+        </motion.div>
+      </div>
+
+      <div className="px-5 -mt-6 relative z-10">
 
       {/* Baby Switcher */}
       {babies.length > 1 && (
@@ -146,7 +170,7 @@ export function ProfilePage() {
             </div>
             <div className="flex items-center gap-3 text-sm">
               <MapPin className="w-4 h-4 text-bark-400" />
-              <span className="text-bark-600">{countryLabels[profile.country]}</span>
+              <span className="text-bark-600">{countryFlag(profile.country)} {countryLabel(profile.country)}</span>
             </div>
             <button onClick={() => { setEditing(true); setEditName(profile.name); setEditWeight(String(profile.birthWeight)); setEditHeight(String(profile.birthHeight)); }} className="w-full mt-3 py-2.5 rounded-xl bg-forest-100 text-forest-600 text-sm font-semibold">
               Modifier
@@ -190,17 +214,26 @@ export function ProfilePage() {
 
         {/* Country */}
         <div className="mb-4">
-          <p className="text-sm text-bark-600 font-medium mb-2">Pays</p>
-          <div className="flex gap-2">
-            {(['senegal', 'france', 'madagascar'] as Country[]).map(c => (
-              <button key={c} onClick={() => updateProfile({ country: c })}
-                className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${profile.country === c ? 'bg-forest-600 text-white' : 'bg-ivory-200 text-bark-500'}`}>
-                {countryLabels[c].split(' ')[0]}
-              </button>
+          <p className="text-sm text-bark-600 font-medium mb-2">Pays (calendrier vaccinal)</p>
+          <select
+            value={profile.country}
+            onChange={e => updateProfile({ country: e.target.value as Country })}
+            className="w-full py-3 px-4 rounded-xl bg-ivory-200 text-bark-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
+          >
+            {COUNTRIES.map(c => (
+              <option key={c.code} value={c.code}>{c.flag} {c.label}</option>
             ))}
-          </div>
+          </select>
         </div>
       </div>
+
+      {/* Export */}
+      <button
+        onClick={() => navigate('/report')}
+        className="w-full py-3 rounded-2xl bg-ivory-200 text-bark-700 font-semibold text-sm flex items-center justify-center gap-2 mb-3"
+      >
+        <FileText className="w-4 h-4" /> Exporter carnet de santé
+      </button>
 
       {/* Danger zone */}
       <button onClick={() => setShowConfirm(true)} className="w-full py-3 rounded-2xl bg-red-50 text-red-500 font-semibold text-sm flex items-center justify-center gap-2">
@@ -215,7 +248,7 @@ export function ProfilePage() {
             <p className="text-sm text-bark-500 mb-5">Toutes les donn\u00e9es de {profile.name} seront d\u00e9finitivement supprim\u00e9es.</p>
             <div className="flex gap-3">
               <button onClick={() => setShowConfirm(false)} className="flex-1 py-2.5 rounded-xl bg-ivory-100 text-bark-600 font-semibold text-sm">Annuler</button>
-              <button onClick={() => { clearProfile(); setShowConfirm(false); }} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm">Supprimer</button>
+              <button onClick={() => { clearProfile(); setShowConfirm(false); toast.success('Profil supprimé'); }} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm">Supprimer</button>
             </div>
           </div>
         </div>
@@ -320,15 +353,17 @@ export function ProfilePage() {
 
                   {/* Country */}
                   <div>
-                    <label className="text-sm text-bark-600 font-medium">Pays</label>
-                    <div className="flex gap-2 mt-1">
-                      {(['senegal', 'france', 'madagascar'] as Country[]).map(c => (
-                        <button key={c} onClick={() => setNewCountry(c)}
-                          className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${newCountry === c ? 'bg-forest-600 text-white' : 'bg-ivory-200 text-bark-500'}`}>
-                          {countryLabels[c].split(' ')[0]}
-                        </button>
+                    <label className="text-sm text-bark-600 font-medium">Pays (calendrier vaccinal)</label>
+                    <select
+                      value={newCountry}
+                      onChange={e => setNewCountry(e.target.value as Country)}
+                      className="w-full mt-1 py-3 px-4 rounded-xl bg-ivory-200 text-bark-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-forest-300"
+                    >
+                      <option value="">— Choisir un pays —</option>
+                      {COUNTRIES.map(c => (
+                        <option key={c.code} value={c.code}>{c.flag} {c.label}</option>
                       ))}
-                    </div>
+                    </select>
                   </div>
 
                   {/* Submit */}
@@ -345,6 +380,7 @@ export function ProfilePage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

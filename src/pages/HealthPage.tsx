@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { vaccines as allVaccines } from '@/data/vaccines';
 import { milestones } from '@/data/milestones';
@@ -71,6 +72,7 @@ export function HealthPage() {
     }
     setShowAddMeasure(false);
     setMeasureValue('');
+    toast.success('Mesure enregistrée ✓');
   };
 
   // Milestones
@@ -87,21 +89,35 @@ export function HealthPage() {
     : 0;
 
   return (
-    <div className="px-5 pt-6 pb-6 safe-top">
-      <h1 className="font-heading text-2xl font-bold text-bark-800 mb-5">Santé</h1>
+    <div className="pb-24 safe-top min-h-full">
+      {/* Hero vert — Santé / croissance */}
+      <div className="relative mesh-green grain overflow-hidden pt-10 pb-14 px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10"
+        >
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-medium">Suivi pédiatrique</p>
+          <h1 className="text-white text-5xl leading-none mt-1.5" style={{ fontFamily: 'Instrument Serif, serif' }}>
+            Santé
+          </h1>
+          <p className="text-white/85 text-sm mt-2 font-medium">Vaccins · Croissance · Développement</p>
+        </motion.div>
+      </div>
 
-      {/* Tab bar */}
-      <div className="flex gap-2 mb-6 overflow-x-auto no-scrollbar">
+      {/* Tab bar glass */}
+      <div className="flex gap-2 -mt-6 mx-5 mb-5 p-1.5 rounded-2xl glass-card overflow-x-auto no-scrollbar relative z-10">
         {healthTabs.map(tab => {
           const Icon = tab.icon;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
                 activeTab === tab.id
-                  ? 'bg-forest-600 text-white shadow-md shadow-forest-600/25'
-                  : 'bg-ivory-50 text-bark-500'
+                  ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30'
+                  : 'text-bark-500'
               }`}
             >
               <Icon className="w-4 h-4" /> {tab.label}
@@ -110,17 +126,19 @@ export function HealthPage() {
         })}
       </div>
 
+      <div className="px-5">
+
       {/* Vaccines Tab */}
       {activeTab === 'vaccines' && (
         <div className="space-y-3 animate-stagger">
           {/* Progress */}
-          <div className="bg-ivory-50 rounded-2xl p-4 mb-2">
+          <div className="glass-card-green rounded-2xl p-4 mb-2">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-bark-600 font-medium">Progression</span>
-              <span className="text-forest-500 font-bold">{countryVaccines.filter(v => isVaccineDone(v.id)).length}/{countryVaccines.length}</span>
+              <span className="text-emerald-600 font-bold">{countryVaccines.filter(v => isVaccineDone(v.id)).length}/{countryVaccines.length}</span>
             </div>
-            <div className="h-2 bg-ivory-300 rounded-full overflow-hidden">
-              <div className="h-full bg-forest-600 rounded-full transition-all" style={{ width: `${(countryVaccines.filter(v => isVaccineDone(v.id)).length / countryVaccines.length) * 100}%` }} />
+            <div className="h-2 bg-white/60 rounded-full overflow-hidden">
+              <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${(countryVaccines.filter(v => isVaccineDone(v.id)).length / countryVaccines.length) * 100}%` }} />
             </div>
           </div>
 
@@ -339,6 +357,7 @@ export function HealthPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

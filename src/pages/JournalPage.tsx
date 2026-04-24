@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { format, subDays, addDays, isSameDay, isToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -77,6 +78,7 @@ export function JournalPage() {
     setShowAdd(false);
     setAddType(null);
     resetForm();
+    toast.success('Log enregistré ✓');
   };
 
   const getLogIcon = (type: LogType) => {
@@ -107,13 +109,25 @@ export function JournalPage() {
   };
 
   return (
-    <div className="pt-6 pb-6 safe-top">
-      <div className="px-5">
-        <h1 className="font-heading text-2xl font-bold text-bark-800 mb-4">Journal</h1>
+    <div className="pb-24 safe-top min-h-full">
+      {/* Hero bleu — Journal (mémoire, continuité) */}
+      <div className="relative mesh-sky grain overflow-hidden pt-10 pb-14 px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10"
+        >
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-medium">Chaque jour compte</p>
+          <h1 className="text-white text-5xl leading-none mt-1.5" style={{ fontFamily: 'Instrument Serif, serif' }}>
+            Journal
+          </h1>
+          <p className="text-white/85 text-sm mt-2 font-medium">Repas · Sommeil · Couches · Humeur</p>
+        </motion.div>
       </div>
 
-      {/* Date scroller */}
-      <div ref={scrollRef} className="flex gap-2 px-5 overflow-x-auto no-scrollbar pb-4">
+      {/* Date scroller en glass au-dessus du hero */}
+      <div ref={scrollRef} className="flex gap-2 -mt-6 mx-5 p-2 glass-card rounded-2xl overflow-x-auto no-scrollbar relative z-10 mb-5">
         {dates.map(date => {
           const active = isSameDay(date, selectedDate);
           const today = isToday(date);
@@ -122,8 +136,8 @@ export function JournalPage() {
               key={date.toISOString()}
               data-today={today}
               onClick={() => setSelectedDate(date)}
-              className={`flex flex-col items-center min-w-[48px] py-2 px-2 rounded-2xl transition-all ${
-                active ? 'bg-forest-600 text-white shadow-md' : today ? 'bg-forest-100 text-forest-600' : 'text-bark-500'
+              className={`flex flex-col items-center min-w-[48px] py-2 px-2 rounded-xl transition-all ${
+                active ? 'bg-sky-500 text-white shadow-md shadow-sky-500/30' : today ? 'bg-sky-100 text-sky-600' : 'text-bark-500'
               }`}
             >
               <span className="text-[10px] font-medium uppercase">{format(date, 'EEE', { locale: fr })}</span>
@@ -161,7 +175,7 @@ export function JournalPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-bark-500 font-medium">{entry.time}</p>
-                    <button onClick={() => removeLog(entry.id)} className="text-[10px] text-red-400 mt-0.5">Suppr.</button>
+                    <button onClick={() => { removeLog(entry.id); toast('Log supprimé', { description: 'Entrée retirée du journal' }); }} className="text-[10px] text-red-400 mt-0.5">Suppr.</button>
                   </div>
                 </motion.div>
               );

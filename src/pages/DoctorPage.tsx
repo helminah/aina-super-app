@@ -1,4 +1,4 @@
-import { ArrowLeft, Instagram, BookOpen, GraduationCap, Heart } from 'lucide-react';
+import { ArrowLeft, BookOpen, GraduationCap, Heart, Instagram, Music2, Linkedin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function DoctorPage() {
@@ -78,10 +78,14 @@ export function DoctorPage() {
         <div className="bg-ivory-50 rounded-3xl p-5 ambient-shadow">
           <h3 className="font-heading font-bold text-bark-800 mb-3">Suivez-moi</h3>
           <div className="space-y-3">
-            {[['Instagram', '@drhelminah'], ['TikTok', '@drhelminah'], ['LinkedIn', 'Dr Helminah R.']].map(([platform, handle]) => (
+            {[
+              { platform: 'Instagram', handle: '@drhelminah', icon: Instagram, color: 'text-forest-500' },
+              { platform: 'TikTok', handle: '@drhelminah', icon: Music2, color: 'text-bark-600' },
+              { platform: 'LinkedIn', handle: 'Dr Helminah R.', icon: Linkedin, color: 'text-terra-500' },
+            ].map(({ platform, handle, icon: Icon, color }) => (
               <div key={platform} className="flex items-center gap-3 py-2">
                 <div className="w-10 h-10 rounded-full bg-ivory-200 flex items-center justify-center">
-                  <Instagram className="w-5 h-5 text-bark-500" />
+                  <Icon className={`w-5 h-5 ${color}`} />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-bark-800">{platform}</p>

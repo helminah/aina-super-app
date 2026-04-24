@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export function DashboardPage() {
-  const { profile, babies, activeBabyId, switchBaby, isVaccineDone, weightEntries, dailyLogs, getLogsForDate } = useBaby();
+  const { profile, babies, activeBabyId, switchBaby, isVaccineDone, weightEntries, dailyLogs, getLogsForDate, checkVaccineReminders } = useBaby();
   const navigate = useNavigate();
   const [showEmergency, setShowEmergency] = useState(false);
   const [showBabyMenu, setShowBabyMenu] = useState(false);
@@ -28,6 +28,11 @@ export function DashboardPage() {
 
   const ageText = getAgeText(profile.birthDate);
   const ageMonths = getAgeInMonths(profile.birthDate);
+
+  // Vaccine reminders
+  const vaccineReminders = checkVaccineReminders();
+  const overdueReminders = vaccineReminders.filter(r => r.status === 'overdue');
+  const soonReminders = vaccineReminders.filter(r => r.status === 'soon');
 
   // Next vaccine
   const countryVaccines = vaccines
@@ -105,23 +110,32 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="px-5 pt-6 pb-6 safe-top bg-ivory-100 min-h-full">
-      <div className="animate-stagger">
-
-        {/* ── Editorial Header ── */}
-        <div className="mb-6">
-          <p className="text-sm text-bark-500 font-body">Bonjour, maman de</p>
-          <div className="flex items-center gap-2">
-            <h1 className="font-heading text-3xl font-bold text-bark-800 tracking-tight">
-              {profile.name} <span className="inline-block">{'\ud83c\udf3f'}</span>
+    <div className="pb-24 safe-top bg-ivory-100 min-h-full relative">
+      {/* Hero editorial : mesh gradient + serif display */}
+      <div className="relative brand-mesh grain overflow-hidden pt-10 pb-16 px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10"
+        >
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-medium">
+            Bonjour, maman de
+          </p>
+          <div className="flex items-end gap-3 mt-1.5">
+            <h1
+              className="text-white text-5xl leading-none"
+              style={{ fontFamily: 'Instrument Serif, serif' }}
+            >
+              {profile.name}
             </h1>
             {babies.length > 1 && (
-              <div className="relative">
+              <div className="relative mb-1">
                 <button
                   onClick={() => setShowBabyMenu(!showBabyMenu)}
-                  className="w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center ml-1"
+                  className="w-8 h-8 rounded-full bg-white/25 backdrop-blur flex items-center justify-center"
                 >
-                  <ChevronRight className={`w-4 h-4 text-forest-600 transition-transform ${showBabyMenu ? 'rotate-90' : ''}`} />
+                  <ChevronRight className={`w-4 h-4 text-white transition-transform ${showBabyMenu ? 'rotate-90' : ''}`} />
                 </button>
                 {showBabyMenu && (
                   <>
@@ -133,7 +147,7 @@ export function DashboardPage() {
                           onClick={() => { switchBaby(baby.id); setShowBabyMenu(false); }}
                           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-ivory-100 transition-colors"
                         >
-                          <span className="text-lg">{baby.sex === 'boy' ? '\ud83d\udc66' : '\ud83d\udc67'}</span>
+                          <span className="text-lg">{baby.sex === 'boy' ? '\u{1F466}' : '\u{1F467}'}</span>
                           <span className="text-sm font-semibold text-bark-800">{baby.name}</span>
                         </button>
                       ))}
@@ -143,38 +157,52 @@ export function DashboardPage() {
               </div>
             )}
           </div>
-          <p className="text-sm text-forest-600 font-semibold mt-1">{ageText}</p>
-        </div>
+          <p className="text-white/85 text-sm mt-2 font-medium">{ageText}</p>
+        </motion.div>
+      </div>
 
-        {/* ── MODE URGENCE Button (forest green bg) ── */}
-        <button
-          onClick={() => setShowEmergency(true)}
-          className="w-full mb-5 relative overflow-hidden"
-        >
-          <div className="relative flex items-center gap-3 bg-forest-600 rounded-2xl px-5 py-4 ambient-shadow">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-              <AlertTriangle className="w-5 h-5 text-white" />
-            </div>
-            <div className="text-left flex-1">
-              <p className="font-heading font-bold text-white text-base">MODE URGENCE</p>
-              <p className="text-xs text-white/70">Fausse route &middot; Gestes de premiers secours</p>
-            </div>
-            <ChevronRight className="w-5 h-5 text-white/60" />
-          </div>
-        </button>
+      <div className="px-5 -mt-8 relative z-10 animate-stagger">
 
-        {/* ── Conseil du jour (forest green card, white text) ── */}
-        <div className="bg-forest-600 rounded-2xl p-5 mb-4 ambient-shadow">
+        {/* ── Vaccine Reminder Banner ── */}
+        {(overdueReminders.length > 0 || soonReminders.length > 0) && (
+          <button
+            onClick={() => navigate('/health')}
+            className="w-full mb-4 text-left"
+          >
+            <div className={`rounded-2xl px-5 py-4 flex items-start gap-3 ${overdueReminders.length > 0 ? 'bg-red-50 border border-red-200' : 'bg-amber-50 border border-amber-200'}`}>
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${overdueReminders.length > 0 ? 'bg-red-100' : 'bg-amber-100'}`}>
+                <ShieldCheck className={`w-5 h-5 ${overdueReminders.length > 0 ? 'text-red-500' : 'text-amber-500'}`} />
+              </div>
+              <div className="flex-1">
+                <p className={`font-heading font-bold text-sm ${overdueReminders.length > 0 ? 'text-red-700' : 'text-amber-700'}`}>
+                  {overdueReminders.length > 0
+                    ? `${overdueReminders.length} vaccin${overdueReminders.length > 1 ? 's' : ''} en retard`
+                    : `${soonReminders.length} vaccin${soonReminders.length > 1 ? 's' : ''} à venir`}
+                </p>
+                <p className={`text-xs mt-0.5 ${overdueReminders.length > 0 ? 'text-red-500' : 'text-amber-500'}`}>
+                  {overdueReminders.length > 0
+                    ? overdueReminders.slice(0, 2).map(r => r.vaccineName).join(', ')
+                    : soonReminders.slice(0, 2).map(r => r.vaccineName).join(', ')}
+                  {(overdueReminders.length > 2 || soonReminders.length > 2) && '…'}
+                </p>
+              </div>
+              <ChevronRight className={`w-4 h-4 mt-1 ${overdueReminders.length > 0 ? 'text-red-400' : 'text-amber-400'}`} />
+            </div>
+          </button>
+        )}
+
+        {/* Conseil du jour — surface blanche, accent ambré (rythme visuel après hero rose) */}
+        <div className="bg-white rounded-2xl p-5 mb-4 elev-2">
           <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-              <Lightbulb className="w-6 h-6 text-white" />
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-100 to-terra-100 flex items-center justify-center flex-shrink-0">
+              <Lightbulb className="w-6 h-6 text-amber-500" />
             </div>
             <div className="flex-1">
-              <p className="text-xs text-white/70 font-semibold uppercase tracking-wide">
+              <p className="text-[11px] text-amber-500 font-semibold uppercase tracking-[0.15em]">
                 {tip.categoryEmoji} Conseil du jour
               </p>
-              <p className="font-heading font-bold text-white mt-0.5">{tip.title}</p>
-              <p className="text-sm text-white/80 mt-1 leading-relaxed">{tip.content}</p>
+              <p className="font-heading font-bold text-bark-800 mt-1">{tip.title}</p>
+              <p className="text-sm text-bark-500 mt-1 leading-relaxed">{tip.content}</p>
             </div>
           </div>
         </div>
@@ -327,6 +355,22 @@ export function DashboardPage() {
         </div>
 
       </div>
+
+      {/* FAB Mode Urgence — flottant, discret mais accessible */}
+      <motion.button
+        onClick={() => setShowEmergency(true)}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 22 }}
+        whileTap={{ scale: 0.92 }}
+        className="fixed bottom-24 right-5 z-30 flex items-center gap-2 pr-5 pl-3.5 py-3 rounded-full bg-red-500 text-white shadow-[0_12px_30px_-8px_rgba(239,68,68,0.55)]"
+        aria-label="Mode urgence"
+      >
+        <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+          <AlertTriangle className="w-4 h-4" />
+        </span>
+        <span className="font-heading font-bold text-xs uppercase tracking-wider">SOS</span>
+      </motion.button>
 
       {/* ── Emergency Modal ── */}
       <AnimatePresence>

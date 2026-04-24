@@ -1,4 +1,6 @@
-export type Country = 'senegal' | 'france' | 'madagascar';
+// Le code pays est une string libre, validée par la liste src/data/countries.ts
+// (on a 25+ pays maintenant, pas viable en union).
+export type Country = string;
 export type Sex = 'boy' | 'girl';
 
 export interface ChildProfile {

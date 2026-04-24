@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import { useBaby } from '@/contexts/BabyContext';
 import { vaccines } from '@/data/vaccines';
+import { COUNTRIES, REGION_LABELS, REGION_ORDER } from '@/data/countries';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { generateId } from '@/lib/utils';
 import type { Country, Sex, ChildProfile } from '@/types/child';
-import { Baby, Calendar, Ruler, Globe, ShieldCheck, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { Baby, Calendar, Ruler, ShieldCheck, ArrowRight, ArrowLeft, Sparkles, Search, Check } from 'lucide-react';
 
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
@@ -42,6 +44,12 @@ export function OnboardingFlow() {
   };
 
   const finish = () => {
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.6 },
+      colors: ['#FF2D78', '#FF7F5E', '#FFA641', '#fff', '#ffd6ea'],
+    });
     const profile: ChildProfile = {
       id: generateId(),
       name: name.trim(),
@@ -120,7 +128,7 @@ export function OnboardingFlow() {
             animate="center"
             exit="exit"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="absolute inset-0 px-6 flex flex-col justify-center"
+            className={`absolute inset-0 px-6 flex flex-col ${step === 4 || step === 5 ? 'justify-start pt-4' : 'justify-center'}`}
           >
             {step === 1 && (
               <div className="space-y-6">
@@ -217,30 +225,11 @@ export function OnboardingFlow() {
             )}
 
             {step === 4 && (
-              <div className="space-y-6">
-                <div className="w-16 h-16 rounded-full bg-forest-100 flex items-center justify-center mx-auto">
-                  <Globe className="w-8 h-8 text-forest-500" />
-                </div>
-                <div className="text-center">
-                  <h1 className="font-heading text-2xl font-bold text-bark-800">Où grandit {name} ?</h1>
-                  <p className="text-bark-500 mt-2">Le calendrier vaccinal sera adapté à votre pays.</p>
-                </div>
-                <div className="space-y-3">
-                  {([['senegal', '\u{1F1F8}\u{1F1F3}', 'Sénégal'], ['france', '\u{1F1EB}\u{1F1F7}', 'France'], ['madagascar', '\u{1F1F2}\u{1F1EC}', 'Madagascar']] as const).map(([val, flag, label]) => (
-                    <button
-                      key={val}
-                      onClick={() => setCountry(val)}
-                      className={`w-full py-4 px-6 rounded-2xl font-heading font-semibold text-lg flex items-center gap-4 transition-all ${
-                        country === val
-                          ? 'bg-forest-600 text-white shadow-lg shadow-forest-600/25'
-                          : 'bg-ivory-50 text-bark-600 hover:bg-ivory-200'
-                      }`}
-                    >
-                      <span className="text-3xl">{flag}</span> {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <CountryPicker
+                name={name}
+                country={country}
+                onPick={setCountry}
+              />
             )}
 
             {step === 5 && (
@@ -312,6 +301,110 @@ export function OnboardingFlow() {
             <>Continuer <ArrowRight className="w-5 h-5" /></>
           )}
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────
+// CountryPicker — grid searchable groupé par région, glassmorphism
+// ────────────────────────────────────────────────────────────────
+
+interface CountryPickerProps {
+  name: string;
+  country: Country | '';
+  onPick: (code: Country) => void;
+}
+
+function CountryPicker({ name, country, onPick }: CountryPickerProps) {
+  const [query, setQuery] = useState('');
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return COUNTRIES;
+    return COUNTRIES.filter(c =>
+      c.label.toLowerCase().includes(q) || c.code.includes(q),
+    );
+  }, [query]);
+
+  const byRegion = useMemo(() => {
+    const map = new Map<string, typeof COUNTRIES>();
+    for (const c of filtered) {
+      const arr = map.get(c.region) || [];
+      arr.push(c);
+      map.set(c.region, arr);
+    }
+    return map;
+  }, [filtered]);
+
+  return (
+    <div className="flex flex-col h-full pt-2">
+      <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto">
+        <span className="text-3xl">🌍</span>
+      </div>
+      <div className="text-center mt-4">
+        <h1 className="font-heading text-2xl font-bold text-bark-800">
+          Où grandit {name || 'bébé'} ?
+        </h1>
+        <p className="text-bark-500 mt-1 text-sm">
+          Le calendrier vaccinal sera adapté au PEV du pays.
+        </p>
+      </div>
+
+      {/* Barre de recherche glass */}
+      <div className="mt-5 relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Rechercher un pays…"
+          className="w-full glass-card pl-11 pr-4 py-3.5 rounded-2xl text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
+        />
+      </div>
+
+      {/* Liste groupée par région — scroll interne */}
+      <div className="flex-1 overflow-y-auto no-scrollbar mt-4 -mx-2 px-2 pb-6 min-h-0">
+        {REGION_ORDER.map(region => {
+          const countries = byRegion.get(region);
+          if (!countries || countries.length === 0) return null;
+          return (
+            <div key={region} className="mb-5">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-bark-400 font-semibold mb-2 px-1">
+                {REGION_LABELS[region]}
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {countries.map(c => {
+                  const selected = country === c.code;
+                  return (
+                    <button
+                      key={c.code}
+                      onClick={() => onPick(c.code)}
+                      className={`relative py-3.5 px-3.5 rounded-2xl flex items-center gap-3 text-left transition-all ${
+                        selected
+                          ? 'bg-forest-600 text-white shadow-lg shadow-forest-600/30'
+                          : 'glass-card text-bark-700'
+                      }`}
+                    >
+                      <span className="text-2xl flex-shrink-0">{c.flag}</span>
+                      <span className="text-sm font-semibold leading-tight">{c.label}</span>
+                      {selected && (
+                        <span className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-white/25 backdrop-blur flex items-center justify-center">
+                          <Check className="w-3 h-3" strokeWidth={3} />
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length === 0 && (
+          <p className="text-center text-bark-400 text-sm py-8">
+            Aucun pays trouvé pour « {query} ».
+          </p>
+        )}
       </div>
     </div>
   );

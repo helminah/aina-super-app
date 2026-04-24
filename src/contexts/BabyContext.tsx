@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import type { ChildProfile, WeightEntry, HeightEntry, HeadCircEntry, VaccineRecord, DailyLogEntry, MilestoneRecord, MealPlan } from '@/types/child';
+import { vaccines as allVaccines } from '@/data/vaccines';
 import { safeGet, safeSet } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
 
@@ -50,6 +51,8 @@ interface BabyContextType {
   shoppingChecked: string[];
   toggleShoppingItem: (item: string) => void;
   clearShoppingChecked: () => void;
+
+  checkVaccineReminders: () => { vaccineName: string; dueDate: Date; status: 'overdue' | 'soon' }[];
 }
 
 const BabyContext = createContext<BabyContextType | null>(null);
@@ -238,6 +241,26 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   };
   const clearShoppingChecked = () => setShoppingChecked([]);
 
+  const checkVaccineReminders = (): { vaccineName: string; dueDate: Date; status: 'overdue' | 'soon' }[] => {
+    if (!profile) return [];
+    const countryVaccines = allVaccines.filter(v => v.country.includes(profile.country));
+    const birthDate = new Date(profile.birthDate);
+    const now = new Date();
+    const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+
+    return countryVaccines
+      .filter(v => !isVaccineDone(v.id))
+      .map(v => {
+        const dueDate = new Date(birthDate);
+        dueDate.setMonth(dueDate.getMonth() + v.ageMonths);
+        const diff = dueDate.getTime() - now.getTime();
+        if (diff < 0) return { vaccineName: v.name, dueDate, status: 'overdue' as const };
+        if (diff <= sevenDaysMs) return { vaccineName: v.name, dueDate, status: 'soon' as const };
+        return null;
+      })
+      .filter((r): r is { vaccineName: string; dueDate: Date; status: 'overdue' | 'soon' } => r !== null);
+  };
+
   return (
     <BabyContext.Provider value={{
       babies, activeBabyId, switchBaby, addBaby, removeBaby,
@@ -251,6 +274,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
       mealPlan, setMealSlot, clearMealPlan,
       favorites, toggleFavorite, isFavorite,
       shoppingChecked, toggleShoppingItem, clearShoppingChecked,
+      checkVaccineReminders,
     }}>
       {children}
     </BabyContext.Provider>
