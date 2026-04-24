@@ -74,7 +74,7 @@ export function ProfilePage() {
 
   return (
     <div className="pb-24 safe-top overflow-y-auto min-h-full">
-      {/* Hero violet \u2014 Profil (intime) */}
+      {/* Hero violet — Profil (intime) */}
       <div className="relative mesh-violet grain overflow-hidden pt-10 pb-14 px-5">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -86,7 +86,7 @@ export function ProfilePage() {
           <h1 className="text-white text-5xl leading-none mt-1.5" style={{ fontFamily: 'Instrument Serif, serif' }}>
             Profil
           </h1>
-          <p className="text-white/85 text-sm mt-2 font-medium">B\u00e9b\u00e9s \u00b7 Param\u00e8tres \u00b7 Carnet</p>
+          <p className="text-white/85 text-sm mt-2 font-medium">Bébés · Paramètres · Carnet</p>
         </motion.div>
       </div>
 
@@ -101,7 +101,7 @@ export function ProfilePage() {
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-forest-100 flex items-center justify-center text-xl">
-                {profile.sex === 'boy' ? '\u{1F466}' : '\u{1F467}'}
+                {profile.sex === 'boy' ? '👦' : '👧'}
               </div>
               <div className="text-left">
                 <p className="font-heading font-bold text-bark-800">{profile.name}</p>
@@ -127,7 +127,7 @@ export function ProfilePage() {
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-ivory-200 transition-colors"
                     >
                       <div className="w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center text-lg">
-                        {baby.sex === 'boy' ? '\u{1F466}' : '\u{1F467}'}
+                        {baby.sex === 'boy' ? '👦' : '👧'}
                       </div>
                       <div className="text-left">
                         <p className="text-sm font-semibold text-bark-800">{baby.name}</p>
@@ -146,7 +146,7 @@ export function ProfilePage() {
       <div className="bg-ivory-50 rounded-2xl p-5 mb-5 shadow-sm">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 rounded-full bg-forest-100 flex items-center justify-center text-3xl">
-            {profile.sex === 'boy' ? '\u{1F466}' : '\u{1F467}'}
+            {profile.sex === 'boy' ? '👦' : '👧'}
           </div>
           <div>
             <h2 className="font-heading text-xl font-bold text-bark-800">{profile.name}</h2>
@@ -158,7 +158,7 @@ export function ProfilePage() {
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-sm">
               <Calendar className="w-4 h-4 text-bark-400" />
-              <span className="text-bark-600">N\u00e9(e) le {new Date(profile.birthDate).toLocaleDateString('fr-FR')}</span>
+              <span className="text-bark-600">Né(e) le {new Date(profile.birthDate).toLocaleDateString('fr-FR')}</span>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Weight className="w-4 h-4 text-bark-400" />
@@ -179,7 +179,7 @@ export function ProfilePage() {
         ) : (
           <div className="space-y-3">
             <div>
-              <label className="text-xs text-bark-600 font-medium">Pr\u00e9nom</label>
+              <label className="text-xs text-bark-600 font-medium">Prénom</label>
               <input value={editName} onChange={e => setEditName(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-ivory-200 mt-1 focus:outline-none focus:ring-2 focus:ring-forest-300" />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -205,12 +205,12 @@ export function ProfilePage() {
         onClick={() => { resetNewBabyForm(); setShowAddBaby(true); }}
         className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-forest-50 border-2 border-dashed border-forest-200 text-forest-600 font-semibold text-sm mb-5 hover:bg-forest-100 transition-colors"
       >
-        <UserPlus className="w-5 h-5" /> Ajouter un b\u00e9b\u00e9
+        <UserPlus className="w-5 h-5" /> Ajouter un bébé
       </button>
 
       {/* Settings */}
       <div className="bg-ivory-50 rounded-2xl p-5 mb-5 shadow-sm">
-        <h3 className="font-heading font-bold text-bark-800 mb-3 flex items-center gap-2"><Settings className="w-5 h-5" /> R\u00e9glages</h3>
+        <h3 className="font-heading font-bold text-bark-800 mb-3 flex items-center gap-2"><Settings className="w-5 h-5" /> Réglages</h3>
 
         {/* Country */}
         <div className="mb-4">
@@ -245,7 +245,7 @@ export function ProfilePage() {
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-6" onClick={() => setShowConfirm(false)}>
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
             <h3 className="font-heading font-bold text-lg text-bark-800 mb-2">Confirmer la suppression</h3>
-            <p className="text-sm text-bark-500 mb-5">Toutes les donn\u00e9es de {profile.name} seront d\u00e9finitivement supprim\u00e9es.</p>
+            <p className="text-sm text-bark-500 mb-5">Toutes les données de {profile.name} seront définitivement supprimées.</p>
             <div className="flex gap-3">
               <button onClick={() => setShowConfirm(false)} className="flex-1 py-2.5 rounded-xl bg-ivory-100 text-bark-600 font-semibold text-sm">Annuler</button>
               <button onClick={() => { clearProfile(); setShowConfirm(false); toast.success('Profil supprimé'); }} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm">Supprimer</button>
@@ -275,7 +275,7 @@ export function ProfilePage() {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="font-heading text-xl font-bold text-bark-800">
-                    Ajouter un b\u00e9b\u00e9
+                    Ajouter un bébé
                   </h2>
                   <button
                     onClick={() => setShowAddBaby(false)}
@@ -288,11 +288,11 @@ export function ProfilePage() {
                 <div className="space-y-4">
                   {/* Name */}
                   <div>
-                    <label className="text-sm text-bark-600 font-medium">Pr\u00e9nom</label>
+                    <label className="text-sm text-bark-600 font-medium">Prénom</label>
                     <input
                       value={newName}
                       onChange={e => setNewName(e.target.value)}
-                      placeholder="Pr\u00e9nom du b\u00e9b\u00e9"
+                      placeholder="Prénom du bébé"
                       className="w-full px-4 py-3 rounded-xl bg-ivory-200 mt-1 focus:outline-none focus:ring-2 focus:ring-forest-300"
                     />
                   </div>
@@ -301,7 +301,7 @@ export function ProfilePage() {
                   <div>
                     <label className="text-sm text-bark-600 font-medium">Sexe</label>
                     <div className="flex gap-3 mt-1">
-                      {([['girl', '\u{1F467} Fille'], ['boy', '\u{1F466} Gar\u00e7on']] as [Sex, string][]).map(([val, label]) => (
+                      {([['girl', '👧 Fille'], ['boy', '👦 Garçon']] as [Sex, string][]).map(([val, label]) => (
                         <button
                           key={val}
                           onClick={() => setNewSex(val)}
@@ -372,7 +372,7 @@ export function ProfilePage() {
                     disabled={!newName.trim() || !newBirthDate || !newWeight || !newHeight}
                     className="w-full py-3.5 rounded-full btn-gradient text-white font-heading font-bold text-base flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed mt-2"
                   >
-                    <Check className="w-5 h-5" /> Ajouter {newName.trim() || 'b\u00e9b\u00e9'}
+                    <Check className="w-5 h-5" /> Ajouter {newName.trim() || 'bébé'}
                   </button>
                 </div>
               </div>

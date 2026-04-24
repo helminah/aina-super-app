@@ -80,7 +80,7 @@ export function DashboardPage() {
 
   const logTypeLabel = (type: string) => {
     switch (type) {
-      case 'feed': return 'Biberon / T\u00e9t\u00e9e';
+      case 'feed': return 'Biberon / Tétée';
       case 'sleep': return 'Sieste / Dodo';
       case 'diaper': return 'Couche';
       case 'mood': return 'Humeur';
@@ -89,20 +89,20 @@ export function DashboardPage() {
   };
   const logTypeEmoji = (type: string) => {
     switch (type) {
-      case 'feed': return '\ud83c\udf7c';
-      case 'sleep': return '\ud83c\udf19';
-      case 'diaper': return '\ud83d\udc76';
-      case 'mood': return '\ud83d\ude0a';
-      default: return '\ud83d\udccb';
+      case 'feed': return '🍼';
+      case 'sleep': return '🌙';
+      case 'diaper': return '👶';
+      case 'mood': return '😊';
+      default: return '📋';
     }
   };
 
   const emergencySteps = [
-    { title: '\u00c9valuez la situation', desc: 'B\u00e9b\u00e9 tousse-t-il ? Peut-il pleurer ou \u00e9mettre des sons ? Si oui, encouragez-le \u00e0 tousser.' },
-    { title: 'Position', desc: 'Placez b\u00e9b\u00e9 \u00e0 plat ventre sur votre avant-bras, t\u00eate plus basse que le corps, en soutenant sa m\u00e2choire.' },
+    { title: 'Évaluez la situation', desc: 'Bébé tousse-t-il ? Peut-il pleurer ou émettre des sons ? Si oui, encouragez-le à tousser.' },
+    { title: 'Position', desc: 'Placez bébé à plat ventre sur votre avant-bras, tête plus basse que le corps, en soutenant sa mâchoire.' },
     { title: '5 tapes dans le dos', desc: 'Donnez 5 tapes fermes entre les omoplates avec le talon de votre main.' },
-    { title: '5 compressions thoraciques', desc: 'Retournez b\u00e9b\u00e9 sur le dos. Effectuez 5 compressions au milieu du sternum avec 2 doigts.' },
-    { title: 'R\u00e9p\u00e9tez ou appelez les secours', desc: 'Alternez tapes et compressions. Si l\'obstruction persiste, appelez imm\u00e9diatement le SAMU (15) ou les pompiers (18).' },
+    { title: '5 compressions thoraciques', desc: 'Retournez bébé sur le dos. Effectuez 5 compressions au milieu du sternum avec 2 doigts.' },
+    { title: 'Répétez ou appelez les secours', desc: 'Alternez tapes et compressions. Si l\'obstruction persiste, appelez immédiatement le SAMU (15) ou les pompiers (18).' },
   ];
 
   const formatVaccineDate = (date: Date) => {
@@ -147,7 +147,7 @@ export function DashboardPage() {
                           onClick={() => { switchBaby(baby.id); setShowBabyMenu(false); }}
                           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-ivory-100 transition-colors"
                         >
-                          <span className="text-lg">{baby.sex === 'boy' ? '\u{1F466}' : '\u{1F467}'}</span>
+                          <span className="text-lg">{baby.sex === 'boy' ? '👦' : '👧'}</span>
                           <span className="text-sm font-semibold text-bark-800">{baby.name}</span>
                         </button>
                       ))}
@@ -284,7 +284,7 @@ export function DashboardPage() {
               </p>
             )}
             <p className="text-xs text-bark-400 mt-0.5">
-              {latestWeight ? 'dernier relev\u00e9' : 'naissance'}
+              {latestWeight ? 'dernier relevé' : 'naissance'}
             </p>
           </div>
         </div>
@@ -315,11 +315,11 @@ export function DashboardPage() {
           </button>
         )}
 
-        {/* ── Activit\u00e9s R\u00e9centes ── */}
+        {/* ── Activités Récentes ── */}
         {recentLogs.length > 0 && (
           <div className="bg-ivory-50 rounded-2xl p-5 mb-4 ambient-shadow">
             <div className="flex items-center justify-between mb-3">
-              <p className="font-heading font-bold text-bark-800">Activit\u00e9s R\u00e9centes</p>
+              <p className="font-heading font-bold text-bark-800">Activités Récentes</p>
               <button
                 onClick={() => navigate('/journal')}
                 className="text-xs text-forest-600 font-semibold"
@@ -349,7 +349,7 @@ export function DashboardPage() {
         {/* ── Footer: Dr Helminah ── */}
         <div className="mt-2 mb-4 text-center">
           <p className="text-xs text-bark-400">
-            Suivi p\u00e9diatrique avec{' '}
+            Suivi pédiatrique avec{' '}
             <span className="font-semibold text-forest-600">Dr Helminah</span>
           </p>
         </div>
@@ -393,7 +393,7 @@ export function DashboardPage() {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="font-heading text-xl font-bold text-terra-500">
-                    {'\ud83d\udea8'} Fausse Route - B\u00e9b\u00e9
+                    {'🚨'} Fausse Route - Bébé
                   </h2>
                   <button
                     onClick={() => setShowEmergency(false)}
