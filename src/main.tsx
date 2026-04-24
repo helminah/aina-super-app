@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { BabyProvider } from '@/contexts/BabyContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import App from './App';
 import './index.css';
 import './i18n'; // init i18next avant le render
@@ -11,6 +12,7 @@ import './i18n'; // init i18next avant le render
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+      <ThemeProvider>
       <AuthProvider>
         <BabyProvider>
           <App />
@@ -24,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
           />
         </BabyProvider>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 );

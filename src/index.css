@@ -129,6 +129,63 @@ body {
   overscroll-behavior: none;
 }
 
+/* =========================================================
+ * Dark mode — applied via .dark on <html>.
+ * On remappe les tokens "ivory" (surfaces claires) et "bark"
+ * (texte foncé) pour garder les couleurs brand (rose, vert…)
+ * telles quelles — elles doivent rester punchy en mode sombre.
+ * ========================================================= */
+html.dark {
+  --color-ivory-50:  #2a1424;
+  --color-ivory-100: #1f0f1b;
+  --color-ivory-200: #2f1a29;
+  --color-ivory-300: #3a2233;
+  --color-ivory-400: #4a2d40;
+  --color-ivory-500: #5c384e;
+
+  --color-bark-50:  #fff0f6;
+  --color-bark-100: #ffd6ea;
+  --color-bark-200: #f7c8dd;
+  --color-bark-300: #c8a8b8;
+  --color-bark-400: #a07f94;
+  --color-bark-500: #c8a8b8;
+  --color-bark-600: #e2cfda;
+  --color-bark-700: #f2e8ed;
+  --color-bark-800: #ffffff;
+}
+
+html.dark body {
+  background-color: var(--color-ivory-100);
+  color: var(--color-bark-800);
+}
+html.dark #root {
+  background-color: var(--color-ivory-100);
+}
+
+/* Glass cards en dark — tonal inverse */
+html.dark .glass-card {
+  background: rgba(47, 26, 41, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 30px -8px rgba(0, 0, 0, 0.3);
+}
+html.dark .glass-card-rose  { background: linear-gradient(135deg, rgba(255, 45, 120, 0.15), rgba(47, 26, 41, 0.65)); }
+html.dark .glass-card-green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(47, 26, 41, 0.65)); }
+html.dark .glass-card-sky   { background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(47, 26, 41, 0.65)); }
+html.dark .glass-card-violet{ background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(47, 26, 41, 0.65)); }
+html.dark .glass-card-amber { background: linear-gradient(135deg, rgba(248, 138, 31, 0.15), rgba(47, 26, 41, 0.65)); }
+
+/* Surfaces blanches → neutres foncées en dark */
+html.dark .bg-white {
+  background-color: #2f1a29;
+}
+
+/* Les .elev-* (ombres ambiantes) sont trop visibles en dark, on les atténue */
+html.dark .elev-1 { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.3); }
+html.dark .elev-2 { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.25); }
+html.dark .elev-3 { box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), 0 6px 14px rgba(0, 0, 0, 0.3); }
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }

@@ -6,6 +6,8 @@ import { generateId } from '@/lib/utils';
 import type { Country, Sex, ChildProfile } from '@/types/child';
 import { COUNTRY_BY_CODE, COUNTRIES } from '@/data/countries';
 import { SUPPORTED_LANGUAGES } from '@/i18n';
+import { useTheme, type ThemeMode } from '@/contexts/ThemeContext';
+import { Sun, Moon, SunMoon } from 'lucide-react';
 import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,6 +19,7 @@ const countryLabel = (code: string) => COUNTRY_BY_CODE[code]?.label ?? code;
 
 export function ProfilePage() {
   const { t, i18n } = useTranslation();
+  const { mode: themeMode, setMode: setThemeMode } = useTheme();
   const navigate = useNavigate();
   const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile, removeBaby } = useBaby();
   const [editing, setEditing] = useState(false);
@@ -249,6 +252,35 @@ export function ProfilePage() {
                 >
                   <span className="text-lg">{lang.flag}</span>
                   <span className="flex-1 text-left">{lang.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Theme */}
+        <div>
+          <p className="text-sm text-bark-600 font-medium mb-2">{t('profile.theme')}</p>
+          <div className="flex gap-2">
+            {([
+              { id: 'auto' as ThemeMode,  labelKey: 'theme_auto',  icon: SunMoon },
+              { id: 'light' as ThemeMode, labelKey: 'theme_light', icon: Sun },
+              { id: 'dark' as ThemeMode,  labelKey: 'theme_dark',  icon: Moon },
+            ]).map(opt => {
+              const Icon = opt.icon;
+              const active = themeMode === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() => setThemeMode(opt.id)}
+                  className={`flex-1 flex flex-col items-center gap-1 py-3 rounded-xl text-xs font-semibold transition-all ${
+                    active
+                      ? 'bg-violet-500 text-white shadow-md shadow-violet-500/30'
+                      : 'bg-ivory-200 text-bark-600'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {t(`profile.${opt.labelKey}`)}
                 </button>
               );
             })}
