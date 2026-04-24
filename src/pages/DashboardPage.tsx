@@ -117,15 +117,14 @@ export function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10"
+          className="relative z-10 hero-text"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-medium">
+          <p className="text-sm text-white/80 font-medium tracking-wide">
             Bonjour, maman de
           </p>
-          <div className="flex items-end gap-3 mt-1.5">
+          <div className="flex items-end gap-3 mt-1">
             <h1
-              className="text-white text-5xl leading-none"
-              style={{ fontFamily: 'Instrument Serif, serif' }}
+              className={`font-display text-white leading-[0.95] font-semibold ${profile.name.length > 8 ? 'text-5xl' : profile.name.length > 6 ? 'text-[3.5rem]' : 'text-6xl'}`}
             >
               {profile.name}
             </h1>
@@ -157,7 +156,7 @@ export function DashboardPage() {
               </div>
             )}
           </div>
-          <p className="text-white/85 text-sm mt-2 font-medium">{ageText}</p>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{ageText}</p>
         </motion.div>
       </div>
 

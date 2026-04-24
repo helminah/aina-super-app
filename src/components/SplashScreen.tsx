@@ -67,8 +67,7 @@ export function SplashScreen({ onComplete, minDurationMs = 2600 }: SplashScreenP
               initial={{ opacity: 0, y: 16, letterSpacing: '0.4em' }}
               animate={{ opacity: 1, y: 0, letterSpacing: '0.2em' }}
               transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-white text-6xl tracking-widest"
-              style={{ fontFamily: 'Instrument Serif, serif' }}
+              className="font-display text-white text-7xl font-medium"
             >
               AINA
             </motion.h1>
@@ -86,8 +85,7 @@ export function SplashScreen({ onComplete, minDurationMs = 2600 }: SplashScreenP
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-4 text-white/90 text-base tracking-wide"
-              style={{ fontFamily: 'Instrument Serif, serif', fontStyle: 'italic' }}
+              className="font-display-intimate mt-4 text-white/95 text-xl"
             >
               Souffle de vie
             </motion.p>

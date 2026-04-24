@@ -49,8 +49,7 @@ export function AuthPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="mt-5 text-5xl tracking-widest"
-          style={{ fontFamily: 'Instrument Serif, serif' }}
+          className="font-display text-white text-6xl tracking-[0.15em] mt-5 font-medium"
         >
           AINA
         </motion.h1>
@@ -58,8 +57,7 @@ export function AuthPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="text-white/85 text-sm mt-1"
-          style={{ fontFamily: 'Instrument Serif, serif', fontStyle: 'italic' }}
+          className="font-display-intimate text-white/90 text-lg mt-1"
         >
           Souffle de vie
         </motion.p>

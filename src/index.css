@@ -96,10 +96,10 @@
   --color-ink: var(--color-bark-800);
   --color-ink-muted: var(--color-bark-500);
 
-  /* Typography */
+  /* Typography — Fraunces variable (SOFT + WONK) pour chaleur maternelle 2026 */
   --font-heading: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Be Vietnam Pro', sans-serif;
-  --font-display: 'Instrument Serif', serif;
+  --font-display: 'Fraunces', 'Georgia', serif;
 
   /* Radii (squircles-ready via border-radius, iOS-like) */
   --radius-card: 2rem;
@@ -125,6 +125,33 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+}
+
+/* Display family — Fraunces variable. Axes personnalisés pour un serif
+   chaud et organique (pas les styles "formels" par défaut). */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  letter-spacing: -0.015em;
+}
+
+.font-display-intimate {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'opsz' 48, 'SOFT' 100, 'WONK' 1;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.font-display-soft {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 96, 'SOFT' 60, 'WONK' 0;
+}
+
+/* Ombre douce pour le texte blanc sur les hero gradients (sinon ça noie) */
+.hero-text {
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 #root {
@@ -177,41 +204,42 @@ h1, h2, h3, h4, h5, h6 {
     0 10px 30px -8px rgba(44, 20, 36, 0.12);
 }
 
-/* Mesh par section — pour les hero de chaque tab */
+/* Mesh par section — texte blanc atterrit en haut-gauche,
+   donc on garde des tons foncés là et clairs à droite/bas pour la chaleur. */
 .mesh-green {
-  background-color: #059669;
+  background-color: #047857;
   background-image:
-    radial-gradient(at 14% 18%, #34d399 0px, transparent 55%),
+    radial-gradient(at 12% 20%, #047857 0px, transparent 55%),
     radial-gradient(at 82% 12%, #10b981 0px, transparent 55%),
-    radial-gradient(at 72% 84%, #6ee7b7 0px, transparent 50%),
-    radial-gradient(at 8% 82%, #047857 0px, transparent 50%);
+    radial-gradient(at 72% 84%, #34d399 0px, transparent 50%),
+    radial-gradient(at 8% 82%, #065f46 0px, transparent 50%);
 }
 
 .mesh-sky {
-  background-color: #0284c7;
+  background-color: #0369a1;
   background-image:
-    radial-gradient(at 14% 18%, #38bdf8 0px, transparent 55%),
-    radial-gradient(at 82% 12%, #7dd3fc 0px, transparent 55%),
-    radial-gradient(at 72% 84%, #0ea5e9 0px, transparent 50%),
-    radial-gradient(at 8% 82%, #0369a1 0px, transparent 50%);
+    radial-gradient(at 12% 20%, #0369a1 0px, transparent 55%),
+    radial-gradient(at 82% 12%, #0ea5e9 0px, transparent 55%),
+    radial-gradient(at 72% 84%, #38bdf8 0px, transparent 50%),
+    radial-gradient(at 8% 82%, #075985 0px, transparent 50%);
 }
 
 .mesh-violet {
-  background-color: #9333ea;
+  background-color: #7e22ce;
   background-image:
-    radial-gradient(at 14% 18%, #c084fc 0px, transparent 55%),
+    radial-gradient(at 12% 20%, #6b21a8 0px, transparent 55%),
     radial-gradient(at 82% 12%, #a855f7 0px, transparent 55%),
-    radial-gradient(at 72% 84%, #d8b4fe 0px, transparent 50%),
-    radial-gradient(at 8% 82%, #7e22ce 0px, transparent 50%);
+    radial-gradient(at 72% 84%, #c084fc 0px, transparent 50%),
+    radial-gradient(at 8% 82%, #581c87 0px, transparent 50%);
 }
 
 .mesh-amber {
-  background-color: #f88a1f;
+  background-color: #e84015;
   background-image:
-    radial-gradient(at 14% 18%, #ffc966 0px, transparent 55%),
-    radial-gradient(at 82% 12%, #ffa641 0px, transparent 55%),
-    radial-gradient(at 72% 84%, #ff8050 0px, transparent 50%),
-    radial-gradient(at 8% 82%, #ff6030 0px, transparent 50%);
+    radial-gradient(at 12% 20%, #c0320a 0px, transparent 55%),
+    radial-gradient(at 82% 12%, #f88a1f 0px, transparent 55%),
+    radial-gradient(at 72% 84%, #ffa641 0px, transparent 50%),
+    radial-gradient(at 8% 82%, #b92d0a 0px, transparent 50%);
 }
 
 .btn-gradient {

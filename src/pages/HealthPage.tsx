@@ -96,13 +96,13 @@ export function HealthPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative z-10"
+          className="relative z-10 hero-text"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-medium">Suivi pédiatrique</p>
-          <h1 className="text-white text-5xl leading-none mt-1.5" style={{ fontFamily: 'Instrument Serif, serif' }}>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">Suivi pédiatrique</p>
+          <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">
             Santé
           </h1>
-          <p className="text-white/85 text-sm mt-2 font-medium">Vaccins · Croissance · Développement</p>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">Vaccins · Croissance · Développement</p>
         </motion.div>
       </div>
 
