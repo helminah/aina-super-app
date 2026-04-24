@@ -1,33 +1,33 @@
 {
   "app": {
     "name": "AINA",
-    "slogan": "Fofonain'ny aina",
-    "loading": "Miandry…",
-    "medical_disclaimer": "AINA dia fitaovana fampahafantarana. Ny votoatiny dia tsy misolo ny hevitry ny mpitsabo."
+    "slogan": "Fofon'aina",
+    "loading": "Eo am-pangalana…",
+    "medical_disclaimer": "Fitaovana fampahalalam-baovao ny AINA. Ny votoatiny dia tsy mahasolo ny hevitry ny mpitsabo matihanina."
   },
   "nav": {
     "home": "Fandraisana",
     "health": "Fahasalamana",
     "nutrition": "Sakafo",
     "journal": "Diary",
-    "profile": "Mombamomba"
+    "profile": "Pofily"
   },
   "common": {
-    "back": "Miverina",
-    "next": "Manohy",
-    "save": "Raiketina",
-    "cancel": "Hofoanana",
-    "close": "Akatona",
-    "delete": "Fafana",
+    "back": "Hiverina",
+    "next": "Hanohy",
+    "save": "Tehirizina",
+    "cancel": "Hanafoana",
+    "close": "Hanakatona",
+    "delete": "Hamafa",
     "edit": "Hanova",
-    "add": "Hampiditra",
+    "add": "Hanampy",
     "done": "Vita",
-    "overdue": "Tara",
+    "overdue": " Tara",
     "soon": "Ho avy",
-    "see_all": "Hizaha azy rehetra",
-    "learn_more": "Hahafantarana bebe kokoa",
-    "tap_to_expand": "Tsindrio raha hahalala bebe kokoa",
-    "tap_to_collapse": "Tsindrio hanakatona",
+    "see_all": "Hijery ny rehetra",
+    "learn_more": "Hanitatra fahalalana",
+    "tap_to_expand": "Kitihina raha hovakiana bebe kokoa",
+    "tap_to_collapse": "Kitihina raha hanakatona",
     "day": "andro",
     "days": "andro",
     "month": "volana",
@@ -37,473 +37,473 @@
     "girl": "Zazavavy"
   },
   "auth": {
-    "welcome": "Tonga soa",
+    "welcome": "Tongasoa",
     "login": "Hiditra",
     "signup": "Hamorona kaonty",
     "login_cta": "Hiditra",
     "signup_cta": "Hamorona ny kaontiko",
-    "email": "Mailaka",
-    "password": "Teny miafina",
-    "signup_success": "Vita ny kaonty ! Jereo ny mailaka 📧",
-    "terms": "Amin'ny fanohizana, ianao dia manaiky ny fepetra sy ny politika fiarovana ny zavatra manokana.",
-    "dev_mode_label": "Fomba dev — tsy vonona ny Supabase",
-    "dev_bypass": "Hanohy amin'ny demo eto an-toerana"
+    "email": "Imailaka",
+    "password": "***",
+    "signup_success": "Voaforona ny kaonty! Jereo ny imailakanao 📧",
+    "terms": "Raha manohy ianao, dia manaiky ny fepetra fampiasana sy ny politikan'ny tsiambaratelo izahay.",
+    "dev_mode_label": "Mode dev — Tsy voalamina ny Supabase",
+    "dev_bypass": "Hanohy amin'ny demo tsotra"
   },
   "onboarding": {
     "step_of": "Dingana {{current}} amin'ny {{total}}",
-    "welcome_title": "Tonga soa eto amin'ny AINA",
-    "welcome_subtitle": "Inona ny anaran'ny zanakao ?",
-    "name_placeholder": "Anaran'ny zaza",
-    "birth_date_title": "Oviana no nahaterahan'i {{name}} ?",
-    "birth_date_subtitle": "Ary zazalahy sa zazavavy ?",
+    "welcome_title": "Tongasoa ato amin'ny AINA",
+    "welcome_subtitle": "Iza no anarana mamy iantsoanao ny zanakao?",
+    "name_placeholder": "Anaran'ny zazakely",
+    "birth_date_title": "Oviana no teraka i {{name}}?",
+    "birth_date_subtitle": "Ary zazalahy kely sa zazavavy kely izy?",
     "measurements_title": "Refy tamin'ny fahaterahana",
-    "measurements_subtitle": "Ilaintsika izy ireo hijerena ny fitomboany.",
+    "measurements_subtitle": "Mila izany izahay hanaraha-maso ny fitomboany.",
     "weight_kg": "Lanja (kg)",
-    "height_cm": "Halavany (cm)",
-    "country_title": "Aiza no hitomboan'i {{name}} ?",
-    "country_subtitle": "Hifanaraka amin'ny fanjakana no vaksiny.",
+    "height_cm": "Halehibe (cm)",
+    "country_title": "Aiza no mitombo i {{name}}?",
+    "country_subtitle": "Hampifanarahina amin'ny teti-pirenena fanaovam-bakisiny (PEV) ny fandaharam-potoana.",
     "country_search": "Hitady firenena…",
-    "country_no_results": "Tsy misy firenena hita hoe « {{query}} ».",
-    "vaccines_title": "Vaksiny efa nomena",
-    "vaccines_subtitle": "Marihana izay vaksiny efa noraisin'i {{name}} mba ho mitombina ny fanaraha-maso.",
-    "vaccines_too_young": "Kely dia kely i {{name}}, tsy misy vaksiny mbola andrasana.",
+    "country_no_results": "Tsy nisy firenena hita tamin'ny « {{query}} ».",
+    "vaccines_title": "Vakisiny efa natao",
+    "vaccines_subtitle": "Mariho ny vakisiny efa azon'i {{name}} mba hahafahana manao fanaraha-maso manokana.",
+    "vaccines_too_young": "Mbola kely loatra i {{name}}, mbola tsy misy vakisiny tokony hatao aloha izao.",
     "start": "Hanomboka"
   },
   "dashboard": {
-    "hello_mom_of": "Salama, reny reny an'i",
-    "tip_of_day": "Torohevitra androany",
-    "next_vaccine": "Vaksiny manaraka",
-    "days_until": "Afaka {{days}} andro",
-    "days_until_plural": "Afaka {{days}} andro",
+    "hello_mom_of": "Manao ahoana, renin'i",
+    "tip_of_day": "Torohevitra ho an'ny anio",
+    "next_vaccine": "Vakisiny manaraka",
+    "days_until": "Rehefa afaka {{days}} andro",
+    "days_until_plural": "Rehefa afaka {{days}} andro",
     "vaccine_overdue": "Tara",
-    "sleep": "Torimaso",
+    "sleep": "Tory",
     "weight": "Lanja",
-    "today": "androany",
-    "latest": "farany",
+    "today": "anio",
+    "latest": "refy farany",
     "birth_value": "fahaterahana",
     "not_yet": "Tsy mbola",
-    "recent_activity": "Hetsika vao haingana",
-    "suggestion_of_day": "Soso-kevitra androany",
+    "recent_activity": "Hetsika farany",
+    "suggestion_of_day": "Soso-kevitra ho an'ny anio",
     "sos_label": "SOS",
-    "care_kit": "Fitaovana",
-    "pediatric_followup": "Novokarin'i Dr"
+    "care_kit": "Maika",
+    "pediatric_followup": "Nataon'i"
   },
   "health": {
     "title": "Fahasalamana",
-    "hero_tagline": "Vaksiny · Fitomboana · Nify · Dingana",
-    "hero_kicker": "Fanaraha-maso ny zaza",
+    "hero_tagline": "Vakisiny · Fitomboana · Nify · Dingana",
+    "hero_kicker": "Fanaraha-maso ara-pahasalamana",
     "tabs": {
-      "vaccines": "Vaksiny",
+      "vaccines": "Vakisiny",
       "growth": "Fitomboana",
       "teeth": "Nify",
-      "development": "Dingana"
+      "development": "Dingam-pitomboana"
     },
     "vaccines": {
-      "progress": "Fandrosoana",
+      "progress": "Fivoarana",
       "birth": "Fahaterahana",
-      "education_title": "Ahoana ny fiasan'ny vaksiny ?",
-      "education_kicker": "Hahatakatra",
-      "detail_why": "Nahoana no manao azy ?",
-      "detail_disease": "Ny aretina",
+      "education_title": "Ny vakisiny, ahoana no fiasany?",
+      "education_kicker": "Hahafantatra bebe kokoa",
+      "detail_why": "Nahoana no manao azy?",
+      "detail_disease": "Ny aretina resahina",
       "detail_risk": "Nahoana no mampidi-doza",
-      "detail_side_effects": "Fiantraikany andrasana",
-      "disclaimer": "Famantarana fotsiny izy ireo. Ny dokotera no mpanoro hevitra voalohany."
+      "detail_side_effects": "Voka-dratsy mety hitranga",
+      "disclaimer": "Ireo fampahalalana ireo dia antsangany ihany. Ny mpitsabo ny zanakao no tompon'andraikitra feno amin'ny fanontaniana manokana rehetra."
     },
     "growth": {
       "weight": "Lanja (kg)",
-      "height": "Halavany (cm)",
-      "hc": "PC (cm)",
-      "no_data": "Tsy mbola misy refy voasoratra. Ampidiro ny voalohany.",
-      "add_measure": "Hampiditra refy"
+      "height": "Halehibe (cm)",
+      "hc": "Refin'ny loha (cm)",
+      "no_data": "Tsy mbola misy refy voarakitra. Manampia iray hahitana ny dikan'izany.",
+      "add_measure": "Hanampy refy"
     },
     "teeth": {
-      "erupted": "Nify nitranga",
-      "legend_incisor": "Maranidoha",
-      "legend_canine": "Vango",
-      "legend_molar": "Vavahady",
-      "tap_hint": "Tsindrio ny nify iray mba hamarihana azy ho nitranga",
-      "upper_jaw": "Valanorano ambony",
-      "lower_jaw": "Valanorano ambany",
-      "timeline": "Fandaharana",
-      "soothe_title": "Hanamaivanana ny fipoiran'ny nify",
+      "erupted": "Nify nipoitra",
+      "legend_incisor": "Nify mpanapaka",
+      "legend_canine": "Nify fangoloka",
+      "legend_molar": "Nify fikosohana",
+      "tap_hint": "Tsindrio the nify iray raha hanamarika azy ho nipoitra",
+      "upper_jaw": "Sihy ambony",
+      "lower_jaw": "Sihy ambany",
+      "timeline": "Tabilao",
+      "soothe_title": "Hampitony ny fanaintainana",
       "growing_well": "Mitombo tsara i {{name}} 🌱"
     },
     "development": {
-      "red_flags_kicker": "Oviana hizaha dokotera ?",
-      "red_flags_title": "Famantarana tandremana amin'ny {{ageLabel}}",
-      "red_flags_intro": "Raha maneho iray na maromaro amin'ireto famantarana ireto i {{name}}, resaho amin'ny pédiatra :",
-      "call_doctor": "Hantso dokotera",
-      "disclaimer": "Samy manana ny fitomboany ny zaza — famantarana fotsiny ireo, ny mpitsabo no afaka manome hevitra."
+      "red_flags_kicker": "Rahoviana no hanatona mpitsabo?",
+      "red_flags_title": "Sintoma tokony hojerena eo amin'ny faha-{{ageLabel}}",
+      "red_flags_intro": "Raha toa ka mampiseho ny iray amin'ireto famantarana ireto i {{name}} amin'izao taonany izao, dia miresaha amin'ny mpitsabo:",
+      "call_doctor": "Hiantso mpitsabo",
+      "disclaimer": "Samihafa ny fitomboan'ny ankizy tsirairay — santionany fotsiny ireo famantarana ireo, ny mpitsabo ihany no afaka manome hevitra raikitra."
     }
   },
   "nutrition": {
     "title": "Sakafo",
-    "hero_kicker": "Tsiro & vongany",
-    "hero_tagline": "Fomba · Tiana · Menu · Vidim-barotra",
+    "hero_kicker": "Tsiro & firindrana",
+    "hero_tagline": "Nahandro · Ankafizina · Sakafo · Fiantsenana",
     "tabs": {
-      "recipes": "Fomba",
+      "recipes": "Nahandro",
       "foods": "Sakafo",
-      "favorites": "Tiana",
-      "planner": "Menu",
-      "shopping": "Vidim-barotra"
+      "favorites": "Ankafizina",
+      "planner": "Teti-pisakafoana",
+      "shopping": "Tsena"
     },
     "foods": {
-      "conservation_title": "Fitahirizana sakafo",
-      "conservation_tagline": "Firizé · mangatsiaka · sisa · fotoana",
-      "hygiene_title": "Fahadiovana & fiomanana",
-      "hygiene_tagline": "Tavoahangy · fitaovana · fanasana",
-      "new_badge": "vaovao",
-      "allergen": "manetsiketsika",
-      "detail_texture": "Endrika",
+      "conservation_title": "Fitahirizana ny sakafo",
+      "conservation_tagline": "Vata fampangatsiahana · fitehirizana · ambina · faharetana",
+      "hygiene_title": "Fahadiovana & fikarakarana",
+      "hygiene_tagline": "Biberon · fitaovana · fanasana",
+      "new_badge": "baovao",
+      "allergen": "mety hiteraka tsy fahazakana",
+      "detail_texture": "Firindrana",
       "detail_tips": "Torohevitra",
-      "detail_local": "Eto an-toerana"
+      "detail_local": "Sakafo eto an-toerana"
     }
   },
   "journal": {
     "title": "Diary",
-    "hero_kicker": "Manan-danja ny isan'andro",
-    "hero_tagline": "Sakafo · Torimaso · Lamba · Fihetsika",
-    "empty": "Tsy misy nosoratana ho an'ity andro ity",
-    "empty_hint": "Ampiasao ny bokotra + hampiditra hetsika."
+    "hero_kicker": "Sarobidy ny andro rehetra",
+    "hero_tagline": "Sakafo · Torimaso · Lamba firakotra · Toe-po",
+    "empty": "Tsy misy na inona na inona voarakitra ho an'ity andro ity",
+    "empty_hint": "Ampiasao ny bokotra + raha hanampy hetsika iray."
   },
   "profile": {
-    "title": "Mombamomba",
+    "title": "Pofily",
     "hero_kicker": "Ny toerako",
-    "hero_tagline": "Zaza · Fepetra · Boky",
-    "born_on": "Teraka ny",
+    "hero_tagline": "Zazakely · Fandaminana · Diary",
+    "born_on": "Teraka tamin'ny",
     "birth_weight": "Lanja tamin'ny fahaterahana",
-    "birth_height": "Halavany tamin'ny fahaterahana",
-    "add_baby": "Hampiditra zaza",
-    "settings": "Fepetra",
-    "country_vaccine": "Firenena (fandaharam-baksiny)",
+    "birth_height": "Halehibe tamin'ny fahaterahana",
+    "add_baby": "Hanampy zazakely",
+    "settings": "Fandaminana",
+    "country_vaccine": "Firenena (teti-bakisiny)",
     "language": "Fiteny",
-    "theme": "Endrika",
-    "theme_auto": "Ho azy",
+    "theme": "Loko",
+    "theme_auto": "Arakaraky ny finday",
     "theme_light": "Mazava",
     "theme_dark": "Maizina",
-    "export_record": "Hanondrana ny boky fahasalamana",
+    "export_record": "Hamoaka ny bokim-pahasalamana",
     "danger_zone": "Faritra saro-pady",
-    "delete_baby": "Hamafa ity zaza ity",
-    "profile_updated": "Voaova ny mombamomba ✓"
+    "delete_baby": "Hamafa ity zazakely ity",
+    "profile_updated": "Voavaozina ny pofily ✓"
   },
   "care": {
-    "title": "Fanomezana fanafody",
-    "hero_kicker": "Ny fitaovam-panafodiko",
-    "hero_tagline": "Refy · Hafanana · Tay",
+    "title": "Fikarakarana",
+    "hero_kicker": "Ny fitoeram-panafodiko",
+    "hero_tagline": "Fatra · Tazo · Maloto",
     "tabs": {
-      "dose": "Refy",
-      "fever": "Hafanana",
-      "stool": "Tay"
+      "dose": "Fatra",
+      "fever": "Tazo",
+      "stool": "Maloto"
     },
     "dose": {
       "medication": "Fanafody",
-      "weight_of_baby": "Lanjan'ny zaza",
-      "form": "Endrika",
-      "recommended_dose": "Refy aroso",
-      "max_interval": "Isaky ny 6 ora fara fahakeliny ({{count}} indray mandeha/24 ora) · ampifanaraho amin'ny hafanana.",
-      "ibuprofen_warning": "Tsy azo ampiasaina raha latsaky ny 3 volana, varicella, na tsy ampy rano.",
-      "record_dose": "Hanoratra ny refy",
-      "last_dose": "Refy farany",
-      "next_allowed": "Manaraka azo omena",
-      "too_soon": "Mbola ela — miandrasa",
-      "history": "Tantara 24 ora"
+      "weight_of_baby": "Lanjan'ny zazakely",
+      "form": "Fandrafetana",
+      "recommended_dose": "Fatra soso-kevitra",
+      "max_interval": "Isaky ny 6 ora raha be indrindra (fatra {{count}} ao anatin'ny 24 ora) · amboarina arakaraky ny tazo.",
+      "ibuprofen_warning": "Tsy azo omena alohan'ny 3 volana, raha voan'ny nendra na ritra rano ny vatana.",
+      "record_dose": "Hirakitra the fanafody nomena",
+      "last_dose": "Fanafody nomena farany",
+      "next_allowed": "Fanafody manaraka azo omena",
+      "too_soon": "Mbola aloha loatra — miandrasa kely",
+      "history": "Ny tamin'ny 24 ora farany"
     },
     "fever": {
-      "level_normal": "Salama",
+      "level_normal": "Ara-dalàna",
       "level_mild": "Kely",
-      "level_moderate": "Manaraka",
-      "level_high": "Avo",
-      "baby_under_3m_title": "Zaza < 3 volana",
-      "baby_under_3m_body": "Na inona na inona hafanana ≥ 38°C dia maika. Mandehana avy hatrany amin'ny dokotera.",
-      "when_emergency": "Oviana no maika ?"
+      "level_moderate": "Antonony",
+      "level_high": "Ambony",
+      "baby_under_3m_title": "Zazakely < 3 volana",
+      "baby_under_3m_body": "Raha vao ≥ 38°C ny tazo dia maika. Manantona mpitsabo avy hatrany.",
+      "when_emergency": "Rahoviana no tokony hanatona mpitsabo haingana?"
     },
-    "disclaimer": "Famantarana fotsiny ireo. Jereo foana ny torolalana ary mihaonana amin'ny dokotera raha misalasala. Maika : SAMU 15 / 117."
+    "disclaimer": "Ireo fampahalalana ireo dia antsangany ihany. Jereo hatrany ny taratasy miaraka amin'ny fanafody ary manantona mpitsabo raha misy fisalasalana. Raha misy fahamehana momba ny aina: BMH 124 na ny mpitsabo akaiky indrindra."
   },
   "vaccine_info": {
     "bcg": {
-      "why": "Miaro ny zaza amin'ny aretina mandoza indrindra amin'ny avokavoka.",
-      "disease": "Ny tuberkilaozy dia vokatry ny mikraoba manafika ny avokavoka (indraindray koa ireo taova hafa). Mifindra amin'ny alalan'ny kohaka.",
-      "risk": "Amin'ny zaza kely, mety mahatonga endrika mampidi-doza (méningite, pulmonaire).",
-      "side_effects": "Mety ho misy mena kely eo amin'ny toerana natao azy, ary mety hisy holatra kely. Maharitra ihany izay ary tsy misy antenaina."
+      "why": "Miaro ny zazakely amin'ny aretina mafy mikitika indrindra ny havokavoka.",
+      "disease": "Ny kohaka vava (tuberculose) dia vokatry ny otrikaretina mamely ny havokavoka (sy ny taova hafa indraindray). Mifindra amin'ny alalan'ny kohaka izy io.",
+      "risk": "Ho an'ny zaza vao teraka, ny kohaka vava dia mety hiteraka aretina mafy (fivontosan'ny fonon'atidoha na mampitombo ny aretin'ny havokavoka).",
+      "side_effects": "Misy fivontosana kely eo amin'ny toerana nanindronana izay mety hamela kilema eo amin'ny sandry, zavatra ara-dalàna izany."
     },
     "hepb": {
-      "why": "Miaro ny zaza amin'ny virus manimba ny aty mandritra ny fotoana lava.",
-      "disease": "Ny hepatite B dia virus miditra ao amin'ny aty. Mety ho lasa kronika ary miteraka cirose na kansera.",
-      "risk": "Afaka mifindra avy amin'ny reny mankany amin'ny zaza mandritra ny fiterahana na ao anaty fianakaviana.",
-      "side_effects": "Fahamenana eo amin'ny toerana natao azy, mety hisy hafanana kely."
+      "why": "Miaro ny zazakely amin'ny otrikaretina izay manimba ny aty amin'ny hoavy.",
+      "disease": "Ny hépatite B dia otrikaretina mipetraka any amin'ny aty. Mety haharitra ary hiteraka aretin'aty mafy (cirrhose) na homamiadana.",
+      "risk": "Mety hifindra avy amin'ny reny mankany amin'ny zazakely mandritra ny fiterahana na avy amin'ny olona ao an-trano.",
+      "side_effects": "Menamena eo amin'ny toerana nanindronana, mety hisy tazo kely."
     },
     "polio": {
-      "why": "Miaro amin'ny aretina mety hampaka-mahitsy mandrakizay.",
-      "disease": "Ny poliomyélite dia virus manafika ny sasaitra nerveuse ary mety hampaka-mahitsy ny tongotra, ny tanana na ny fiainana.",
-      "risk": "Tsy misy fitsaboana manasitrana — ny vaksiny irery ihany no manakana. Mbola velona any amin'ny firenena sasany.",
-      "side_effects": "Hafanana kely, tsy dia misy fiantraikany."
+      "why": "Miaro amin'ny aretina izay mety mampalemy mandra-pahafaty.",
+      "disease": "Ny poliomyélite dia otrikaretina mamely ny rafi-pitatitra ary mety mampalemy ny tongotra, ny tanana, na ny fisefoana.",
+      "risk": "Tsy misy fanafody mahasitrana azy — ny vakisiny ihany no fisorohana. Mbola misy aretina mipoitra amin'ny firenena sasany.",
+      "side_effects": "Tazo kely, vitsy ny voka-dratsy hita."
     },
     "penta": {
-      "why": "Vaksiny iray miaro amin'ny aretina dimy.",
-      "disease": "Difterie (fahasembanana), Tétanos (fihetsehana), Coqueluche (kohaka matanjaka), Hépatite B, Haemophilus (méningite).",
-      "risk": "Ireo aretina ireo rehetra dia mety ho mahafaty ny zaza kely.",
-      "side_effects": "Hafanana (azo atao ny paracétamol), mena, zaza somary tezitra 24-48 ora."
+      "why": "Vakisiny iray monja nefa miaro amin'ny aretina mafy miisa 5.",
+      "disease": "Difiteria (fahasemporana), Tétanos (fihintson'ny hozatra), Coqueluche (kohaka mafy), Hépatite B, Haemophilus (fivontosan'ny fonon'atidoha).",
+      "risk": "Ireo aretina rehetra ireo dia mety hahafaty the zaza vao teraka.",
+      "side_effects": "Tazo (azo omena paracétamol), menamena, kizitina kely the zazakely mandritra ny 24-48 ora."
     },
     "hexa": {
-      "why": "Miaro amin'ny aretina enina amin'ny tsindrona tokana.",
-      "disease": "Difterie, Tétanos, Coqueluche, Polio, Hib (méningite), Hépatite B.",
-      "risk": "Tsy misy vaksiny, dia mety ho mahafaty ireo aretina ireo.",
-      "side_effects": "Hafanana, mena eo an-toerana, zaza tezitra 24-48 ora. Paracétamol raha misy hafanana."
+      "why": "Miaro amin'ny aretina miisa 6 amin'ny tsindrona iray monja.",
+      "disease": "Difiteria, Tétanos, Coqueluche, Polio, Hib, Hépatite B.",
+      "risk": "Raha tsy misy vakisiny, dia mety ho mafy ary hahafaty ireto aretina ireto.",
+      "side_effects": "Tazo, menamena eo amin'ny toerana nanindronana, kizitina kely the zazakely mandritra ny 24-48 ora. Omena paracétamol raha misy tazo."
     },
     "pneumo": {
-      "why": "Miaro ny avokavoka sy ny atidoha amin'ny mikraoba mampidi-doza.",
-      "disease": "Ny pneumocoque dia mahatonga sofina mifohatra, pulmonary, méningites amin'ny zaza kely.",
-      "risk": "Mety hamela sequelles amin'ny atidoha ny méningite pneumococcique.",
-      "side_effects": "Mety hafanana, mena."
+      "why": "Miaro ny havokavoka sy the atidoha amin'ny otrikaretina mampidi-doza.",
+      "disease": "Ny pneumocoque dia miteraka aretin-tsofina, nemonia ary fivontosan'ny fonon'atidoha ho an'ny ankizy kely.",
+      "risk": "Ny fivontosan'ny fonon'atidoha vokatry the pneumocoque dia mety hamela takaitra amin'ny saina sy the hozatra.",
+      "side_effects": "Mety hisy tazo kely, menamena."
     },
     "rota": {
-      "why": "Manakana fivalanana mafy mety hahatonga zaza tsy ampy rano.",
-      "disease": "Ny rotavirus dia mahatonga gastro-entérite mafy amin'ny zaza kely.",
-      "risk": "Tsy ampy rano haingana — antony voalohany fidirana hopitaly noho ny fivalanana talohan'ny 2 taona.",
-      "side_effects": "Vaksiny atao am-bava, kely ny fiantraikany, indraindray tay somary malemy."
+      "why": "Misoroka the fivalanana mahery vaika izay mety hampiditra rano the zazakely.",
+      "disease": "Ny rotavirus dia miteraka aretin'ny tsinay sy fivalanana mahery vaika amin'ny zazakely.",
+      "risk": "Faharitry the rano ao anaty vatana haingana — antony voalohany mampiditra hopitaly noho the fivalanana alohan'ny 2 taona.",
+      "side_effects": "Vakisiny fihinam-bava, vitsy the voka-dratsy hita, indraindray malemy kely the fivalanana."
     },
     "ror": {
-      "why": "Fiarovana miaro amin'ny aretina telo mifindra mora.",
-      "disease": "Kitrotro (filoharana + hafanana mafy), Oreillons (fivontosan'ny sofina), Rubéole (mampidi-doza raha bevohoka).",
-      "risk": "Ny kitrotro dia mbola iray amin'ireo aretina zaza mampidi-doza indrindra raha tsy misy vaksiny.",
-      "side_effects": "Hafanana sy filoharana kely 7-10 andro aorian'ny vaksiny (fihetsika ara-dalàna)."
+      "why": "Fiarovana telo sosona amin'ireo aretina telo mifindra haingana loatra.",
+      "disease": "Kitrotro (takentaka + tazo mahery), Papango (fivontosan'ny tany tenda), Rubéole (mampidi-doza ho an'ny vehivavy bevohoka).",
+      "risk": "Ny kitrotro no iray amin'ireo aretin'ny ankizy hahafaty be indrindra raha tsy misy vakisiny.",
+      "side_effects": "Tazo sy takentaka kely 7-10 andro aorian'ny vakisiny (fihetsiky the vatana ara-dalàna)."
     },
     "fievre-jaune": {
-      "why": "Miaro amin'ny aretina mifindra amin'ny moka, mampidi-doza any Afrika.",
-      "disease": "Ny fièvre jaune dia mitarika hafanana, fivalanana mavo ary mety hanao ny aty sy ny voa.",
-      "risk": "Aretina mety ho mahafaty. Miely any amin'ny firenena afrikanina maro.",
-      "side_effects": "Hafanana kely 1-2 andro aorian'izay, havizanana."
+      "why": "Miaro amin'ny aretina entin'ny moka, izay mafy aty Afrika.",
+      "disease": "Ny tazo mavo dia miteraka tazo, fivontosan'ny maso sy the hoditra ary afaka mikitika the aty sy the voa.",
+      "risk": "Aretina mety hahafaty. Misy be amin'ny firenena afrikanina maro.",
+      "side_effects": "Tazo kely 1-2 andro aorian'izay, faharerahana."
     },
     "meningo-a": {
-      "why": "Miaro amin'ny méningite ao amin'ny \"ceinture méningitique\" afrikanina.",
-      "disease": "Ny méningocoque A dia mahatonga méningites mahafaty haingana.",
-      "risk": "Epidemia amin'ny vanim-potoana any Sahel, ny ankizy no voakasika indrindra.",
-      "side_effects": "Mena, hafanana kely."
+      "why": "Miaro amin'ny fivontosan'ny fonon'atidoha mahazatra aty Afrika.",
+      "disease": "Ny méningocoque A dia miteraka fivontosan'ny fonon'atidoha izay hahafaty haingana.",
+      "risk": "Aretina mipoitra isan-taona any amin'ny faritra vitsy orana, the ankizy no tena voany.",
+      "side_effects": "Menamena, tazo kely."
     },
     "meningo-c": {
-      "why": "Miaro amin'ny méningocoque C (méningite / septicémie).",
-      "disease": "Fijanonana méningocoque C : méningite na fijanonana amin'ny ra manontolo.",
-      "risk": "Mety ho mahafaty anaty ora vitsivitsy. Tena mahomby ny vaksiny.",
-      "side_effects": "Mena eo an-toerana, kely ny fiantraikany."
+      "why": "Miaro amin'ny méningocoque C (fivontosan'ny fonon'atidoha / fahapoizina ao amin'ny ra).",
+      "disease": "Infection à méningocoque C : fivontosan'ny fonon'atidoha na aretina miparitaka amin'ny ra.",
+      "risk": "Mety hahafaty ao anatin'ny ora vitsy. Mahomby tsara the vakisiny.",
+      "side_effects": "Menamena eo amin'ny toerana nanindronana, vitsy the voka-dratsy."
     },
     "vita": {
-      "why": "Manamafy ny hery miaro sy manakana ny olan'ny maso.",
-      "disease": "Ny tsy fahampian'ny vitamine A dia mahatonga fahajambana amin'ny alina sy fihenan'ny hery miaro.",
-      "risk": "Matetika amin'ny faritra sasany ao amin'ny sakafo tsy maro karazana.",
-      "side_effects": "Tsy misy amin'ny dose mahazatra. Am-bava."
+      "why": "Manamafy the fiarovana the vatana sy misoroka the olana amin'ny fahitana.",
+      "disease": "Ny tsy fahampian'ny vitamina A dia miteraka tsy fahitana amin'ny alina sy fahalemen'ny fiarovana the vatana.",
+      "risk": "Matetika mitranga amin'ny faritra sasany izay tsy dia miovaova the sakafo.",
+      "side_effects": "Tsy misy raha arakaraka the fatra voatondro. Atete amin'ny vava."
     }
   },
   "red_flags": {
     "4": {
       "label": "4 volana",
       "signs": [
-        "Tsy mitsinjo ny lohany",
-        "Tsy manaraka amin'ny masony ny zavatra mihetsika",
-        "Tsy mitsiky miverina",
-        "Tsy mihetsika amin'ny feo mafy"
+        "Tsy mahatana the lohany",
+        "Tsy manaraka amin'ny maso zavatra mihetsika",
+        "Tsy mitsiky rehefa iresahana",
+        "Tsy taitra amin'ny feo mafy"
       ]
     },
     "9": {
       "label": "9 volana",
       "signs": [
-        "Tsy afaka mipetraka na dia amin'ny fanampiana",
-        "Tsy mibitsika (tsy misy mamama, papapa)",
-        "Tsy mihetsika amin'ny feo na amin'ny anarany",
-        "Tsy mametraka zavatra ao am-bava"
+        "Tsy mahavita mipetraka na dia misy manohana aza",
+        "Tsy mibabibaby (tsy miteny hoe mamama, papapa)",
+        "Tsy taitra amin'ny feo na amin'ny anarany",
+        "Tsy mampiditra zavatra any am-bavany"
       ]
     },
     "12": {
       "label": "12 volana",
       "signs": [
-        "Tsy mitsangana amin'ny fanohanana",
-        "Tsy misy teny, na dia tsy mazava",
+        "Tsy mahavita mitsangana na dia misy itananjahana aza",
+        "Tsy miteny na teny iray aza",
         "Tsy manondro amin'ny rantsan-tanana",
-        "Tsy mijery amin'ny lalana asehony"
+        "Tsy mijery amin'ny lalana atorona azy"
       ]
     },
     "18": {
       "label": "18 volana",
       "signs": [
         "Tsy mandeha",
-        "Mivolana latsaky ny teny 5",
-        "Tsy mahatakatra baiko tsotra (omeo, avia)",
-        "Fahaverezan'ny fahaiza-manao efa azo"
+        "Tsy mahateny teny mihoatra the 5",
+        "Tsy mahazo baiko tsotra (omeo, avia)",
+        "Very ireo fahaizana efa nananany teo aloha"
       ]
     },
     "24": {
       "label": "24 volana",
       "signs": [
-        "Tsy manao fehezanteny 2 teny",
-        "Tsy milalao fampitandremana",
-        "Tsy maneho fahalianana amin'ny ankizy hafa",
-        "Fihetsika miverimberina tsy mahazatra"
+        "Tsy mahavita manambatra teny 2 ho fehezanteny",
+        "Tsy mahay milalao mody manao zavatra",
+        "Tsy liana amin'ny ankizy hafa",
+        "Manao fihetsika miverimberina tsy mahazatra"
       ]
     }
   },
   "teeth_tips": [
-    "🧊 Ny peratra nify mangatsiaka dia manamaivana ny akanjon-nify marary",
-    "👆 Kotrehana moramora ny akanjon-nify amin'ny rantsan-tanana madio",
-    "💊 Paracétamol raha misy hafanana kely mifanaraka amin'ny fipoiran'ny nify",
-    "🍌 Omeo sakafo mangatsiaka (compote mangatsiaka, akondro madio)",
-    "🚫 Ialao ny gel anesthésiant — tsy aroso raha latsaky ny 2 taona"
+    "🧊 Ny peratra nify mangatsiaka dia mampitony the hihy marary",
+    "👆 Otrao moramora amin'ny rantsan-tanana madio the hihiny",
+    "💊 Paracétamol raha misy tazo kely vokatry the fipoitra nify",
+    "🍌 Omeo sakafo mangatsiaka (kompota mangatsiaka, akondro)",
+    "🚫 Sorohy the fampiasana fanafody fampitoniana (gels) — tsy soso-kevitra alohan'ny 2 taona"
   ],
   "emergency": {
-    "title": "🚨 Mitsenta - Zaza",
-    "call_samu": "Hantso ny SAMU (15 / 117)",
+    "title": "🚨 Kendry - Zazakely",
+    "call_samu": "Hiantso vonjy taitra (124)",
     "steps": [
       {
-        "title": "Hadihadio ny zava-misy",
-        "desc": "Mikohaka ve ny zaza ? Afaka mitomany na manao feo ? Raha eny, ampirisiho izy hikohaka."
+        "title": "Zahao the zava-misy",
+        "desc": "Mikoaka ve the zazakely? Mahavita mitomany na mamoaka feo ve izy? Raha eny, amporisiho isika hikohaka."
       },
       {
         "title": "Toerana",
-        "desc": "Ampirindrino ny zaza eo amin'ny sandry, lohany ambany kokoa noho ny vatany, mitazona ny valanorano."
+        "desc": "Apetraho mitsinkafona am-pofoana the zazakely, the lohany ambany noho the vatany, ary tano the valanoranony."
       },
       {
-        "title": "Tehaka 5 eo an-damosina",
-        "desc": "Asio tehaka mafy 5 eo anelanelan'ny omoplates amin'ny tanana."
+        "title": "Tampoka in-5 eo amin'ny lamosina",
+        "desc": "Tampohy in-5 mafy eo anelanelan'ny taolana roa amin'ny lamosina amin'ny felan-tananao."
       },
       {
-        "title": "Fanindrina 5 amin'ny tratra",
-        "desc": "Ampihetoina ny zaza. Manaovà fanindrina 5 eo amin'ny sternum miaraka amin'ny rantsan-tanana 2."
+        "title": "Tsindry in-5 amin'ny tratra",
+        "desc": "Avadiho the zazakely hiondrika. Tsindrio in-5 eo afovoan'ny taolan-tratra amin'ny rantsan-tanana 2."
       },
       {
-        "title": "Averimberina na hantso fanampiana",
-        "desc": "Ovay ny tehaka sy fanindrina. Raha maharitra ny fanakanana, hantso avy hatrany ny SAMU (15 / 117)."
+        "title": "Avereno na miantsoa vonjy",
+        "desc": "Mifandimby the tampoka sy the tsindry. Raha mbola tsy miala the zavatra mikitika, antsoy avy hatrany the vonjy taitra."
       }
     ]
   },
   "fever_advice": {
-    "normal": "Tsy misy hafanana. Jereo ny fihetsik'ilay zaza.",
-    "mild": "Esory ny akanjo, omeo rano matetika, jereo. Tsy voatery paracétamol raha tsy misy fahasahiranana.",
-    "moderate_template": "Paracétamol {{doseMg}} mg isaky ny 6 ora. Ampangatsiaho ny efitrano (18-20°C).",
-    "high": "Mandehana haingana any amin'ny dokotera, indrindra raha zaza < 3 volana na hafanana > 48 ora.",
+    "normal": "Tsy misy tazo. Araho maso the fihetsiky the zazakely.",
+    "mild": "Esory the akanjo be loatra, omeo rano matetika, araho maso. Tsy voatery omena paracétamol raha mbola milamina the zaza.",
+    "moderate_template": "Paracétamol {{doseMg}} mg isaky ny 6 ora. Ampangatsiahina the efitrano (18-20°C).",
+    "high": "Manantona mpitsabo haingana, indrindra raha < 3 volana the zazakely na mihoatra the 48 ora the tazo.",
     "emergency_signs": [
-      "Fifeheran'angidina, vozona henjana, filoharana",
-      "Mandoa imbetsaka na tsy te hisotro mihitsy",
-      "Torimaso tsy mahazatra, tomany tsy mitsahatra",
-      "Hafanana maharitra > 48 ora tsy mihatsara"
+      "Fanintona, henjana the hatoka, misy pentinpantina amin'ny hoditra",
+      "Mandoa matetika na tsy mety misotro rano mihitsy",
+      "Te hatory lava, mitomany tsy azo ajanona",
+      "Tazo maharitra mihoatra the 48 ora nefa tsy miova"
     ]
   },
   "stool_types": [
     {
       "emoji": "💛",
-      "color": "Mavo moutarde",
-      "status": "Salama",
-      "desc": "Ronono nonoina : tay volamena, mifangaro kely, fofo malefaka.",
+      "color": "Mavo",
+      "status": "Ara-dalàna",
+      "desc": "Ronon-dreny: mavo toy ny volamena, mitambaingana kely, malefaka the fofony.",
       "level": "ok"
     },
     {
       "emoji": "🟤",
-      "color": "Mainty mamirapiratra",
-      "status": "Salama",
-      "desc": "Biberon na sakafo voalohany : tay mafy kokoa, mainty kokoa.",
+      "color": "Mavo maty loha",
+      "status": "Ara-dalàna",
+      "desc": "Biberon na efa mihinana sakafo hafa: mafimafy kokoa, somary mivolontsôkôlà.",
       "level": "ok"
     },
     {
       "emoji": "💚",
-      "color": "Maitso matroka",
-      "status": "Tandremo",
-      "desc": "Indraindray mandalo mahazatra. Raha maharitra : lactose be loatra na fahasahiranana digestif.",
+      "color": "Maitso antitra",
+      "status": "Araho maso",
+      "desc": "Mety ho ara-dalàna indraindray. Raha maharitra: be loatra the lactose na misy tsy fahasalamana amin'ny kibo.",
       "level": "watch"
     },
     {
       "emoji": "⚪",
-      "color": "Fotsy / tsy misy loko",
-      "status": "Mandehana haingana",
-      "desc": "Mety hisy olana amin'ny aty. Mandehana avy hatrany any amin'ny pediatra.",
+      "color": "Fotsy / Hatsatra",
+      "status": "Manantona mpitsabo",
+      "desc": "Inoana ho misy olana amin'ny aty. Manantona mpitsabo haingana.",
       "level": "alert"
     },
     {
       "emoji": "🔴",
-      "color": "Mena (rà)",
-      "status": "Maika",
-      "desc": "Mandehana haingana. Mety ho allergie, triatra, na hafa.",
+      "color": "Mena (misy ra)",
+      "status": "Tena Maika",
+      "desc": "Manantona mpitsabo haingana. Mety ho mariky the tsy fahazakana sakafo na ratra kely.",
       "level": "alert"
     },
     {
       "emoji": "⚫",
-      "color": "Mainty goudron",
-      "status": "Maika",
-      "desc": "Mety ho manondro fivoahan-dra amin'ny taova. Mandehana avy hatrany.",
+      "color": "Mainty",
+      "status": "Tena Maika",
+      "desc": "Mety ho mariky the fandehanan-dra any anaty tsinay. Manantona mpitsabo avy hatrany.",
       "level": "alert"
     }
   ],
-  "stool_note": "💧 Fivalanana = mihoatra ny in-3 tay liquid isan'andro. Mety tsy ampy rano : omeo rano matetika, jereo ny lamba, mandehana raha tsy mihatsara anaty 24 ora.",
-  "stool_consistency_title": "💧 Endrika",
+  "stool_note": "💧 Fivalanana = maloto tena rano mihoatra the in-3 isan'andro. Atahorana ho ritra rano the vatana: omeo rano matetika, jereo the lamba firakotra ary manantona mpitsabo raha tsy miova ao anatin'ny 24 ora.",
+  "stool_consistency_title": "💧 Firindrana",
   "storage_rules": [
     {
       "emoji": "🥣",
-      "title": "Purée amin'ny tranony",
-      "detail": "Vata hermetika voajanona taorian'ny fandrahoana",
+      "title": "Sakafo an-trano (Purée)",
+      "detail": "Atao anaty fitoerana mihidy tsara vantany vao vita mahandro",
       "rows": [
         [
-          "Frigo (0-4°C)",
-          "48 ora"
+          "Vata fampangatsiahana (0-4°C)",
+          "48 ora farany indrindra"
         ],
         [
-          "Mangatsiaka (-18°C)",
+          "Vata fitehirizana (-18°C)",
           "1 volana"
         ],
         [
-          "Toerana mahazatra",
-          "Tsy mihitsy"
+          "Ety ivelany",
+          "Tsy azo atao mihitsy"
         ]
       ]
     },
     {
       "emoji": "🍼",
-      "title": "Biberon ronono reny",
-      "detail": "Ampangatsiaho haingana taorian'ny fanintonana",
+      "title": "Biberon ronon-dreny",
+      "detail": "Ampangatsiahina haingana aorian'the fakam-panahy",
       "rows": [
         [
-          "Frigo",
+          "Vata fampangatsiahana",
           "48 ora"
         ],
         [
-          "Mangatsiaka",
+          "Vata fitehirizana",
           "4-6 volana"
         ],
         [
-          "Efa nokalibana (Frigo)",
+          "Avy any amin'the vata fitehirizana",
           "24 ora"
         ],
         [
-          "Toerana mahazatra",
-          "4 ora fara fahakeliny"
+          "Ety ivelany",
+          "4 ora farany indrindra"
         ]
       ]
     },
     {
       "emoji": "🍼",
-      "title": "Biberon ronono zaza",
-      "detail": "Ataovy amin'ny fotoana ho an'ny zaza, ariana ny sisa",
+      "title": "Biberon ronono vovoka",
+      "detail": "Karakaraina rehefa hisotro the zazakely, ariana the ambiny",
       "rows": [
         [
-          "Toerana mahazatra",
-          "1 ora fara fahakeliny"
+          "Ety ivelany",
+          "1 ora farany indrindra"
         ],
         [
-          "Frigo (tsy atomboka)",
+          "Vata fampangatsiahana (tsy mbola nisotroana)",
           "24 ora"
         ],
         [
-          "Nafanaina tsy nohanina",
+          "Nafana nefa tsy lany",
           "Ariana"
         ]
       ]
     },
     {
       "emoji": "🍎",
-      "title": "Compote amin'ny tranony",
-      "detail": "Anaty vata sterile",
+      "title": "Kompota vita an-trano",
+      "detail": "Anaty tavoahangy voadio tsara",
       "rows": [
         [
-          "Frigo",
+          "Vata fampangatsiahana",
           "3 andro"
         ],
         [
-          "Mangatsiaka",
+          "Vata fitehirizana",
           "3 volana"
         ]
       ]
@@ -511,95 +511,99 @@
     {
       "emoji": "🥩",
       "title": "Hena/trondro masaka",
-      "detail": "Hetsika dia ampangatsiaho haingana",
+      "detail": "Potsehina avy eo ampangatsiahina haingana",
       "rows": [
         [
-          "Frigo",
+          "Vata fampangatsiahana",
           "24 ora"
         ],
         [
-          "Mangatsiaka",
+          "Vata fitehirizana",
           "1 volana"
         ]
       ]
     },
     {
       "emoji": "🥚",
-      "title": "Atody masaka lalina",
-      "detail": "Tsy maintsy masaka manontolo ho an'ny zaza",
+      "title": "Atody masaka tsara",
+      "detail": "Tsy maintsy masaka tsara the atody rehetra omena the zazakely",
       "rows": [
         [
-          "Frigo",
+          "Vata fampangatsiahana",
           "2 andro"
         ],
         [
-          "Mangatsiaka",
-          "Tsy asaina"
+          "Vata fitehirizana",
+          "Tsy soso-kevitra"
         ]
       ]
     }
   ],
-  "storage_golden_rules_title": "Fepetra fototra",
+  "storage_golden_rules_title": "Fitsipika volamena",
   "storage_golden_rules": [
-    "Aza averina mangatsiaka ny sakafo efa nokalibana.",
-    "Hafanaina indray mandeha ihany, mandra-pahazo ny hafanana (70°C faran'ny kely ho an'ny hena/trondro).",
-    "Ariana ny sisan'ny zaza efa nohaniny (tsisika) aorian'ny 1 ora.",
-    "Soraty ny daty fanomanana amin'ny vata kely."
+    "Aza averina ampidirina ao amin'the vata fitehirizana mihitsy the sakafo efa nivoaka tao.",
+    "Indray mandeha ihany no averina hafanaina, ary tsy maintsy mafana tsara (70°C ho an'the hena/trondro).",
+    "Ariana the ambin-tsakafo rehetra avy nisotroan'the zazakely (misy rora) rehefa afaka 1 ora.",
+    "Mariho amin'ny taratasy the daty nanamboarana the sakafo rehetra.",
+    "Sasao amin'ny savony the tananao mandritra ny 20 segondra alohan'the hikarakarana sakafo",
+    "Diovy amin'ny rano mafana misy savony the toerana fiasana sy the fitaovana",
+    "Sasao amin'ny rano madio the voankazo sy the legioma",
+    "Aleo mampiasa fitaovana vy na plastika toy izay hazo"
   ],
   "hygiene_sections": [
     {
-      "title": "Alohan'ny fahandroana",
+      "title": "Alohan'ny handrahoana",
       "items": [
-        "Sasao ny tanana amin'ny savony mandritra ny 20 segaondra",
-        "Diovio ny latabatra sy ny fitaovana amin'ny rano mafana savony",
-        "Sasao ny voankazo sy legioma amin'ny rano madio (savony raha matevina)",
-        "Tandremo ny fitaovana hazo — aleo vy na plastika"
+        "Sasao amin'ny savony the tananao mandritra ny 20 segondra",
+        "Diovy amin'ny rano mafana misy savony the toerana fiasana + fitaovana",
+        "Sasao amin'ny rano madio the voankazo sy the legioma (borosio raha matevina the hodiny)",
+        "Tandremo the fitaovana vita amin'ny hazo — aleo mampiasa vy/plastika"
       ]
     },
     {
-      "title": "Fanadiovana biberon (0-4 volana)",
+      "title": "Fandiovana the biberon (0-4 volana)",
       "items": [
-        "Esory tanteraka ny biberon (tétine, anneau, saron-doha)",
-        "Sasao isan-karazany amin'ny rano mafana savony + savao",
-        "Sterilisao amin'ny rano mangotraka 10 mn NA amin'ny etona",
-        "Maina eo amin'ny lamba madio",
-        "Aorian'ny 4 volana : lave-vaisselle 65°C ampy"
+        "Ravayo daholo ireo singa rehetra amin'the biberon",
+        "Sasao amin'ny rano mafana misy savony the tsirairay avy + kobany",
+        "Andrahoina amin'ny rano mangotraka mandritra ny 10 minitra NA ampiasao the fitaovana fanadiovana amin'ny fofon-drano (stérilisateur)",
+        "Avelao ho maina ety ivelany eo ambonin'ny lamba madio",
+        "Aorian'the 4 volana: ampy the manasa azy amin'ny milina fanasan-damba amin'ny hafanana 65°C"
       ]
     },
     {
-      "title": "Manomana biberon ronono zaza",
+      "title": "Fikarakarana biberon ronono vovoka",
       "items": [
-        "Rano tsy be minéraux (misy soratra \"ho an'ny zaza\")",
-        "Hajao ny dose : 1 mesurette rase amin'ny 30 ml rano",
-        "Arotsaho ny rano aloha dia ny poudre, tsy mifamadika",
-        "Hozongozony moramora (tsy mafy : misy boba)",
-        "Andramo amin'ny hatotohanana (matimaty, tsy mafana)"
+        "Rano tsy be mineraly (misy soratra hoe \"mety ho an'ny zazakely\")",
+        "Hajao the fatra: sotro fampandrefesana 1 ho an'the rano 30 ml",
+        "Asio rano aloha vao asiana vovon-dronono, fa tsy the mifamadika amin'izany",
+        "Afoy moramora (aza hozongozonina mafy: sao miteraka herotra)",
+        "Andramo eo amin'ny tanana the hafanany (tokony ho matimaty, fa tsy mafana mihitsy)"
       ]
     },
     {
-      "title": "Fandrahoana mifanaraka amin'ny zaza",
+      "title": "Fandrahonana sakafo mety amin'the zazakely",
       "items": [
-        "Mandraho amin'ny etona : mitazona ny vitamines (aleo)",
-        "Ialao ny endrika frit/grilled/braisé alohan'ny 2 taona",
-        "Tsy misy sira, tsy misy siramamy, tsy misy tantely alohan'ny 12 volana",
-        "Tsy misy zava-manitra mafy (piment, poivre) alohan'ny 2 taona"
+        "Fandrahoana amin'ny fofon-drano (vapeur): mitazona the vitamina (tsara indrindra)",
+        "Sorohy the sakafo endasina/atsatsika alohan'ny 2 taona",
+        "Tsy asiana sira, tsy asiana siramamy, tsy asiana tantely alohan'ny 12 volana",
+        "Tsy asiana zavatra masiaka (tsakitsaky, dipoavatra) alohan'ny 2 taona"
       ]
     }
   ],
-  "hygiene_temperature_note": "Hafanana tsara : ny sakafon'ny zaza dia tokony ho matimaty (37°C eo). Tsy mafana, tsy mangatsiaka alohan'ny 12 volana.",
+  "hygiene_temperature_note": "Hafanana tsara: the sakafon'the zazakely dia tokony ho matimaty (eo amin'ny 37°C eo). Tsy mafana mihitsy, ary tsy mangatsiaka alohan'ny 12 volana.",
   "conservation": {
     "title": "Fitahirizana",
-    "tap_hint": "Tsindrio ny latabatra hijery ny fotoana"
+    "tap_hint": "Tsindrio the tabilao hahitana the faharetany"
   },
   "hygiene": {
-    "title": "Fahadiovana & fiomanana"
+    "title": "Fahadiovana & fikarakarana"
   },
   "about": {
     "title": "Momba an'i Dr Helminah",
-    "subtitle": "Mpitsabo zaza · Mpamorona ny AINA",
-    "bio": "Dr Helminah Randriamananoro dia manampy ny fianakaviana amin'ny fanaraha-maso ny fahasalamana sy ny sakafon'ny zaza. AINA dia vokatry ny traikefany amin'ny fitsaboana zaza.",
-    "links_title": "Hahita ahy",
-    "website": "Tranokala",
+    "subtitle": "Mpitsabo ankizy · Namorona ny AINA",
+    "bio": "Dr Helminah Randriamananoro dia manampy the fianakaviana amin'ny fanaraha-maso the fahasalamana sy the sakafon'the zazakely. Ny AINA dia vokatry the traikefany tamin'ny fitsaboana ankizy tamin'ny teny frantsay.",
+    "links_title": "Hifandray amiko",
+    "website": "Tranonkala",
     "instagram": "Instagram",
     "tiktok": "TikTok",
     "facebook": "Facebook",
