@@ -14,6 +14,7 @@ import { JournalPage } from '@/pages/JournalPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import { RecipeDetailPage } from '@/pages/RecipeDetailPage';
 import { DoctorPage } from '@/pages/DoctorPage';
+import { CarePage } from '@/pages/CarePage';
 
 // Affiché une seule fois par session (cold open)
 const SPLASH_FLAG = 'aina-splash-shown';
@@ -70,6 +71,7 @@ export default function App() {
       <Route path="/recipe/:id" element={<RecipeDetailPage />} />
       <Route path="/doctor" element={<DoctorPage />} />
       <Route path="/report" element={<HealthReportPage />} />
+      <Route path="/care" element={<CarePage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

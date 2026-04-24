@@ -3,9 +3,10 @@ import { useBaby } from '@/contexts/BabyContext';
 import { recipes } from '@/data/recipes';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, ChevronRight, Plus, Trash2, Share2, Clock, Flame } from 'lucide-react';
+import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, ChevronRight, Plus, Trash2, Share2, Clock, Flame, Apple } from 'lucide-react';
+import { FoodGuide } from '@/components/nutrition/FoodGuide';
 
-type NutritionView = 'recipes' | 'favorites' | 'planner' | 'shopping';
+type NutritionView = 'recipes' | 'foods' | 'favorites' | 'planner' | 'shopping';
 
 const AGES = [6, 7, 8, 9, 10, 11, 12];
 const CATEGORIES = [
@@ -138,8 +139,9 @@ export function NutritionPage() {
       <div className="flex gap-2 mb-5 p-1.5 glass-card rounded-2xl overflow-x-auto no-scrollbar">
         {([
           { id: 'recipes' as const, label: 'Recettes', icon: Search },
+          { id: 'foods' as const, label: 'Aliments', icon: Apple },
           { id: 'favorites' as const, label: 'Favoris', icon: Heart },
-          { id: 'planner' as const, label: 'Planifier', icon: CalendarDays },
+          { id: 'planner' as const, label: 'Menu', icon: CalendarDays },
           { id: 'shopping' as const, label: 'Courses', icon: ShoppingCart },
         ]).map(tab => {
           const Icon = tab.icon;
@@ -147,15 +149,18 @@ export function NutritionPage() {
             <button
               key={tab.id}
               onClick={() => { setView(tab.id); setPickerSlot(null); }}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
+              className={`flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
                 view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'
               }`}
             >
-              <Icon className="w-4 h-4" /> {tab.label}
+              <Icon className="w-3.5 h-3.5" /> {tab.label}
             </button>
           );
         })}
       </div>
+
+      {/* FOODS VIEW */}
+      {view === 'foods' && !pickerSlot && <FoodGuide />}
 
       {/* RECIPES VIEW */}
       {(view === 'recipes' || pickerSlot) && (

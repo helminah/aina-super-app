@@ -355,21 +355,34 @@ export function DashboardPage() {
 
       </div>
 
-      {/* FAB Mode Urgence — flottant, discret mais accessible */}
-      <motion.button
-        onClick={() => setShowEmergency(true)}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 22 }}
-        whileTap={{ scale: 0.92 }}
-        className="fixed bottom-24 right-5 z-30 flex items-center gap-2 pr-5 pl-3.5 py-3 rounded-full bg-red-500 text-white shadow-[0_12px_30px_-8px_rgba(239,68,68,0.55)]"
-        aria-label="Mode urgence"
-      >
-        <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-          <AlertTriangle className="w-4 h-4" />
-        </span>
-        <span className="font-heading font-bold text-xs uppercase tracking-wider">SOS</span>
-      </motion.button>
+      {/* FAB stack : Trousse + SOS — actions urgence/soins accessibles */}
+      <div className="fixed bottom-24 right-5 z-30 flex flex-col items-end gap-3">
+        <motion.button
+          onClick={() => navigate('/care')}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.5, type: 'spring', stiffness: 300, damping: 22 }}
+          whileTap={{ scale: 0.92 }}
+          className="w-12 h-12 rounded-full bg-white text-red-500 border border-red-100 shadow-md flex items-center justify-center"
+          aria-label="Trousse à pharmacie"
+        >
+          <span className="text-xl">💊</span>
+        </motion.button>
+        <motion.button
+          onClick={() => setShowEmergency(true)}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 22 }}
+          whileTap={{ scale: 0.92 }}
+          className="flex items-center gap-2 pr-5 pl-3.5 py-3 rounded-full bg-red-500 text-white shadow-[0_12px_30px_-8px_rgba(239,68,68,0.55)]"
+          aria-label="Mode urgence"
+        >
+          <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <AlertTriangle className="w-4 h-4" />
+          </span>
+          <span className="font-heading font-bold text-xs uppercase tracking-wider">SOS</span>
+        </motion.button>
+      </div>
 
       {/* ── Emergency Modal ── */}
       <AnimatePresence>
