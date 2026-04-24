@@ -217,5 +217,380 @@
       "when_emergency": "When is it an emergency?"
     },
     "disclaimer": "This information is indicative. Always check the leaflet and consult a doctor if in doubt. Emergency: call 15 / 112."
+  },
+  "vaccine_info": {
+    "bcg": {
+      "why": "Protects baby against a serious disease that mainly affects the lungs.",
+      "disease": "Tuberculosis is caused by a germ that attacks the lungs (and sometimes other organs). It spreads by coughing.",
+      "risk": "In infants, tuberculosis can cause severe forms (meningitis, extensive pulmonary).",
+      "side_effects": "Small local reaction that may leave a scar on the arm, normal."
+    },
+    "hepb": {
+      "why": "Prevents baby from catching a virus that damages the liver long term.",
+      "disease": "Hepatitis B is a virus that settles in the liver. Can become chronic and cause cirrhosis or cancer.",
+      "risk": "Can be transmitted from mother to baby at birth or within the family.",
+      "side_effects": "Redness at injection site, mild fever possible."
+    },
+    "polio": {
+      "why": "Prevents a disease that can paralyze for life.",
+      "disease": "Poliomyelitis is a virus that attacks the nervous system and can paralyze legs, arms, or breathing.",
+      "risk": "No cure — only vaccination prevents it. Still active in some countries.",
+      "side_effects": "Mild fever, few side effects."
+    },
+    "penta": {
+      "why": "A single vaccine that protects against 5 serious diseases.",
+      "disease": "Diphtheria (choking), Tetanus (contractures), Pertussis (severe cough), Hepatitis B, Haemophilus (meningitis).",
+      "risk": "These diseases are all potentially fatal in infants.",
+      "side_effects": "Fever (paracetamol allowed), redness, baby a bit fussy 24-48h."
+    },
+    "hexa": {
+      "why": "Protects against 6 diseases in a single injection.",
+      "disease": "Diphtheria, Tetanus, Pertussis, Polio, Hib (meningitis), Hepatitis B.",
+      "risk": "Without vaccine, these diseases can be serious or fatal.",
+      "side_effects": "Fever, local redness, fussy baby 24-48h. Paracetamol if fever."
+    },
+    "pneumo": {
+      "why": "Protects lungs and brain against a dangerous bacterium.",
+      "disease": "Pneumococcus causes ear infections, pneumonia and meningitis in young children.",
+      "risk": "Pneumococcal meningitis can leave neurological sequelae.",
+      "side_effects": "Possible fever, redness."
+    },
+    "rota": {
+      "why": "Avoids very severe diarrhea that can dehydrate baby.",
+      "disease": "Rotavirus causes acute gastroenteritis in infants.",
+      "risk": "Rapid dehydration — main cause of hospitalization for gastroenteritis before age 2.",
+      "side_effects": "Oral vaccine, few side effects, sometimes slightly soft stools."
+    },
+    "ror": {
+      "why": "Triple protection against 3 highly contagious diseases.",
+      "disease": "Measles (rash + high fever), Mumps (swollen glands), Rubella (dangerous if pregnant).",
+      "risk": "Measles remains one of the deadliest childhood diseases without vaccine.",
+      "side_effects": "Mild fever and rash 7-10 days after vaccination (normal reaction)."
+    },
+    "fievre-jaune": {
+      "why": "Protects against a mosquito-borne disease, serious in Africa.",
+      "disease": "Yellow fever causes fever, jaundice and can affect liver and kidneys.",
+      "risk": "Potentially fatal disease. Endemic in many African countries.",
+      "side_effects": "Mild fever 1-2 days after, fatigue."
+    },
+    "meningo-a": {
+      "why": "Protects against meningitis in the African \"meningitis belt\".",
+      "disease": "Meningococcus A causes rapidly fatal meningitis.",
+      "risk": "Seasonal epidemics in the Sahel, children are most affected.",
+      "side_effects": "Redness, mild fever."
+    },
+    "meningo-c": {
+      "why": "Protects against meningococcus C (meningitis / sepsis).",
+      "disease": "Meningococcal C infection: meningitis or generalized blood infection.",
+      "risk": "Can kill in hours. The vaccine is very effective.",
+      "side_effects": "Local redness, few effects."
+    },
+    "vita": {
+      "why": "Strengthens immunity and prevents vision problems.",
+      "disease": "Vitamin A deficiency causes night blindness and reduced immunity.",
+      "risk": "Common in some regions with limited food variety.",
+      "side_effects": "None at standard dose. Oral drops."
+    }
+  },
+  "red_flags": {
+    "4": {
+      "label": "4 months",
+      "signs": [
+        "Doesn't hold their head up",
+        "Doesn't follow a moving object with eyes",
+        "Doesn't smile in response",
+        "Doesn't react to loud noises"
+      ]
+    },
+    "9": {
+      "label": "9 months",
+      "signs": [
+        "Can't sit up even with support",
+        "Doesn't babble (no mamama, papapa)",
+        "Doesn't react to sounds or their name",
+        "Doesn't put objects in mouth"
+      ]
+    },
+    "12": {
+      "label": "12 months",
+      "signs": [
+        "Doesn't stand with support",
+        "No words, even unclear",
+        "Doesn't point with finger",
+        "Doesn't look where pointed"
+      ]
+    },
+    "18": {
+      "label": "18 months",
+      "signs": [
+        "Doesn't walk",
+        "Says fewer than 5 words",
+        "Doesn't understand simple instructions (give, come)",
+        "Loses previously acquired skills"
+      ]
+    },
+    "24": {
+      "label": "24 months",
+      "signs": [
+        "Doesn't make 2-word phrases",
+        "Doesn't play pretend",
+        "Shows no interest in other children",
+        "Unusual repetitive behaviors"
+      ]
+    }
+  },
+  "teeth_tips": [
+    "🧊 A cold teething ring soothes sore gums",
+    "👆 Gently massage gums with a clean finger",
+    "💊 Paracetamol if mild fever related to teething",
+    "🍌 Offer cold foods (cold compote, fresh banana)",
+    "🚫 Avoid numbing gels — not recommended before age 2"
+  ],
+  "emergency": {
+    "title": "🚨 Choking - Baby",
+    "call_samu": "Call emergency (15 / 112)",
+    "steps": [
+      {
+        "title": "Assess the situation",
+        "desc": "Is baby coughing? Can they cry or make sounds? If yes, encourage them to cough."
+      },
+      {
+        "title": "Position",
+        "desc": "Place baby face down on your forearm, head lower than body, supporting the jaw."
+      },
+      {
+        "title": "5 back slaps",
+        "desc": "Give 5 firm slaps between the shoulder blades with the heel of your hand."
+      },
+      {
+        "title": "5 chest compressions",
+        "desc": "Turn baby on their back. Perform 5 compressions in the middle of the sternum with 2 fingers."
+      },
+      {
+        "title": "Repeat or call help",
+        "desc": "Alternate slaps and compressions. If obstruction persists, call emergency immediately (15 / 112)."
+      }
+    ]
+  },
+  "fever_advice": {
+    "normal": "No fever. Monitor baby's behavior.",
+    "mild": "Undress, hydrate often, monitor. Paracetamol not required if baby is comfortable.",
+    "moderate_template": "Paracetamol {{doseMg}} mg every 6h. Cool the room (18-20°C).",
+    "high": "Consult quickly, especially if baby < 3 months or fever > 48h.",
+    "emergency_signs": [
+      "Seizures, stiff neck, spotted rash",
+      "Repeated vomiting or total refusal to drink",
+      "Unusual drowsiness, inconsolable crying",
+      "Persistent fever > 48h without improvement"
+    ]
+  },
+  "stool_types": [
+    {
+      "emoji": "💛",
+      "color": "Mustard yellow",
+      "status": "Normal",
+      "desc": "Breast milk: golden-yellow stools, lumpy, mild odor.",
+      "level": "ok"
+    },
+    {
+      "emoji": "🟤",
+      "color": "Light brown",
+      "status": "Normal",
+      "desc": "Formula or solids: more formed, browner.",
+      "level": "ok"
+    },
+    {
+      "emoji": "💚",
+      "color": "Dark green",
+      "status": "Watch",
+      "desc": "Occasionally normal. If persistent: too much lactose or digestive discomfort.",
+      "level": "watch"
+    },
+    {
+      "emoji": "⚪",
+      "color": "White / pale",
+      "status": "Consult",
+      "desc": "Possible liver issue. Consult a pediatrician quickly.",
+      "level": "alert"
+    },
+    {
+      "emoji": "🔴",
+      "color": "Red (blood)",
+      "status": "Emergency",
+      "desc": "Consult quickly. May indicate allergy, fissure, or more.",
+      "level": "alert"
+    },
+    {
+      "emoji": "⚫",
+      "color": "Black tarry",
+      "status": "Emergency",
+      "desc": "May indicate digestive bleeding. Immediate consultation.",
+      "level": "alert"
+    }
+  ],
+  "stool_note": "💧 Diarrhea = more than 3 very liquid stools per day. Risk of dehydration: hydrate frequently, watch the diaper, consult if no improvement in 24h.",
+  "stool_consistency_title": "💧 Consistency",
+  "storage_rules": [
+    {
+      "emoji": "🥣",
+      "title": "Homemade purée",
+      "detail": "Airtight container closed right after cooking",
+      "rows": [
+        [
+          "Fridge (0-4°C)",
+          "48h max"
+        ],
+        [
+          "Freezer (-18°C)",
+          "1 month"
+        ],
+        [
+          "Room temp",
+          "Never"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍼",
+      "title": "Breast milk bottle",
+      "detail": "Cool quickly after pumping",
+      "rows": [
+        [
+          "Fridge",
+          "48h"
+        ],
+        [
+          "Freezer",
+          "4-6 months"
+        ],
+        [
+          "Thawed (fridge)",
+          "24h"
+        ],
+        [
+          "Room temp",
+          "4h max"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍼",
+      "title": "Infant formula bottle",
+      "detail": "Prepare at the last moment, throw out the rest",
+      "rows": [
+        [
+          "Room temp",
+          "1h max"
+        ],
+        [
+          "Fridge (unopened)",
+          "24h"
+        ],
+        [
+          "Reheated uneaten",
+          "Throw out"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍎",
+      "title": "Homemade compote",
+      "detail": "In a sterilized jar",
+      "rows": [
+        [
+          "Fridge",
+          "3 days"
+        ],
+        [
+          "Freezer",
+          "3 months"
+        ]
+      ]
+    },
+    {
+      "emoji": "🥩",
+      "title": "Cooked meat/fish",
+      "detail": "Blend then cool quickly",
+      "rows": [
+        [
+          "Fridge",
+          "24h"
+        ],
+        [
+          "Freezer",
+          "1 month"
+        ]
+      ]
+    },
+    {
+      "emoji": "🥚",
+      "title": "Hard-boiled egg",
+      "detail": "Must be fully cooked for baby",
+      "rows": [
+        [
+          "Fridge",
+          "2 days"
+        ],
+        [
+          "Freezer",
+          "Not recommended"
+        ]
+      ]
+    }
+  ],
+  "storage_golden_rules_title": "Golden rules",
+  "storage_golden_rules": [
+    "Never refreeze a thawed food.",
+    "Reheat only once, thoroughly (70°C min for meat/fish).",
+    "Throw away any leftover started by baby (saliva) after 1h.",
+    "Label jars with preparation date."
+  ],
+  "hygiene_sections": [
+    {
+      "title": "Before cooking",
+      "items": [
+        "Wash your hands with soap for 20 seconds",
+        "Clean worktop + utensils with hot soapy water",
+        "Wash fruits and vegetables with clean water (brush if thick skin)",
+        "Watch wooden utensils — prefer stainless steel/plastic"
+      ]
+    },
+    {
+      "title": "Bottle sterilization (0-4 months)",
+      "items": [
+        "Fully disassemble the bottle (nipple, ring, cap)",
+        "Wash each piece with hot soapy water + rinse",
+        "Sterilize in boiling water 10 min OR steam sterilizer",
+        "Let air dry on a clean cloth",
+        "After 4 months: dishwasher at 65°C is enough"
+      ]
+    },
+    {
+      "title": "Prepare an infant formula bottle",
+      "items": [
+        "Low-mineral water (labeled \"suitable for babies\")",
+        "Respect the dose: 1 level scoop per 30 ml of water",
+        "Pour water first then powder, never the reverse",
+        "Swirl gently (don't shake hard: foaming)",
+        "Test temperature on wrist (warm, never hot)"
+      ]
+    },
+    {
+      "title": "Baby-friendly cooking",
+      "items": [
+        "Steaming: preserves vitamins (preferred)",
+        "Avoid fried/grilled/braised before age 2",
+        "No salt, no sugar, no honey before 12 months",
+        "No strong spices (chili, pepper) before age 2"
+      ]
+    }
+  ],
+  "hygiene_temperature_note": "Ideal temperature: baby's meal should be warm (about 37°C). Never hot, never cold before 12 months.",
+  "conservation": {
+    "title": "Conservation",
+    "tap_hint": "Tap tables to see durations"
+  },
+  "hygiene": {
+    "title": "Hygiene & preparation"
   }
 }

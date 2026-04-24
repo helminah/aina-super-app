@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Heart, Sparkles, X, Info, BookOpen } from 'lucide-react';
-import { getVaccineInfo } from '@/data/vaccine-info';
+import { useTranslation } from 'react-i18next';
 import type { Vaccine } from '@/data/vaccines';
+
+/** Retrouve la clé racine i18n d'un vaccin.id (penta-1 → penta, hexa-3 → hexa, etc.) */
+function vaccineRootKey(vaccineId: string): string {
+  // Essai direct
+  const direct = ['bcg', 'hepb', 'polio', 'penta', 'hexa', 'pneumo', 'rota', 'ror',
+                  'fievre-jaune', 'meningo-a', 'meningo-c', 'vita'];
+  for (const root of direct) {
+    if (vaccineId.startsWith(root)) return root;
+  }
+  return vaccineId;
+}
 
 /**
  * VaccineEducation — composant double :
@@ -12,6 +23,7 @@ import type { Vaccine } from '@/data/vaccines';
 
 export function VaccineEducationCard() {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <motion.button
@@ -24,9 +36,9 @@ export function VaccineEducationCard() {
           <Shield className="w-5 h-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">Comprendre</p>
-          <p className="font-heading font-bold text-bark-800 mt-0.5">La vaccination, comment ça marche ?</p>
-          <p className="text-xs text-bark-500 mt-1">{expanded ? 'Toucher pour replier' : 'Toucher pour en savoir plus'}</p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">{t('health.vaccines.education_kicker')}</p>
+          <p className="font-heading font-bold text-bark-800 mt-0.5">{t('health.vaccines.education_title')}</p>
+          <p className="text-xs text-bark-500 mt-1">{expanded ? t('common.tap_to_collapse') : t('common.tap_to_expand')}</p>
         </div>
         <BookOpen className={`w-4 h-4 text-emerald-600 flex-shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`} />
       </div>
@@ -107,7 +119,15 @@ export function VaccineDetailSheet({ vaccine, onClose }: DetailProps) {
 }
 
 function VaccineDetailContent({ vaccine, onClose }: { vaccine: Vaccine; onClose: () => void }) {
-  const info = getVaccineInfo(vaccine.id);
+  const { t, i18n } = useTranslation();
+  const rootKey = vaccineRootKey(vaccine.id);
+  const why = t(`vaccine_info.${rootKey}.why`, { defaultValue: '' });
+  const disease = t(`vaccine_info.${rootKey}.disease`, { defaultValue: '' });
+  const risk = t(`vaccine_info.${rootKey}.risk`, { defaultValue: '' });
+  const sideEffects = t(`vaccine_info.${rootKey}.side_effects`, { defaultValue: '' });
+  const hasInfo = why || disease || risk;
+  // Silence linter : i18n used implicitly via t
+  void i18n;
 
   return (
     <div className="p-6">
@@ -115,7 +135,7 @@ function VaccineDetailContent({ vaccine, onClose }: { vaccine: Vaccine; onClose:
         <div className="flex-1 pr-3">
           <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-600 font-semibold">{vaccine.ageLabel}</p>
           <h2 className="font-heading text-xl font-bold text-bark-800 mt-0.5">{vaccine.name}</h2>
-          <p className="text-xs text-bark-500 mt-1">Contre : {vaccine.diseases}</p>
+          <p className="text-xs text-bark-500 mt-1">{t('health.vaccines.detail_disease')} : {vaccine.diseases}</p>
         </div>
         <button
           onClick={onClose}
@@ -125,15 +145,15 @@ function VaccineDetailContent({ vaccine, onClose }: { vaccine: Vaccine; onClose:
         </button>
       </div>
 
-      {info ? (
+      {hasInfo ? (
         <div className="space-y-3">
-          <InfoBlock title="Pourquoi le faire ?" body={info.why} tone="primary" icon={<Heart className="w-4 h-4" />} />
-          <InfoBlock title="La maladie en question" body={info.disease} tone="neutral" icon={<Info className="w-4 h-4" />} />
-          <InfoBlock title="Pourquoi c'est grave" body={info.risk} tone="warn" icon={<Shield className="w-4 h-4" />} />
-          {info.sideEffects && (
+          {why && <InfoBlock title={t('health.vaccines.detail_why')} body={why} tone="primary" icon={<Heart className="w-4 h-4" />} />}
+          {disease && <InfoBlock title={t('health.vaccines.detail_disease')} body={disease} tone="neutral" icon={<Info className="w-4 h-4" />} />}
+          {risk && <InfoBlock title={t('health.vaccines.detail_risk')} body={risk} tone="warn" icon={<Shield className="w-4 h-4" />} />}
+          {sideEffects && (
             <InfoBlock
-              title="Effets secondaires attendus"
-              body={info.sideEffects}
+              title={t('health.vaccines.detail_side_effects')}
+              body={sideEffects}
               tone="neutral"
               icon={<Sparkles className="w-4 h-4" />}
             />
@@ -141,12 +161,12 @@ function VaccineDetailContent({ vaccine, onClose }: { vaccine: Vaccine; onClose:
         </div>
       ) : (
         <div className="bg-ivory-100 rounded-2xl p-4 text-sm text-bark-500">
-          <p>Informations détaillées non disponibles pour ce vaccin. N'hésitez pas à en parler à votre pédiatre.</p>
+          <p>—</p>
         </div>
       )}
 
       <div className="mt-5 pt-5 border-t border-ivory-300 text-xs text-bark-400 italic text-center">
-        Ces informations sont indicatives. Votre pédiatre reste la référence pour toute question personnalisée.
+        {t('health.vaccines.disclaimer')}
       </div>
     </div>
   );

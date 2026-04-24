@@ -100,13 +100,7 @@ export function DashboardPage() {
     }
   };
 
-  const emergencySteps = [
-    { title: 'Évaluez la situation', desc: 'Bébé tousse-t-il ? Peut-il pleurer ou émettre des sons ? Si oui, encouragez-le à tousser.' },
-    { title: 'Position', desc: 'Placez bébé à plat ventre sur votre avant-bras, tête plus basse que le corps, en soutenant sa mâchoire.' },
-    { title: '5 tapes dans le dos', desc: 'Donnez 5 tapes fermes entre les omoplates avec le talon de votre main.' },
-    { title: '5 compressions thoraciques', desc: 'Retournez bébé sur le dos. Effectuez 5 compressions au milieu du sternum avec 2 doigts.' },
-    { title: 'Répétez ou appelez les secours', desc: 'Alternez tapes et compressions. Si l\'obstruction persiste, appelez immédiatement le SAMU (15) ou les pompiers (18).' },
-  ];
+  const emergencySteps = t('emergency.steps', { returnObjects: true, defaultValue: [] }) as Array<{ title: string; desc: string }>;
 
   const formatVaccineDate = (date: Date) => {
     return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -206,7 +200,7 @@ export function DashboardPage() {
             </div>
             <div className="flex-1">
               <p className="text-[11px] text-amber-500 font-semibold uppercase tracking-[0.15em]">
-                {tip.categoryEmoji} Conseil du jour
+                {tip.categoryEmoji} {t('dashboard.tip_of_day')}
               </p>
               <p className="font-heading font-bold text-bark-800 mt-1">{tip.title}</p>
               <p className="text-sm text-bark-500 mt-1 leading-relaxed">{tip.content}</p>
@@ -226,7 +220,7 @@ export function DashboardPage() {
               </div>
               <div className="flex-1">
                 <p className="text-xs text-forest-600 font-semibold uppercase tracking-wide">
-                  Prochain Vaccin
+                  {t('dashboard.next_vaccine')}
                 </p>
                 <p className="font-heading font-bold text-bark-800 mt-0.5">{nextVaccine.name}</p>
                 {vaccineTiming && (
@@ -261,16 +255,16 @@ export function DashboardPage() {
               <div className="w-8 h-8 rounded-lg bg-forest-100 flex items-center justify-center">
                 <Moon className="w-4 h-4 text-forest-600" />
               </div>
-              <p className="text-xs text-bark-500 font-semibold uppercase tracking-wide">Sommeil</p>
+              <p className="text-xs text-bark-500 font-semibold uppercase tracking-wide">{t('dashboard.sleep')}</p>
             </div>
             {totalSleepMin > 0 ? (
               <p className="font-heading text-xl font-bold text-bark-800">
                 {sleepHours}h{sleepMinutes > 0 ? `${sleepMinutes.toString().padStart(2, '0')}` : ''}
               </p>
             ) : (
-              <p className="font-heading text-sm text-bark-400">Pas encore</p>
+              <p className="font-heading text-sm text-bark-400">{t('dashboard.not_yet')}</p>
             )}
-            <p className="text-xs text-bark-400 mt-0.5">aujourd&apos;hui</p>
+            <p className="text-xs text-bark-400 mt-0.5">{t('dashboard.today')}</p>
           </div>
 
           {/* Weight Widget */}
@@ -279,7 +273,7 @@ export function DashboardPage() {
               <div className="w-8 h-8 rounded-lg bg-forest-100 flex items-center justify-center">
                 <Scale className="w-4 h-4 text-forest-600" />
               </div>
-              <p className="text-xs text-bark-500 font-semibold uppercase tracking-wide">Poids</p>
+              <p className="text-xs text-bark-500 font-semibold uppercase tracking-wide">{t('dashboard.weight')}</p>
             </div>
             {latestWeight ? (
               <p className="font-heading text-xl font-bold text-bark-800">
@@ -291,7 +285,7 @@ export function DashboardPage() {
               </p>
             )}
             <p className="text-xs text-bark-400 mt-0.5">
-              {latestWeight ? 'dernier relevé' : 'naissance'}
+              {latestWeight ? t('dashboard.latest') : t('dashboard.birth_value')}
             </p>
           </div>
         </div>
@@ -308,7 +302,7 @@ export function DashboardPage() {
               </div>
               <div className="flex-1">
                 <p className="text-xs text-terra-500 font-semibold uppercase tracking-wide">
-                  Suggestion du jour
+                  {t('dashboard.suggestion_of_day')}
                 </p>
                 <p className="font-heading font-bold text-bark-800 mt-0.5">
                   Suggestion : {suggestedRecipe.title} ({ageMonths} mois+)
@@ -326,7 +320,7 @@ export function DashboardPage() {
         {recentLogs.length > 0 && (
           <div className="bg-ivory-50 rounded-2xl p-5 mb-4 ambient-shadow">
             <div className="flex items-center justify-between mb-3">
-              <p className="font-heading font-bold text-bark-800">Activités Récentes</p>
+              <p className="font-heading font-bold text-bark-800">{t('dashboard.recent_activity')}</p>
               <button
                 onClick={() => navigate('/journal')}
                 className="text-xs text-forest-600 font-semibold"
@@ -356,7 +350,7 @@ export function DashboardPage() {
         {/* ── Footer: Dr Helminah ── */}
         <div className="mt-2 mb-4 text-center">
           <p className="text-xs text-bark-400">
-            Suivi pédiatrique avec{' '}
+            {t('dashboard.pediatric_followup')}{' '}
             <span className="font-semibold text-forest-600">Dr Helminah</span>
           </p>
         </div>
@@ -413,7 +407,7 @@ export function DashboardPage() {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="font-heading text-xl font-bold text-terra-500">
-                    {'🚨'} Fausse Route - Bébé
+                    {t('emergency.title')}
                   </h2>
                   <button
                     onClick={() => setShowEmergency(false)}
@@ -439,7 +433,7 @@ export function DashboardPage() {
                   href="tel:15"
                   className="w-full py-4 rounded-full bg-terra-500 text-white font-heading font-bold text-lg flex items-center justify-center gap-2"
                 >
-                  <Phone className="w-5 h-5" /> Appeler le SAMU (15)
+                  <Phone className="w-5 h-5" /> {t('emergency.call_samu')}
                 </a>
               </div>
             </motion.div>

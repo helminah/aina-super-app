@@ -46,9 +46,9 @@ export function CarePage() {
       {/* Section switcher */}
       <div className="flex gap-2 -mt-6 mx-5 mb-5 p-1.5 glass-card rounded-2xl relative z-10">
         {([
-          { id: 'dose' as const, label: 'Dose', icon: Pill },
-          { id: 'fever' as const, label: 'Fièvre', icon: Thermometer },
-          { id: 'stool' as const, label: 'Selles', icon: Droplets },
+          { id: 'dose' as const, key: 'dose', icon: Pill },
+          { id: 'fever' as const, key: 'fever', icon: Thermometer },
+          { id: 'stool' as const, key: 'stool', icon: Droplets },
         ]).map(s => {
           const Icon = s.icon;
           const active = section === s.id;
@@ -60,7 +60,7 @@ export function CarePage() {
                 active ? 'bg-red-500 text-white shadow-md shadow-red-500/30' : 'text-bark-500'
               }`}
             >
-              <Icon className="w-4 h-4" /> {s.label}
+              <Icon className="w-4 h-4" /> {t(`care.tabs.${s.key}`)}
             </button>
           );
         })}
@@ -76,8 +76,7 @@ export function CarePage() {
       <div className="mx-5 mt-6 p-4 bg-amber-50 border border-amber-100 rounded-2xl flex gap-3">
         <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-amber-800 leading-relaxed">
-          Ces infos sont indicatives. Toujours vérifier la notice et consulter un médecin en cas de doute. En urgence
-          vitale : SAMU 15 / 1515.
+          {t('care.disclaimer')}
         </p>
       </div>
     </div>
@@ -89,6 +88,7 @@ export function CarePage() {
 // ────────────────────────────────────────────────────────────
 
 function DoseCalculator({ weight }: { weight: number }) {
+  const { t } = useTranslation();
   const { doseRecords, addDose, removeDose } = useBaby();
   const [medication, setMedication] = useState<'paracetamol' | 'ibuprofen'>('paracetamol');
   const [form, setForm] = useState<MedicationForm>(MEDICATION_FORMS.paracetamol[0]);
@@ -120,7 +120,7 @@ function DoseCalculator({ weight }: { weight: number }) {
     <div className="space-y-4">
       {/* Medication */}
       <div className="glass-card rounded-2xl p-5">
-        <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">Médicament</p>
+        <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">{t('care.dose.medication')}</p>
         <div className="flex gap-2">
           {(['paracetamol', 'ibuprofen'] as const).map(m => (
             <button
@@ -140,7 +140,7 @@ function DoseCalculator({ weight }: { weight: number }) {
         {medication === 'ibuprofen' && (
           <p className="text-[11px] text-amber-700 mt-3 flex items-start gap-1.5">
             <AlertTriangle className="w-3 h-3 flex-shrink-0 mt-0.5" />
-            Contre-indiqué avant 3 mois, en cas de varicelle ou déshydratation.
+            {t('care.dose.ibuprofen_warning')}
           </p>
         )}
       </div>
@@ -148,7 +148,7 @@ function DoseCalculator({ weight }: { weight: number }) {
       {/* Weight */}
       <div className="glass-card rounded-2xl p-5">
         <div className="flex justify-between items-center mb-2">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold">Poids de bébé</p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold">{t('care.dose.weight_of_baby')}</p>
           <span className="font-display font-semibold text-2xl text-red-600">{customWeight.toFixed(1)} kg</span>
         </div>
         <input
@@ -168,7 +168,7 @@ function DoseCalculator({ weight }: { weight: number }) {
 
       {/* Form selector */}
       <div className="glass-card rounded-2xl p-5">
-        <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">Présentation</p>
+        <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">{t('care.dose.form')}</p>
         <div className="space-y-2">
           {MEDICATION_FORMS[medication].map(f => (
             <button
@@ -187,12 +187,11 @@ function DoseCalculator({ weight }: { weight: number }) {
 
       {/* Result */}
       <div className="bg-gradient-to-br from-red-500 to-rose-500 rounded-2xl p-6 text-white elev-brand">
-        <p className="text-[11px] uppercase tracking-[0.15em] text-white/80 font-semibold">Dose recommandée</p>
+        <p className="text-[11px] uppercase tracking-[0.15em] text-white/80 font-semibold">{t('care.dose.recommended_dose')}</p>
         <p className="font-display font-semibold text-5xl mt-2">{practical.label}</p>
         <p className="text-sm text-white/85 mt-1">{practical.detail} · soit {doseMg} mg</p>
         <p className="text-xs text-white/70 mt-3 leading-relaxed">
-          Toutes les 6h maximum ({medication === 'paracetamol' ? '4 prises/24h' : '3 prises/24h'}) · à ajuster selon
-          la fièvre.
+          {t('care.dose.max_interval', { count: medication === 'paracetamol' ? 4 : 3 })}
         </p>
 
         <button
@@ -204,14 +203,14 @@ function DoseCalculator({ weight }: { weight: number }) {
               : 'bg-white text-red-600 active:scale-[0.98]'
           }`}
         >
-          {mustWait ? `Trop tôt — attendre ~${waitMinutes} min` : 'Enregistrer la prise ✓'}
+          {mustWait ? `${t('care.dose.too_soon')} ~${waitMinutes} min` : `${t('care.dose.record_dose')} ✓`}
         </button>
       </div>
 
       {/* History 24h */}
       {recent.length > 0 && (
         <div className="bg-white rounded-2xl p-5 elev-1">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">Historique 24h</p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">{t('care.dose.history')}</p>
           <div className="space-y-2">
             {recent.map(d => {
               const date = new Date(d.givenAt);
@@ -250,31 +249,14 @@ function DoseCalculator({ weight }: { weight: number }) {
 // ────────────────────────────────────────────────────────────
 
 function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }) {
+  const { t } = useTranslation();
+  const doseMg = Math.round(weight * 15);
+
   const thresholds = [
-    {
-      level: 'Normal',
-      range: '< 37,5°C',
-      color: 'emerald',
-      advice: 'Pas de fièvre. Surveillez le comportement de bébé.',
-    },
-    {
-      level: 'Légère',
-      range: '37,5 – 38,5°C',
-      color: 'amber',
-      advice: 'Déshabiller, hydrater souvent, surveiller. Paracétamol non obligatoire si confort bon.',
-    },
-    {
-      level: 'Modérée',
-      range: '38,5 – 40°C',
-      color: 'orange',
-      advice: `Paracétamol ${Math.round(weight * 15)} mg toutes les 6h. Rafraîchir la pièce (18-20°C).`,
-    },
-    {
-      level: 'Élevée',
-      range: '> 40°C',
-      color: 'red',
-      advice: 'Consultez rapidement, surtout si bébé < 3 mois ou fièvre > 48h.',
-    },
+    { key: 'normal',   level: t('care.fever.level_normal'),   range: '< 37,5°C',      color: 'emerald', advice: t('fever_advice.normal') },
+    { key: 'mild',     level: t('care.fever.level_mild'),     range: '37,5 – 38,5°C', color: 'amber',   advice: t('fever_advice.mild') },
+    { key: 'moderate', level: t('care.fever.level_moderate'), range: '38,5 – 40°C',   color: 'orange',  advice: t('fever_advice.moderate_template', { doseMg }) },
+    { key: 'high',     level: t('care.fever.level_high'),     range: '> 40°C',        color: 'red',     advice: t('fever_advice.high') },
   ];
 
   const colorMap: Record<string, string> = {
@@ -284,6 +266,8 @@ function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }
     red: 'bg-red-50 border-red-200 text-red-800',
   };
 
+  const emergencySigns = t('fever_advice.emergency_signs', { returnObjects: true, defaultValue: [] }) as string[];
+
   return (
     <div className="space-y-3">
       {ageMonths < 3 && (
@@ -291,9 +275,9 @@ function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-heading font-bold">Bébé {'<'} 3 mois</p>
+              <p className="font-heading font-bold">{t('care.fever.baby_under_3m_title')}</p>
               <p className="text-sm text-white/90 mt-1 leading-relaxed">
-                Toute fièvre ≥ 38°C est une <strong>urgence</strong>. Consultez immédiatement.
+                {t('care.fever.baby_under_3m_body')}
               </p>
               <a
                 href="tel:15"
@@ -306,25 +290,20 @@ function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }
         </div>
       )}
 
-      {thresholds.map(t => (
-        <div key={t.level} className={`rounded-2xl border p-4 ${colorMap[t.color]}`}>
+      {thresholds.map(th => (
+        <div key={th.key} className={`rounded-2xl border p-4 ${colorMap[th.color]}`}>
           <div className="flex items-center justify-between mb-1">
-            <p className="font-heading font-bold">{t.level}</p>
-            <span className="text-sm font-mono">{t.range}</span>
+            <p className="font-heading font-bold">{th.level}</p>
+            <span className="text-sm font-mono">{th.range}</span>
           </div>
-          <p className="text-sm leading-relaxed opacity-90">{t.advice}</p>
+          <p className="text-sm leading-relaxed opacity-90">{th.advice}</p>
         </div>
       ))}
 
       <div className="bg-white rounded-2xl p-5 elev-1">
-        <p className="font-heading font-bold text-bark-800 mb-2">Quand consulter en urgence ?</p>
+        <p className="font-heading font-bold text-bark-800 mb-2">{t('care.fever.when_emergency')}</p>
         <ul className="space-y-1.5 text-sm text-bark-600">
-          {[
-            'Convulsions, raideur de la nuque, éruption de taches',
-            'Vomissements répétitifs ou refus total de boire',
-            'Somnolence inhabituelle, pleurs inconsolables',
-            'Fièvre persistante > 48h sans amélioration',
-          ].map((s, i) => (
+          {emergencySigns.map((s, i) => (
             <li key={i} className="flex items-start gap-2">
               <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
               <span>{s}</span>
@@ -341,14 +320,10 @@ function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }
 // ────────────────────────────────────────────────────────────
 
 function StoolGuide() {
-  const stools = [
-    { emoji: '💛', color: 'Jaune moutarde', status: 'Normal', desc: 'Lait maternel : selles jaune d\'or, grumeleuses, odeur douce.', level: 'ok' },
-    { emoji: '🟤', color: 'Marron clair', status: 'Normal', desc: 'Biberon ou diversification : plus moulées, plus brunes.', level: 'ok' },
-    { emoji: '💚', color: 'Vert foncé', status: 'À surveiller', desc: 'Ponctuellement normal. Si persistant : trop de lactose ou inconfort digestif.', level: 'watch' },
-    { emoji: '⚪', color: 'Blanc / décoloré', status: 'Consulter', desc: 'Suspicion de trouble hépatique. Consultez un pédiatre rapidement.', level: 'alert' },
-    { emoji: '🔴', color: 'Rouge (sang vif)', status: 'Urgence', desc: 'Consultez rapidement. Peut signaler une allergie, une fissure, ou autre.', level: 'alert' },
-    { emoji: '⚫', color: 'Noir goudron', status: 'Urgence', desc: 'Peut indiquer un saignement digestif. Consultation immédiate.', level: 'alert' },
-  ];
+  const { t } = useTranslation();
+  const stools = t('stool_types', { returnObjects: true, defaultValue: [] }) as Array<{
+    emoji: string; color: string; status: string; desc: string; level: string;
+  }>;
 
   const badges: Record<string, string> = {
     ok: 'bg-emerald-100 text-emerald-700',
@@ -376,9 +351,8 @@ function StoolGuide() {
       ))}
 
       <div className="bg-sky-50 border border-sky-100 rounded-2xl p-4 text-sm text-bark-700 leading-relaxed">
-        <p className="font-semibold text-sky-700 mb-1">💧 Consistance</p>
-        Diarrhée = plus de 3 selles très liquides par jour. Risque de déshydratation : hydratez fréquemment,
-        surveillez la couche et consultez si pas d'amélioration en 24h.
+        <p className="font-semibold text-sky-700 mb-1">{t('stool_consistency_title')}</p>
+        {t('stool_note')}
       </div>
     </div>
   );

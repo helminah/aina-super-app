@@ -4,6 +4,7 @@ import { babyTeeth, teethTips, type ToothInfo } from '@/data/teeth';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * TeethChart v2 — vrais pictogrammes SVG par type de dent, frise chronologique
@@ -37,9 +38,13 @@ const typeLabel: Record<ToothType, string> = {
 
 export function TeethChart() {
   const { profile, teethRecords, toggleTooth, isToothErupted } = useBaby();
+  const { t } = useTranslation();
 
   const ageMonths = profile ? getAgeInMonths(profile.birthDate) : 0;
   const eruptedCount = teethRecords.length;
+
+  // Tips traduits (défaut = FR de data/teeth.ts)
+  const localizedTips = t('teeth_tips', { returnObjects: true, defaultValue: teethTips }) as string[];
 
   const upper = useMemo(() => babyTeeth.filter(t => t.position === 'upper').sort((a, b) => a.order - b.order), []);
   const lower = useMemo(() => babyTeeth.filter(t => t.position === 'lower').sort((a, b) => a.order - b.order), []);
@@ -66,12 +71,12 @@ export function TeethChart() {
       <div className="glass-card-green rounded-2xl p-5">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-700 font-semibold">Dents sorties</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-700 font-semibold">{t('health.teeth.erupted')}</p>
             <p className="font-display font-semibold text-4xl text-emerald-800 mt-0.5">
               {eruptedCount}<span className="text-xl text-emerald-600">/20</span>
             </p>
             {eruptedCount > 0 && profile && (
-              <p className="text-xs text-emerald-700 mt-1">{profile.name} grandit bien 🌱</p>
+              <p className="text-xs text-emerald-700 mt-1">{t('health.teeth.growing_well', { name: profile.name })}</p>
             )}
           </div>
           <div className="text-5xl">🦷</div>
@@ -86,10 +91,10 @@ export function TeethChart() {
 
       {/* Légende couleurs */}
       <div className="flex gap-3 px-1">
-        {(['incisor', 'canine', 'molar'] as ToothType[]).map(t => (
-          <div key={t} className="flex items-center gap-1.5 text-xs text-bark-500">
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: typeColor[t].stroke }} />
-            {typeLabel[t]}
+        {(['incisor', 'canine', 'molar'] as ToothType[]).map(tk => (
+          <div key={tk} className="flex items-center gap-1.5 text-xs text-bark-500">
+            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: typeColor[tk].stroke }} />
+            {t(`health.teeth.legend_${tk}`)}
           </div>
         ))}
       </div>
@@ -97,7 +102,7 @@ export function TeethChart() {
       {/* Schéma des mâchoires */}
       <div className="bg-white rounded-2xl p-5 elev-2">
         <p className="text-[11px] text-bark-500 uppercase tracking-[0.15em] font-semibold text-center mb-4">
-          Tapez une dent pour la marquer comme sortie
+          {t('health.teeth.tap_hint')}
         </p>
 
         {/* Supérieure — arc avec espace central */}
@@ -111,7 +116,7 @@ export function TeethChart() {
 
       {/* Chronologie */}
       <div className="bg-white rounded-2xl p-5 elev-2">
-        <p className="text-[11px] text-bark-500 uppercase tracking-[0.15em] font-semibold mb-3">Chronologie</p>
+        <p className="text-[11px] text-bark-500 uppercase tracking-[0.15em] font-semibold mb-3">{t('health.teeth.timeline')}</p>
         <div className="space-y-3">
           {timeline.map(([range, teeth]) => {
             const min = parseInt(range.split('-')[0]);
@@ -148,10 +153,10 @@ export function TeethChart() {
       <div className="bg-gradient-to-br from-amber-50 to-rose-50 border border-amber-100 rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-3">
           <Sparkles className="w-4 h-4 text-amber-600" />
-          <p className="text-[11px] text-amber-700 uppercase tracking-[0.15em] font-semibold">Soulager la poussée</p>
+          <p className="text-[11px] text-amber-700 uppercase tracking-[0.15em] font-semibold">{t('health.teeth.soothe_title')}</p>
         </div>
         <div className="space-y-2">
-          {teethTips.map((tip, i) => (
+          {localizedTips.map((tip, i) => (
             <p key={i} className="text-sm text-bark-700 leading-relaxed">{tip}</p>
           ))}
         </div>
@@ -175,10 +180,11 @@ function JawRow({
   erupted: (id: string) => boolean;
   onToggle: (id: string) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div>
       <p className="text-xs text-bark-400 font-medium text-center mb-3">
-        Mâchoire {position === 'upper' ? 'supérieure' : 'inférieure'}
+        {t(position === 'upper' ? 'health.teeth.upper_jaw' : 'health.teeth.lower_jaw')}
       </p>
       <div className="flex justify-center items-end gap-[3px]">
         {teeth.map(t => (

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Snowflake, Thermometer, Droplets, CircleAlert, BookOpen, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * ConservationGuide — toggle card qui ouvre un panel détaillé sur
@@ -9,6 +10,7 @@ import { Snowflake, Thermometer, Droplets, CircleAlert, BookOpen, X } from 'luci
  */
 export function ConservationGuide() {
   const [open, setOpen] = useState<'storage' | 'hygiene' | null>(null);
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-2">
@@ -21,8 +23,8 @@ export function ConservationGuide() {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-[11px] uppercase tracking-[0.15em] text-sky-700 font-semibold">Guide</p>
-          <p className="font-heading font-bold text-bark-800 mt-0.5">Conservation des aliments</p>
-          <p className="text-xs text-bark-500 mt-0.5">Frigo · congélateur · restes · durées</p>
+          <p className="font-heading font-bold text-bark-800 mt-0.5">{t('nutrition.foods.conservation_title')}</p>
+          <p className="text-xs text-bark-500 mt-0.5">{t('nutrition.foods.conservation_tagline')}</p>
         </div>
         <BookOpen className="w-4 h-4 text-sky-600 flex-shrink-0" />
       </button>
@@ -36,8 +38,8 @@ export function ConservationGuide() {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">Guide</p>
-          <p className="font-heading font-bold text-bark-800 mt-0.5">Hygiène & préparation</p>
-          <p className="text-xs text-bark-500 mt-0.5">Biberons · ustensiles · lavage</p>
+          <p className="font-heading font-bold text-bark-800 mt-0.5">{t('nutrition.foods.hygiene_title')}</p>
+          <p className="text-xs text-bark-500 mt-0.5">{t('nutrition.foods.hygiene_tagline')}</p>
         </div>
         <BookOpen className="w-4 h-4 text-emerald-600 flex-shrink-0" />
       </button>
@@ -69,12 +71,17 @@ export function ConservationGuide() {
 }
 
 function StorageContent({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation();
+  const rows = t('storage_rules', { returnObjects: true, defaultValue: [] }) as Array<{
+    emoji: string; title: string; detail: string; rows: string[][];
+  }>;
+  const goldenRules = t('storage_golden_rules', { returnObjects: true, defaultValue: [] }) as string[];
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <Snowflake className="w-6 h-6 text-sky-600" />
-          <h2 className="font-heading text-xl font-bold text-bark-800">Conservation</h2>
+          <h2 className="font-heading text-xl font-bold text-bark-800">{t('conservation.title')}</h2>
         </div>
         <button onClick={onClose} className="w-8 h-8 rounded-full bg-ivory-200 flex items-center justify-center">
           <X className="w-4 h-4 text-bark-600" />
@@ -82,29 +89,19 @@ function StorageContent({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="space-y-3">
-        <Row emoji="🥣" title="Purée maison" detail="Contenant hermétique fermé juste après cuisson"
-             storage={[['Frigo (0-4°C)', '48h max'], ['Congélateur (-18°C)', '1 mois'], ['Température ambiante', 'Jamais']]} />
-        <Row emoji="🍼" title="Biberon lait maternel" detail="Refroidir rapidement après tire-lait"
-             storage={[['Frigo', '48h'], ['Congélateur', '4-6 mois'], ['Décongelé (au frigo)', '24h'], ['Température ambiante', '4h max']]} />
-        <Row emoji="🍼" title="Biberon lait infantile" detail="Préparer au dernier moment, jeter le reste"
-             storage={[['Température ambiante', '1h max'], ['Frigo (non entamé)', '24h'], ['Réchauffé non consommé', 'Jeter']]} />
-        <Row emoji="🍎" title="Compote maison" detail="Dans un bocal stérilisé"
-             storage={[['Frigo', '3 jours'], ['Congélateur', '3 mois']]} />
-        <Row emoji="🥩" title="Viande/poisson cuit" detail="Mixer puis refroidir rapidement"
-             storage={[['Frigo', '24h'], ['Congélateur', '1 mois']]} />
-        <Row emoji="🥚" title="Œuf cuit dur" detail="Obligatoirement cuit en entier pour bébé"
-             storage={[['Frigo', '2 jours'], ['Congélateur', 'Non recommandé']]} />
+        {rows.map(r => (
+          <Row key={r.title} emoji={r.emoji} title={r.title} detail={r.detail} storage={r.rows} />
+        ))}
       </div>
 
       <div className="mt-5 bg-amber-50 border border-amber-100 rounded-2xl p-4 flex gap-3">
         <CircleAlert className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
         <div className="text-xs text-bark-700 leading-relaxed">
-          <p className="font-semibold text-amber-800 mb-1">Règles d'or</p>
+          <p className="font-semibold text-amber-800 mb-1">{t('storage_golden_rules_title')}</p>
           <ul className="space-y-1">
-            <li>• Ne <strong>jamais</strong> recongeler un aliment décongelé.</li>
-            <li>• Réchauffer une seule fois, à cœur (70°C minimum pour viandes/poissons).</li>
-            <li>• Jeter tout reste entamé par bébé (salive) après 1h.</li>
-            <li>• Étiqueter les petits pots avec la date de préparation.</li>
+            {goldenRules.map((rule, i) => (
+              <li key={i}>• {rule}</li>
+            ))}
           </ul>
         </div>
       </div>
@@ -113,53 +110,30 @@ function StorageContent({ onClose }: { onClose: () => void }) {
 }
 
 function HygieneContent({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation();
+  const sections = t('hygiene_sections', { returnObjects: true, defaultValue: [] }) as Array<{
+    title: string; items: string[];
+  }>;
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <Droplets className="w-6 h-6 text-emerald-600" />
-          <h2 className="font-heading text-xl font-bold text-bark-800">Hygiène & préparation</h2>
+          <h2 className="font-heading text-xl font-bold text-bark-800">{t('hygiene.title')}</h2>
         </div>
         <button onClick={onClose} className="w-8 h-8 rounded-full bg-ivory-200 flex items-center justify-center">
           <X className="w-4 h-4 text-bark-600" />
         </button>
       </div>
 
-      <Section title="Avant de cuisiner" items={[
-        'Lave-toi les mains avec du savon pendant 20 secondes',
-        'Nettoie plan de travail + ustensiles à l\'eau chaude savonneuse',
-        'Lave fruits et légumes à l\'eau claire (brosse si peau épaisse)',
-        'Attention aux ustensiles en bois — privilégier inox/plastique',
-      ]} />
-
-      <Section title="Stérilisation biberons (0-4 mois)" items={[
-        'Démonter complètement le biberon (tétine, anneau, capuchon)',
-        'Laver chaque pièce à l\'eau chaude savonneuse + rincer',
-        'Stériliser à l\'eau bouillante 10 min OU stérilisateur vapeur',
-        'Laisser sécher à l\'air libre sur un torchon propre',
-        'Après 4 mois : lave-vaisselle à 65°C suffit',
-      ]} />
-
-      <Section title="Préparer un biberon de lait infantile" items={[
-        'Eau faiblement minéralisée (mention "convient aux bébés")',
-        'Respecter la dose : 1 mesurette rase pour 30 ml d\'eau',
-        'Verser eau puis poudre, jamais l\'inverse',
-        'Agiter doucement (ne pas secouer fort : moussage)',
-        'Tester la température sur le poignet (tiède, jamais chaud)',
-      ]} />
-
-      <Section title="Cuisson adaptée bébé" items={[
-        'Cuisson à la vapeur : garde les vitamines (préféré)',
-        'Éviter frit/grillé/braisé avant 2 ans',
-        'Pas de sel, pas de sucre, pas de miel avant 12 mois',
-        'Pas d\'épices fortes (piment, poivre) avant 2 ans',
-      ]} />
+      {sections.map(sec => (
+        <Section key={sec.title} title={sec.title} items={sec.items} />
+      ))}
 
       <div className="bg-sky-50 border border-sky-100 rounded-2xl p-4 flex gap-3 mt-4">
         <Thermometer className="w-4 h-4 text-sky-600 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-bark-700 leading-relaxed">
-          <strong className="text-sky-700">Température idéale</strong> : le repas de bébé doit être tiède (37°C environ).
-          Jamais chaud, jamais froid avant 12 mois.
+          {t('hygiene_temperature_note')}
         </p>
       </div>
     </div>

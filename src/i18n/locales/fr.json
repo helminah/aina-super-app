@@ -217,5 +217,380 @@
       "when_emergency": "Quand consulter en urgence ?"
     },
     "disclaimer": "Ces infos sont indicatives. Toujours vérifier la notice et consulter un médecin en cas de doute. En urgence vitale : SAMU 15 / 1515."
+  },
+  "vaccine_info": {
+    "bcg": {
+      "why": "Protège bébé contre une maladie grave qui atteint surtout les poumons.",
+      "disease": "La tuberculose est causée par un microbe qui attaque les poumons (et parfois d'autres organes). Elle se transmet par la toux.",
+      "risk": "Chez le nourrisson, la tuberculose peut provoquer des formes graves (méningite, forme pulmonaire étendue).",
+      "side_effects": "Petite réaction locale qui peut laisser une cicatrice sur le bras, normale."
+    },
+    "hepb": {
+      "why": "Empêche bébé d'attraper un virus qui abîme le foie à long terme.",
+      "disease": "L'hépatite B est un virus qui s'installe dans le foie. Peut devenir chronique et causer cirrhose ou cancer.",
+      "risk": "Peut se transmettre de la mère au bébé à l'accouchement ou dans l'entourage familial.",
+      "side_effects": "Rougeur au point d'injection, fièvre légère possible."
+    },
+    "polio": {
+      "why": "Empêche une maladie qui peut paralyser à vie.",
+      "disease": "La poliomyélite est un virus qui attaque le système nerveux et peut paralyser les jambes, les bras, ou la respiration.",
+      "risk": "Pas de traitement curatif — seule la vaccination prévient. Encore active dans certains pays.",
+      "side_effects": "Légère fièvre, peu d'effets secondaires."
+    },
+    "penta": {
+      "why": "Un seul vaccin qui protège contre 5 maladies graves.",
+      "disease": "Diphtérie (étouffement), Tétanos (contractures), Coqueluche (toux sévère), Hépatite B, Haemophilus (méningite).",
+      "risk": "Ces maladies sont toutes potentiellement mortelles chez le nourrisson.",
+      "side_effects": "Fièvre (paracétamol autorisé), rougeur, bébé un peu grognon 24-48h."
+    },
+    "hexa": {
+      "why": "Protège contre 6 maladies en une seule injection.",
+      "disease": "Diphtérie, Tétanos, Coqueluche, Polio, Hib (méningite), Hépatite B.",
+      "risk": "Sans vaccin, ces maladies peuvent être graves voire mortelles.",
+      "side_effects": "Fièvre, rougeur locale, bébé grognon 24-48h. Paracétamol si fièvre."
+    },
+    "pneumo": {
+      "why": "Protège les poumons et le cerveau contre une bactérie dangereuse.",
+      "disease": "Le pneumocoque cause otites, pneumonies et méningites chez le petit enfant.",
+      "risk": "Les méningites pneumococciques peuvent laisser des séquelles neurologiques.",
+      "side_effects": "Fièvre possible, rougeur."
+    },
+    "rota": {
+      "why": "Évite des diarrhées très sévères qui peuvent déshydrater bébé.",
+      "disease": "Le rotavirus provoque des gastro-entérites aiguës chez les nourrissons.",
+      "risk": "Déshydratation rapide — principale cause d'hospitalisation pour gastro avant 2 ans.",
+      "side_effects": "Vaccin oral, peu d'effets secondaires, parfois selles un peu molles."
+    },
+    "ror": {
+      "why": "Triple protection contre 3 maladies très contagieuses.",
+      "disease": "Rougeole (éruption + forte fièvre), Oreillons (glandes gonflées), Rubéole (dangereuse si grossesse).",
+      "risk": "La rougeole reste l'une des maladies infantiles les plus meurtrières sans vaccin.",
+      "side_effects": "Fièvre et éruption légères 7-10 jours après la vaccination (réaction normale)."
+    },
+    "fievre-jaune": {
+      "why": "Protège contre une maladie transmise par le moustique, grave en Afrique.",
+      "disease": "La fièvre jaune cause fièvre, jaunisse et peut toucher le foie et les reins.",
+      "risk": "Maladie pouvant être mortelle. Endémique dans de nombreux pays africains.",
+      "side_effects": "Légère fièvre 1-2 jours après, fatigue."
+    },
+    "meningo-a": {
+      "why": "Protège contre les méningites de la \"ceinture méningitique\" africaine.",
+      "disease": "Le méningocoque A cause des méningites rapidement mortelles.",
+      "risk": "Épidémies saisonnières au Sahel, les enfants sont les plus touchés.",
+      "side_effects": "Rougeur, petite fièvre."
+    },
+    "meningo-c": {
+      "why": "Protège contre le méningocoque C (méningite / septicémie).",
+      "disease": "Infection à méningocoque C : méningite ou infection généralisée du sang.",
+      "risk": "Peut tuer en quelques heures. Le vaccin est très efficace.",
+      "side_effects": "Rougeur locale, peu d'effets."
+    },
+    "vita": {
+      "why": "Renforce immunité et prévient problèmes de vue.",
+      "disease": "La carence en vitamine A cause cécité nocturne et baisse de l'immunité.",
+      "risk": "Fréquente dans certaines régions avec alimentation peu variée.",
+      "side_effects": "Aucun à dose standard. Goutte orale."
+    }
+  },
+  "red_flags": {
+    "4": {
+      "label": "4 mois",
+      "signs": [
+        "Ne tient pas sa tête",
+        "Ne suit pas des yeux un objet en mouvement",
+        "Ne sourit pas en réponse",
+        "Ne réagit pas aux bruits forts"
+      ]
+    },
+    "9": {
+      "label": "9 mois",
+      "signs": [
+        "Ne tient pas assis même avec soutien",
+        "Ne babille pas (pas de mamama, papapa)",
+        "Ne réagit pas aux sons ou à son prénom",
+        "Ne porte pas les objets à sa bouche"
+      ]
+    },
+    "12": {
+      "label": "12 mois",
+      "signs": [
+        "Ne se met pas debout avec appui",
+        "Aucun mot, même imprécis",
+        "Ne pointe pas du doigt",
+        "Ne regarde pas dans la direction qu'on lui montre"
+      ]
+    },
+    "18": {
+      "label": "18 mois",
+      "signs": [
+        "Ne marche pas",
+        "Dit moins de 5 mots",
+        "Ne comprend pas les consignes simples (donne, viens)",
+        "Perte d'acquis déjà obtenus"
+      ]
+    },
+    "24": {
+      "label": "24 mois",
+      "signs": [
+        "Ne fait pas de phrases de 2 mots",
+        "Ne joue pas à faire semblant",
+        "Ne montre pas d'intérêt pour les autres enfants",
+        "Comportements répétitifs inhabituels"
+      ]
+    }
+  },
+  "teeth_tips": [
+    "🧊 Un anneau de dentition froid soulage les gencives douloureuses",
+    "👆 Massez doucement les gencives avec un doigt propre",
+    "💊 Paracétamol si fièvre légère liée à la poussée dentaire",
+    "🍌 Proposez des aliments froids (compote froide, banane fraîche)",
+    "🚫 Évitez les gels anesthésiants — non recommandés avant 2 ans"
+  ],
+  "emergency": {
+    "title": "🚨 Fausse Route - Bébé",
+    "call_samu": "Appeler le SAMU (15)",
+    "steps": [
+      {
+        "title": "Évaluez la situation",
+        "desc": "Bébé tousse-t-il ? Peut-il pleurer ou émettre des sons ? Si oui, encouragez-le à tousser."
+      },
+      {
+        "title": "Position",
+        "desc": "Placez bébé à plat ventre sur votre avant-bras, tête plus basse que le corps, en soutenant sa mâchoire."
+      },
+      {
+        "title": "5 tapes dans le dos",
+        "desc": "Donnez 5 tapes fermes entre les omoplates avec le talon de votre main."
+      },
+      {
+        "title": "5 compressions thoraciques",
+        "desc": "Retournez bébé sur le dos. Effectuez 5 compressions au milieu du sternum avec 2 doigts."
+      },
+      {
+        "title": "Répétez ou appelez les secours",
+        "desc": "Alternez tapes et compressions. Si l'obstruction persiste, appelez immédiatement le SAMU (15) ou les pompiers (18)."
+      }
+    ]
+  },
+  "fever_advice": {
+    "normal": "Pas de fièvre. Surveillez le comportement de bébé.",
+    "mild": "Déshabiller, hydrater souvent, surveiller. Paracétamol non obligatoire si confort bon.",
+    "moderate_template": "Paracétamol {{doseMg}} mg toutes les 6h. Rafraîchir la pièce (18-20°C).",
+    "high": "Consultez rapidement, surtout si bébé < 3 mois ou fièvre > 48h.",
+    "emergency_signs": [
+      "Convulsions, raideur de la nuque, éruption de taches",
+      "Vomissements répétitifs ou refus total de boire",
+      "Somnolence inhabituelle, pleurs inconsolables",
+      "Fièvre persistante > 48h sans amélioration"
+    ]
+  },
+  "stool_types": [
+    {
+      "emoji": "💛",
+      "color": "Jaune moutarde",
+      "status": "Normal",
+      "desc": "Lait maternel : selles jaune d'or, grumeleuses, odeur douce.",
+      "level": "ok"
+    },
+    {
+      "emoji": "🟤",
+      "color": "Marron clair",
+      "status": "Normal",
+      "desc": "Biberon ou diversification : plus moulées, plus brunes.",
+      "level": "ok"
+    },
+    {
+      "emoji": "💚",
+      "color": "Vert foncé",
+      "status": "À surveiller",
+      "desc": "Ponctuellement normal. Si persistant : trop de lactose ou inconfort digestif.",
+      "level": "watch"
+    },
+    {
+      "emoji": "⚪",
+      "color": "Blanc / décoloré",
+      "status": "Consulter",
+      "desc": "Suspicion de trouble hépatique. Consultez un pédiatre rapidement.",
+      "level": "alert"
+    },
+    {
+      "emoji": "🔴",
+      "color": "Rouge (sang vif)",
+      "status": "Urgence",
+      "desc": "Consultez rapidement. Peut signaler une allergie, une fissure, ou autre.",
+      "level": "alert"
+    },
+    {
+      "emoji": "⚫",
+      "color": "Noir goudron",
+      "status": "Urgence",
+      "desc": "Peut indiquer un saignement digestif. Consultation immédiate.",
+      "level": "alert"
+    }
+  ],
+  "stool_note": "💧 Diarrhée = plus de 3 selles très liquides par jour. Risque de déshydratation : hydratez fréquemment, surveillez la couche et consultez si pas d'amélioration en 24h.",
+  "stool_consistency_title": "💧 Consistance",
+  "storage_rules": [
+    {
+      "emoji": "🥣",
+      "title": "Purée maison",
+      "detail": "Contenant hermétique fermé juste après cuisson",
+      "rows": [
+        [
+          "Frigo (0-4°C)",
+          "48h max"
+        ],
+        [
+          "Congélateur (-18°C)",
+          "1 mois"
+        ],
+        [
+          "Température ambiante",
+          "Jamais"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍼",
+      "title": "Biberon lait maternel",
+      "detail": "Refroidir rapidement après tire-lait",
+      "rows": [
+        [
+          "Frigo",
+          "48h"
+        ],
+        [
+          "Congélateur",
+          "4-6 mois"
+        ],
+        [
+          "Décongelé (au frigo)",
+          "24h"
+        ],
+        [
+          "Température ambiante",
+          "4h max"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍼",
+      "title": "Biberon lait infantile",
+      "detail": "Préparer au dernier moment, jeter le reste",
+      "rows": [
+        [
+          "Température ambiante",
+          "1h max"
+        ],
+        [
+          "Frigo (non entamé)",
+          "24h"
+        ],
+        [
+          "Réchauffé non consommé",
+          "Jeter"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍎",
+      "title": "Compote maison",
+      "detail": "Dans un bocal stérilisé",
+      "rows": [
+        [
+          "Frigo",
+          "3 jours"
+        ],
+        [
+          "Congélateur",
+          "3 mois"
+        ]
+      ]
+    },
+    {
+      "emoji": "🥩",
+      "title": "Viande/poisson cuit",
+      "detail": "Mixer puis refroidir rapidement",
+      "rows": [
+        [
+          "Frigo",
+          "24h"
+        ],
+        [
+          "Congélateur",
+          "1 mois"
+        ]
+      ]
+    },
+    {
+      "emoji": "🥚",
+      "title": "Œuf cuit dur",
+      "detail": "Obligatoirement cuit en entier pour bébé",
+      "rows": [
+        [
+          "Frigo",
+          "2 jours"
+        ],
+        [
+          "Congélateur",
+          "Non recommandé"
+        ]
+      ]
+    }
+  ],
+  "storage_golden_rules_title": "Règles d'or",
+  "storage_golden_rules": [
+    "Ne jamais recongeler un aliment décongelé.",
+    "Réchauffer une seule fois, à cœur (70°C minimum pour viandes/poissons).",
+    "Jeter tout reste entamé par bébé (salive) après 1h.",
+    "Étiqueter les petits pots avec la date de préparation."
+  ],
+  "hygiene_sections": [
+    {
+      "title": "Avant de cuisiner",
+      "items": [
+        "Lave-toi les mains avec du savon pendant 20 secondes",
+        "Nettoie plan de travail + ustensiles à l'eau chaude savonneuse",
+        "Lave fruits et légumes à l'eau claire (brosse si peau épaisse)",
+        "Attention aux ustensiles en bois — privilégier inox/plastique"
+      ]
+    },
+    {
+      "title": "Stérilisation biberons (0-4 mois)",
+      "items": [
+        "Démonter complètement le biberon (tétine, anneau, capuchon)",
+        "Laver chaque pièce à l'eau chaude savonneuse + rincer",
+        "Stériliser à l'eau bouillante 10 min OU stérilisateur vapeur",
+        "Laisser sécher à l'air libre sur un torchon propre",
+        "Après 4 mois : lave-vaisselle à 65°C suffit"
+      ]
+    },
+    {
+      "title": "Préparer un biberon de lait infantile",
+      "items": [
+        "Eau faiblement minéralisée (mention \"convient aux bébés\")",
+        "Respecter la dose : 1 mesurette rase pour 30 ml d'eau",
+        "Verser eau puis poudre, jamais l'inverse",
+        "Agiter doucement (ne pas secouer fort : moussage)",
+        "Tester la température sur le poignet (tiède, jamais chaud)"
+      ]
+    },
+    {
+      "title": "Cuisson adaptée bébé",
+      "items": [
+        "Cuisson à la vapeur : garde les vitamines (préféré)",
+        "Éviter frit/grillé/braisé avant 2 ans",
+        "Pas de sel, pas de sucre, pas de miel avant 12 mois",
+        "Pas d'épices fortes (piment, poivre) avant 2 ans"
+      ]
+    }
+  ],
+  "hygiene_temperature_note": "Température idéale : le repas de bébé doit être tiède (37°C environ). Jamais chaud, jamais froid avant 12 mois.",
+  "conservation": {
+    "title": "Conservation",
+    "tap_hint": "Tapez les tableaux pour voir les durées"
+  },
+  "hygiene": {
+    "title": "Hygiène & préparation"
   }
 }

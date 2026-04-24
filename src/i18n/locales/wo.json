@@ -217,5 +217,380 @@
       "when_emergency": "Kañ la ñu demal doktoor gaaw ?"
     },
     "disclaimer": "Xibaar yii àgge rekk la. Xoolal notice bi, jël doktoor boo xam xam-xamu. Gaaw : SAMU 15 / 1515."
+  },
+  "vaccine_info": {
+    "bcg": {
+      "why": "Dafa aar liir bi ci doomu-jàngoro bu rëy, mooy daj poumon yi.",
+      "disease": "Tuberculose doomu-jàngoro la bu dëj ci poumon yi (ba ci yeneen xarnu). Dafay jaar ci sëq.",
+      "risk": "Liir bu ndaw, tuberculose mën na def wér-gu-yaram bu rëy (méningite, pulmonaire).",
+      "side_effects": "Dafay xëkk-xëkkatu ci benn bërëb, ak njëgg mu tuuti. Ay luy nekk la."
+    },
+    "hepb": {
+      "why": "Dafay aar liir bi ci virus bu di yàq foie ci yëngu-yëngu gu yàgg.",
+      "disease": "Hépatite B virus la bu dëj ci foie. Man na nekk jàngoro yu yàgg, ëpp cirrhose walla cancer.",
+      "risk": "Mën na jox jox diggante yaay ak liir ci juddu walla ci kër.",
+      "side_effects": "Diis mu tuuti ci bërëb bi, tàng mu yomb mën am."
+    },
+    "polio": {
+      "why": "Dafay téey doomu-jàngoro bi mën na tëye ba ba fàww.",
+      "disease": "Poliomyélite virus la bu di daj sistem nerveux bi, mën na tëye tànk, loxo, walla noyyi.",
+      "risk": "Amul faj — vaksin rekk mooy téye ko. Dañu koy am ci yenn réew.",
+      "side_effects": "Tàng mu yomb, ay luy rekk."
+    },
+    "penta": {
+      "why": "Benn vaksin bu di aar juróom doomu-jàngoro yu rëy.",
+      "disease": "Diphtérie (sotti), Tétanos (fas), Coqueluche (sëq gu rëy), Hépatite B, Haemophilus (méningite).",
+      "risk": "Ñoom ñépp ay doomu-jàngoro yu mën rey liir bi lañ.",
+      "side_effects": "Tàng (paracétamol mën nekk), diis, liir dafay mer 24-48 waxtu."
+    },
+    "hexa": {
+      "why": "Dafay aar ci juróom-benn doomu-jàngoro ci benn dugg.",
+      "disease": "Diphtérie, Tétanos, Coqueluche, Polio, Hib (méningite), Hépatite B.",
+      "risk": "Su amul vaksin, ay doomu-jàngoro yu rëy lañ ba mën rey.",
+      "side_effects": "Tàng, diis ci bërëb bi, liir mer 24-48 waxtu. Paracétamol su am tàng."
+    },
+    "pneumo": {
+      "why": "Dafay aar poumon yi ak cervau bi ci microbe bu dëk.",
+      "disease": "Pneumocoque dafa def otites, pneumonies, méningites ci xale.",
+      "risk": "Méningites pneumococciques mën def ay feebar ci cervau.",
+      "side_effects": "Tàng mën am, diis."
+    },
+    "rota": {
+      "why": "Dafay téye biir-biir bu yàgg bu mën delcëre liir bi.",
+      "disease": "Rotavirus dafay def gastro-entérites yu rëy ci liir yu ndaw.",
+      "risk": "Jotay yomb di ndaw — lu gën a rëy di dugg hopital ci gastro laata ay 2 att.",
+      "side_effects": "Vaksin ci gémmiñ la, ay luy rekk, yenn saay ay fèy yu tooy."
+    },
+    "ror": {
+      "why": "Kaar kenn aar ci ñetti doomu-jàngoro yu mën jaar yomb.",
+      "disease": "Rougeole (xuxur + tàng bu rëy), Oreillons (kër yu jul), Rubéole (dëk bu nga biir).",
+      "risk": "Rougeole mooy menn ci doomu-jàngoro ci xale yi mën rey ëpp su amul vaksin.",
+      "side_effects": "Tàng ak xuxur yu tuuti 7-10 bis ginnaaw vaksin (dëgg-dëgg la)."
+    },
+    "fievre-jaune": {
+      "why": "Dafay aar doomu-jàngoro bi yomb jox ci yamb, mi ngi rëy ci Afrik.",
+      "disease": "Fièvre jaune dafay jur tàng, jaunisse ak mën daj foie ak ay rein.",
+      "risk": "Doomu-jàngoro bi mën rey. Am ci réew yu bari ci Afrik.",
+      "side_effects": "Tàng mu yomb 1-2 bis ginnaaw, tayeel."
+    },
+    "meningo-a": {
+      "why": "Dafay aar ci méningites yu \"ceinture méningitique\" Afrik.",
+      "disease": "Méningocoque A dafay def méningites yu yomb rey.",
+      "risk": "Ay épidémies ci Sahel, xale ñooy lu gën a koy jàpp.",
+      "side_effects": "Diis, tàng mu yomb."
+    },
+    "meningo-c": {
+      "why": "Dafay aar ci méningocoque C (méningite / septicémie).",
+      "disease": "Fëbbar méningocoque C : méningite walla fëbbar ci dereet gépp.",
+      "risk": "Mën rey ci ay waxtu. Vaksin bi baax na lool.",
+      "side_effects": "Diis ci bërëb bi, ay luy rekk."
+    },
+    "vita": {
+      "why": "Dafay sampe kàrangeen ak téye jafe-jafe gu gëstu.",
+      "disease": "Vitamine A bu neewee dafay def gis-guddi ak téye kàrangeen.",
+      "risk": "Bari na ci yenn bërëb yu amul ay lekk yu bari.",
+      "side_effects": "Amul ci dose bu dëgg-dëgg. Ci gémmiñ la."
+    }
+  },
+  "red_flags": {
+    "4": {
+      "label": "4 weer",
+      "signs": [
+        "Téeyu bopp yi bi",
+        "Toppatul bët-bët yi ak lu jëm",
+        "Musadul ak sa kaddu",
+        "Walaatul ci ay coow yu rëy"
+      ]
+    },
+    "9": {
+      "label": "9 weer",
+      "signs": [
+        "Toogul na gis yu dëkkal",
+        "Waxul ay mamama, papapa",
+        "Walaatul ci coow walla tur",
+        "Yor du nafa ci gémmiñ"
+      ]
+    },
+    "12": {
+      "label": "12 weer",
+      "signs": [
+        "Taxawul ak ndëkk",
+        "Benn baat, ba xel",
+        "Kharaxul ak baraam",
+        "Xoolul fu nu jox"
+      ]
+    },
+    "18": {
+      "label": "18 weer",
+      "signs": [
+        "Dafa doxul",
+        "Wax la gën a néew 5 kaddu",
+        "Xam la na nekkul yëgle yu yomb (joxal, kaay)",
+        "Rey xam-xam yi mu jël"
+      ]
+    },
+    "24": {
+      "label": "24 weer",
+      "signs": [
+        "Benn ay kaddu 2 kaddu",
+        "Po po yu nu tuuti bonne",
+        "Am-mul yitteyu ndaw yi",
+        "Jëf yu dellu yu amul"
+      ]
+    }
+  },
+  "teeth_tips": [
+    "🧊 Benn anneau nif mu sedd dafay baax ci bëñ yu metti",
+    "👆 Masse la bëñ gi ak baraam mu set",
+    "💊 Paracétamol su am tàng bu tuuti ak poussée bëñ",
+    "🍌 Jox lekk yu sedd (compote bu sedd, banaanaa)",
+    "🚫 Bañal gels anesthésiants — baaxul laata 2 att"
+  ],
+  "emergency": {
+    "title": "🚨 Gaaw sotti - Liir",
+    "call_samu": "Wooteel SAMU (15 / 1515)",
+    "steps": [
+      {
+        "title": "Xool bu baax jàngoro bi",
+        "desc": "Liir bi ndax dafa sëq ? Mën joo ay coow ? Su fekkee waaw, jàpp ko mu sëq."
+      },
+      {
+        "title": "Yoonu biir",
+        "desc": "Défal liir bi ci sa loxo, bopp bi suuf lu gën yaram, jàpp mu ngi jawu."
+      },
+      {
+        "title": "Juróom tak-tak ci diggaante",
+        "desc": "Juróomi tak-tak yu rëy diggante omoplates ak loxo bi."
+      },
+      {
+        "title": "Juróom lajj ci kër-kër",
+        "desc": "Delloo liir bi ci biir. Def juróom lajj ci diggante sternum ak ñaari baraam."
+      },
+      {
+        "title": "Toppal walla wooteel fajkat",
+        "desc": "Soppi tak-tak ak lajj. Su fekkee sotti gi yàgg, wooteel gaaw SAMU (15 / 1515)."
+      }
+    ]
+  },
+  "fever_advice": {
+    "normal": "Amul tàng. Ndenc liir bi.",
+    "mild": "Summil yëre, maye ndox li ci ëllëg-ëllëg, xamal. Paracétamol dëgg-dëgg du nekk.",
+    "moderate_template": "Paracétamol {{doseMg}} mg saa 6 waxtu lépp. Sedalal néeg bi (18-20°C).",
+    "high": "Demal doktoor gaaw, rawatina su liir < 3 weer walla tàng > 48 waxtu.",
+    "emergency_signs": [
+      "Convulsions, raideur nuque, xuxur",
+      "Xënté yu dellu walla bañ lekk",
+      "Noyi gu amul xalaat, jooy yu amul faj",
+      "Tàng mu dëkkadi > 48 waxtu"
+    ]
+  },
+  "stool_types": [
+    {
+      "emoji": "💛",
+      "color": "Mboq",
+      "status": "Baax",
+      "desc": "Meew jaay : poop bu bàjj, ak fëy gu yomb.",
+      "level": "ok"
+    },
+    {
+      "emoji": "🟤",
+      "color": "Tàq yu leer",
+      "status": "Baax",
+      "desc": "Biberon walla dugg lekk : gëna kàll, gëna tàq.",
+      "level": "ok"
+    },
+    {
+      "emoji": "💚",
+      "color": "Xonq",
+      "status": "Ndenc",
+      "desc": "Yenn saay baax la. Su yàggee : lactose ju bari walla jafe-jafe biir.",
+      "level": "watch"
+    },
+    {
+      "emoji": "⚪",
+      "color": "Weex / amul melo",
+      "status": "Demal fajkat",
+      "desc": "Mën ne am na jafe-jafe foie. Demal doktoor gaaw.",
+      "level": "alert"
+    },
+    {
+      "emoji": "🔴",
+      "color": "Xonq (dereet)",
+      "status": "Gaaw",
+      "desc": "Demal gaaw. Mën allergie, boru, walla lu beneen.",
+      "level": "alert"
+    },
+    {
+      "emoji": "⚫",
+      "color": "Ñuul goudron",
+      "status": "Gaaw",
+      "desc": "Mën ne am na dereet ci biir. Demal gaaw.",
+      "level": "alert"
+    }
+  ],
+  "stool_note": "💧 Biir-biir = ëpp 3 poop yu yomb ci bes. Risk jotay : maye ndox bu bari, xamal couche, demal su amul faj ci 24 waxtu.",
+  "stool_consistency_title": "💧 Yeem",
+  "storage_rules": [
+    {
+      "emoji": "🥣",
+      "title": "Purée ci kër",
+      "detail": "Fësaay hermétique tëjaat saa bi mu noppi",
+      "rows": [
+        [
+          "Frigo (0-4°C)",
+          "48 waxtu"
+        ],
+        [
+          "Congélateur (-18°C)",
+          "1 weer"
+        ],
+        [
+          "Tàng-tàng",
+          "Bañal"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍼",
+      "title": "Biberon meew yaay",
+      "detail": "Sedalal gaaw ginnaaw tire-lait",
+      "rows": [
+        [
+          "Frigo",
+          "48 waxtu"
+        ],
+        [
+          "Congélateur",
+          "4-6 weer"
+        ],
+        [
+          "Décongélé (Frigo)",
+          "24 waxtu"
+        ],
+        [
+          "Tàng-tàng",
+          "4 waxtu"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍼",
+      "title": "Biberon meew liir",
+      "detail": "Défaral ci waxtu, sanni lépp",
+      "rows": [
+        [
+          "Tàng-tàng",
+          "1 waxtu"
+        ],
+        [
+          "Frigo (du tambali)",
+          "24 waxtu"
+        ],
+        [
+          "Réchauffé du lekk",
+          "Sanni"
+        ]
+      ]
+    },
+    {
+      "emoji": "🍎",
+      "title": "Compote ci kër",
+      "detail": "Ci bocaal bu steril",
+      "rows": [
+        [
+          "Frigo",
+          "3 bes"
+        ],
+        [
+          "Congélateur",
+          "3 weer"
+        ]
+      ]
+    },
+    {
+      "emoji": "🥩",
+      "title": "Yàpp/jën ñor",
+      "detail": "Mixé te sedal gaaw",
+      "rows": [
+        [
+          "Frigo",
+          "24 waxtu"
+        ],
+        [
+          "Congélateur",
+          "1 weer"
+        ]
+      ]
+    },
+    {
+      "emoji": "🥚",
+      "title": "Nen bu ñor gu mat",
+      "detail": "Warul ñor gu mat ngir liir",
+      "rows": [
+        [
+          "Frigo",
+          "2 bes"
+        ],
+        [
+          "Congélateur",
+          "Du nu jàppal"
+        ]
+      ]
+    }
+  ],
+  "storage_golden_rules_title": "Ndigël yu tax",
+  "storage_golden_rules": [
+    "Bul recongelé lu nga decongelé.",
+    "Réchauffer benn yoon, ba xol (70°C bu nekk ngir yàpp/jën).",
+    "Sanni lépp lu liir bi tambali lekk (ay téer) ginnaaw 1 waxtu.",
+    "Bind daté sa fanomanana ci pots."
+  ],
+  "hygiene_sections": [
+    {
+      "title": "Laata togg",
+      "items": [
+        "Raxasal sa loxo ak saabu ci 20 segondes",
+        "Set plan de travail + ay jumtukaay ak ndox mu tàng savon",
+        "Raxasal fruits ak légumes ak ndox mu set (brosse su mu bari derma)",
+        "Moytuleen jumtukaay yu garab — yägal inox walla plastik"
+      ]
+    },
+    {
+      "title": "Stérilisation biberon (0-4 weer)",
+      "items": [
+        "Témbal ëpp biberon bi (tétine, anneau, capuchon)",
+        "Raxasal benn-benn ak ndox mu tàng savon + raxas",
+        "Stériliser ak ndox mu diis 10 mn WALLA stérilisateur",
+        "Xool moom ci benn serviette bu set",
+        "Ginnaaw 4 weer : lave-vaisselle 65°C doy"
+      ]
+    },
+    {
+      "title": "Défar biberon meew liir",
+      "items": [
+        "Ndox bu tuuti minéralisé (mention \"pour bébé\")",
+        "Toppatoo dose : 1 mesurette ci 30 ml ndox",
+        "Teg ndox li ba noppi poudre, dara deneen",
+        "Yëngalal moom (du riir : moussage)",
+        "Testal tangaay ci sa kaw-njaxas (wayy, du tàng)"
+      ]
+    },
+    {
+      "title": "Togg bu mat ngir liir",
+      "items": [
+        "Togg ak vapeur : denc vitamines (lu gën)",
+        "Bañ frit/grillé/braisé laata 2 att",
+        "Bul xorom, bul suukër, bul lem laata 12 weer",
+        "Bul épices yu tàng (piment, poivre) laata 2 att"
+      ]
+    }
+  ],
+  "hygiene_temperature_note": "Tàngaay bu rafet : lekk liir bi wara nekk ay bu sedd (37°C). Du tàng, du sedd laata 12 weer.",
+  "conservation": {
+    "title": "Denc",
+    "tap_hint": "Laalal tableau yi ngir gis jotay"
+  },
+  "hygiene": {
+    "title": "Setlu & waajal"
   }
 }
