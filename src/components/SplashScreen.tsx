@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -9,6 +10,7 @@ interface SplashScreenProps {
 
 export function SplashScreen({ onComplete, minDurationMs = 2600 }: SplashScreenProps) {
   const [visible, setVisible] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(false), minDurationMs);
@@ -87,7 +89,7 @@ export function SplashScreen({ onComplete, minDurationMs = 2600 }: SplashScreenP
               transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="font-display-intimate mt-4 text-white/95 text-xl"
             >
-              Souffle de vie
+              {t('app.slogan')}
             </motion.p>
           </div>
 

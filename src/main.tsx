@@ -6,6 +6,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { BabyProvider } from '@/contexts/BabyContext';
 import App from './App';
 import './index.css';
+import './i18n'; // init i18next avant le render
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

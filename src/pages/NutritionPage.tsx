@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, ChevronRight, Plus, Trash2, Share2, Clock, Flame, Apple } from 'lucide-react';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
+import { useTranslation } from 'react-i18next';
 
 type NutritionView = 'recipes' | 'foods' | 'favorites' | 'planner' | 'shopping';
 
@@ -28,6 +29,7 @@ const AGE_COLORS: Record<number, string> = {
 };
 
 export function NutritionPage() {
+  const { t } = useTranslation();
   const { isFavorite, toggleFavorite, favorites, mealPlan, setMealSlot, clearMealPlan, shoppingChecked, toggleShoppingItem, clearShoppingChecked } = useBaby();
   const navigate = useNavigate();
   const [view, setView] = useState<NutritionView>('recipes');
@@ -126,11 +128,11 @@ export function NutritionPage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 hero-text"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">Goûts & textures</p>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">{t('nutrition.hero_kicker')}</p>
           <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">
-            Nutrition
+            {t('nutrition.title')}
           </h1>
-          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">Recettes · Favoris · Menu · Courses</p>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{t('nutrition.hero_tagline')}</p>
         </motion.div>
       </div>
 

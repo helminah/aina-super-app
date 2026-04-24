@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "AINA",
+    "slogan": "Fofonain'ny aina",
+    "loading": "Miandry…"
+  },
+  "nav": {
+    "home": "Fandraisana",
+    "health": "Fahasalamana",
+    "nutrition": "Sakafo",
+    "journal": "Diary",
+    "profile": "Mombamomba"
+  },
+  "common": {
+    "back": "Miverina",
+    "next": "Manohy",
+    "save": "Raiketina",
+    "cancel": "Hofoanana",
+    "close": "Akatona",
+    "delete": "Fafana",
+    "edit": "Hanova",
+    "add": "Hampiditra",
+    "done": "Vita",
+    "overdue": "Tara",
+    "soon": "Ho avy",
+    "see_all": "Hizaha azy rehetra",
+    "learn_more": "Hahafantarana bebe kokoa",
+    "tap_to_expand": "Tsindrio raha hahalala bebe kokoa",
+    "tap_to_collapse": "Tsindrio hanakatona",
+    "day": "andro",
+    "days": "andro",
+    "month": "volana",
+    "week": "herinandro",
+    "weeks": "herinandro",
+    "boy": "Zazalahy",
+    "girl": "Zazavavy"
+  },
+  "auth": {
+    "welcome": "Tonga soa",
+    "login": "Hiditra",
+    "signup": "Hamorona kaonty",
+    "login_cta": "Hiditra",
+    "signup_cta": "Hamorona ny kaontiko",
+    "email": "Mailaka",
+    "password": "Teny miafina",
+    "signup_success": "Vita ny kaonty ! Jereo ny mailaka 📧",
+    "terms": "Amin'ny fanohizana, ianao dia manaiky ny fepetra sy ny politika fiarovana ny zavatra manokana.",
+    "dev_mode_label": "Fomba dev — tsy vonona ny Supabase",
+    "dev_bypass": "Hanohy amin'ny demo eto an-toerana"
+  },
+  "onboarding": {
+    "step_of": "Dingana {{current}} amin'ny {{total}}",
+    "welcome_title": "Tonga soa eto amin'ny AINA",
+    "welcome_subtitle": "Inona ny anaran'ny zanakao ?",
+    "name_placeholder": "Anaran'ny zaza",
+    "birth_date_title": "Oviana no nahaterahan'i {{name}} ?",
+    "birth_date_subtitle": "Ary zazalahy sa zazavavy ?",
+    "measurements_title": "Refy tamin'ny fahaterahana",
+    "measurements_subtitle": "Ilaintsika izy ireo hijerena ny fitomboany.",
+    "weight_kg": "Lanja (kg)",
+    "height_cm": "Halavany (cm)",
+    "country_title": "Aiza no hitomboan'i {{name}} ?",
+    "country_subtitle": "Hifanaraka amin'ny fanjakana no vaksiny.",
+    "country_search": "Hitady firenena…",
+    "country_no_results": "Tsy misy firenena hita hoe « {{query}} ».",
+    "vaccines_title": "Vaksiny efa nomena",
+    "vaccines_subtitle": "Marihana izay vaksiny efa noraisin'i {{name}} mba ho mitombina ny fanaraha-maso.",
+    "vaccines_too_young": "Kely dia kely i {{name}}, tsy misy vaksiny mbola andrasana.",
+    "start": "Hanomboka"
+  },
+  "dashboard": {
+    "hello_mom_of": "Salama, reny reny an'i",
+    "tip_of_day": "Torohevitra androany",
+    "next_vaccine": "Vaksiny manaraka",
+    "days_until": "Afaka {{days}} andro",
+    "days_until_plural": "Afaka {{days}} andro",
+    "vaccine_overdue": "Tara",
+    "sleep": "Torimaso",
+    "weight": "Lanja",
+    "today": "androany",
+    "latest": "farany",
+    "birth_value": "fahaterahana",
+    "not_yet": "Tsy mbola",
+    "recent_activity": "Hetsika vao haingana",
+    "suggestion_of_day": "Soso-kevitra androany",
+    "sos_label": "SOS",
+    "care_kit": "Fitaovana",
+    "pediatric_followup": "Fanaraha-maso amin'ny Dr"
+  },
+  "health": {
+    "title": "Fahasalamana",
+    "hero_tagline": "Vaksiny · Fitomboana · Nify · Dingana",
+    "hero_kicker": "Fanaraha-maso ny zaza",
+    "tabs": {
+      "vaccines": "Vaksiny",
+      "growth": "Fitomboana",
+      "teeth": "Nify",
+      "development": "Dingana"
+    },
+    "vaccines": {
+      "progress": "Fandrosoana",
+      "birth": "Fahaterahana",
+      "education_title": "Ahoana ny fiasan'ny vaksiny ?",
+      "education_kicker": "Hahatakatra",
+      "detail_why": "Nahoana no manao azy ?",
+      "detail_disease": "Ny aretina",
+      "detail_risk": "Nahoana no mampidi-doza",
+      "detail_side_effects": "Fiantraikany andrasana",
+      "disclaimer": "Famantarana fotsiny izy ireo. Ny dokotera no mpanoro hevitra voalohany."
+    },
+    "growth": {
+      "weight": "Lanja (kg)",
+      "height": "Halavany (cm)",
+      "hc": "PC (cm)",
+      "no_data": "Tsy mbola misy refy voasoratra. Ampidiro ny voalohany.",
+      "add_measure": "Hampiditra refy"
+    },
+    "teeth": {
+      "erupted": "Nify nitranga",
+      "legend_incisor": "Maranidoha",
+      "legend_canine": "Vango",
+      "legend_molar": "Vavahady",
+      "tap_hint": "Tsindrio ny nify iray mba hamarihana azy ho nitranga",
+      "upper_jaw": "Valanorano ambony",
+      "lower_jaw": "Valanorano ambany",
+      "timeline": "Fandaharana",
+      "soothe_title": "Hanamaivanana ny fipoiran'ny nify",
+      "growing_well": "Mitombo tsara i {{name}} 🌱"
+    },
+    "development": {
+      "red_flags_kicker": "Oviana hizaha dokotera ?",
+      "red_flags_title": "Famantarana tandremana amin'ny {{ageLabel}}",
+      "red_flags_intro": "Raha maneho iray na maromaro amin'ireto famantarana ireto i {{name}}, resaho amin'ny pédiatra :",
+      "call_doctor": "Hantso dokotera",
+      "disclaimer": "Samy manana ny fitomboany ny zaza — famantarana fotsiny ireo, ny mpitsabo no afaka manome hevitra."
+    }
+  },
+  "nutrition": {
+    "title": "Sakafo",
+    "hero_kicker": "Tsiro & vongany",
+    "hero_tagline": "Fomba · Tiana · Menu · Vidim-barotra",
+    "tabs": {
+      "recipes": "Fomba",
+      "foods": "Sakafo",
+      "favorites": "Tiana",
+      "planner": "Menu",
+      "shopping": "Vidim-barotra"
+    },
+    "foods": {
+      "conservation_title": "Fitahirizana sakafo",
+      "conservation_tagline": "Firizé · mangatsiaka · sisa · fotoana",
+      "hygiene_title": "Fahadiovana & fiomanana",
+      "hygiene_tagline": "Tavoahangy · fitaovana · fanasana",
+      "new_badge": "vaovao",
+      "allergen": "manetsiketsika",
+      "detail_texture": "Endrika",
+      "detail_tips": "Torohevitra",
+      "detail_local": "Eto an-toerana"
+    }
+  },
+  "journal": {
+    "title": "Diary",
+    "hero_kicker": "Manan-danja ny isan'andro",
+    "hero_tagline": "Sakafo · Torimaso · Lamba · Fihetsika",
+    "empty": "Tsy misy nosoratana ho an'ity andro ity",
+    "empty_hint": "Ampiasao ny bokotra + hampiditra hetsika."
+  },
+  "profile": {
+    "title": "Mombamomba",
+    "hero_kicker": "Ny toerako",
+    "hero_tagline": "Zaza · Fepetra · Boky",
+    "born_on": "Teraka ny",
+    "birth_weight": "Lanja tamin'ny fahaterahana",
+    "birth_height": "Halavany tamin'ny fahaterahana",
+    "add_baby": "Hampiditra zaza",
+    "settings": "Fepetra",
+    "country_vaccine": "Firenena (fandaharam-baksiny)",
+    "language": "Fiteny",
+    "theme": "Endrika",
+    "theme_auto": "Ho azy",
+    "theme_light": "Mazava",
+    "theme_dark": "Maizina",
+    "export_record": "Hanondrana ny boky fahasalamana",
+    "danger_zone": "Faritra saro-pady",
+    "delete_baby": "Hamafa ity zaza ity",
+    "profile_updated": "Voaova ny mombamomba ✓"
+  },
+  "care": {
+    "title": "Fanomezana fanafody",
+    "hero_kicker": "Ny fitaovam-panafodiko",
+    "hero_tagline": "Refy · Hafanana · Tay",
+    "tabs": {
+      "dose": "Refy",
+      "fever": "Hafanana",
+      "stool": "Tay"
+    },
+    "dose": {
+      "medication": "Fanafody",
+      "weight_of_baby": "Lanjan'ny zaza",
+      "form": "Endrika",
+      "recommended_dose": "Refy aroso",
+      "max_interval": "Isaky ny 6 ora fara fahakeliny ({{count}} indray mandeha/24 ora) · ampifanaraho amin'ny hafanana.",
+      "ibuprofen_warning": "Tsy azo ampiasaina raha latsaky ny 3 volana, varicella, na tsy ampy rano.",
+      "record_dose": "Hanoratra ny refy",
+      "last_dose": "Refy farany",
+      "next_allowed": "Manaraka azo omena",
+      "too_soon": "Mbola ela — miandrasa",
+      "history": "Tantara 24 ora"
+    },
+    "fever": {
+      "level_normal": "Salama",
+      "level_mild": "Kely",
+      "level_moderate": "Manaraka",
+      "level_high": "Avo",
+      "baby_under_3m_title": "Zaza < 3 volana",
+      "baby_under_3m_body": "Na inona na inona hafanana ≥ 38°C dia maika. Mandehana avy hatrany amin'ny dokotera.",
+      "when_emergency": "Oviana no maika ?"
+    },
+    "disclaimer": "Famantarana fotsiny ireo. Jereo foana ny torolalana ary mihaonana amin'ny dokotera raha misalasala. Maika : SAMU 15 / 117."
+  }
+}

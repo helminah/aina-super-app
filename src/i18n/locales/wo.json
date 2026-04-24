@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "AINA",
+    "slogan": "Sawu dund",
+    "loading": "Ay xaar…"
+  },
+  "nav": {
+    "home": "Kër",
+    "health": "Wér-gu-yaram",
+    "nutrition": "Lekk",
+    "journal": "Téere",
+    "profile": "Sama kàddu"
+  },
+  "common": {
+    "back": "Dellu",
+    "next": "Toppal",
+    "save": "Denc",
+    "cancel": "Bàyyi",
+    "close": "Tëj",
+    "delete": "Far",
+    "edit": "Soppi",
+    "add": "Yokk",
+    "done": "Jeex",
+    "overdue": "Genn jaar",
+    "soon": "Bi ñu ñëw",
+    "see_all": "Xool lépp",
+    "learn_more": "Xam lu bees",
+    "tap_to_expand": "Laalal ngir xam lu ëpp",
+    "tap_to_collapse": "Laalal ngir tëj",
+    "day": "bis",
+    "days": "bis",
+    "month": "weer",
+    "week": "ayu-bis",
+    "weeks": "ayu-bis",
+    "boy": "Xale góor",
+    "girl": "Xale jigéen"
+  },
+  "auth": {
+    "welcome": "Dalal ak jam",
+    "login": "Dugg",
+    "signup": "Bind kont",
+    "login_cta": "Dugg",
+    "signup_cta": "Bind sama kont",
+    "email": "Email",
+    "password": "Baatu làqu",
+    "signup_success": "Kont bi binduwa na ! Xoolal sa email 📧",
+    "terms": "Boo toppee, yaangi nangu say njàngat ak say seetlu.",
+    "dev_mode_label": "Dev mode — Supabase amul",
+    "dev_bypass": "Toppal ak démo bu lokaal"
+  },
+  "onboarding": {
+    "step_of": "Lal {{current}} ci {{total}}",
+    "welcome_title": "Dalal ak jam ci AINA",
+    "welcome_subtitle": "Luy turu sa liir ?",
+    "name_placeholder": "Turu liir",
+    "birth_date_title": "Kañ la {{name}} juddu ?",
+    "birth_date_subtitle": "Xale góor walla xale jigéen ?",
+    "measurements_title": "Natt ci juddu",
+    "measurements_subtitle": "Soxla nañu ko ngir toppatoo ay màgg.",
+    "weight_kg": "Diis (kg)",
+    "height_cm": "Gùdd (cm)",
+    "country_title": "Fu {{name}} di màgg ?",
+    "country_subtitle": "Kaleendar bu vaksin bi dina tollu ak réew bi.",
+    "country_search": "Wut réew…",
+    "country_no_results": "Amul réew mu tudd « {{query}} ».",
+    "vaccines_title": "Vaksin yi muy jël",
+    "vaccines_subtitle": "Laalal vaksin yi {{name}} jël ba noppi ngir toppatoo ju rafet.",
+    "vaccines_too_young": "{{name}} ndaw na ba pare, vaksin dafa yokk doomu.",
+    "start": "Tambali"
+  },
+  "dashboard": {
+    "hello_mom_of": "Jamm ak jamm, yaayu",
+    "tip_of_day": "Ndigël bis bi",
+    "next_vaccine": "Vaksin bi ñëw",
+    "days_until": "Ci {{days}} bis",
+    "days_until_plural": "Ci {{days}} bis",
+    "vaccine_overdue": "Jaar na",
+    "sleep": "Nelaw",
+    "weight": "Diis",
+    "today": "tey",
+    "latest": "bi mujj",
+    "birth_value": "juddu",
+    "not_yet": "Jëkkul",
+    "recent_activity": "Jëf yi ko moomee ci kanam",
+    "suggestion_of_day": "Ndigël bis bi",
+    "sos_label": "SOS",
+    "care_kit": "Fagaru",
+    "pediatric_followup": "Toppatoo pédiatrique ak Dr"
+  },
+  "health": {
+    "title": "Wér-gu-yaram",
+    "hero_tagline": "Vaksin · Màgg · Bëñ · Màngal",
+    "hero_kicker": "Toppatoo liir",
+    "tabs": {
+      "vaccines": "Vaksin",
+      "growth": "Màgg",
+      "teeth": "Bëñ",
+      "development": "Màngal"
+    },
+    "vaccines": {
+      "progress": "Yokkute",
+      "birth": "Juddu",
+      "education_title": "Vaksin, nan la liggéey ?",
+      "education_kicker": "Xam",
+      "detail_why": "Lu tax mu may ?",
+      "detail_disease": "Fat wi",
+      "detail_risk": "Ndax lu tax tiiskante la",
+      "detail_side_effects": "Njàng yi ñu xaar",
+      "disclaimer": "Xibaar yii àgge lañ. Saa doktoor moo la tax a xam lu gën a rafet."
+    },
+    "growth": {
+      "weight": "Diis (kg)",
+      "height": "Gùdd (cm)",
+      "hc": "PC (cm)",
+      "no_data": "Amul natt bu nu bind. Yokkal bi mujj.",
+      "add_measure": "Yokk natt"
+    },
+    "teeth": {
+      "erupted": "Bëñ yi génn",
+      "legend_incisor": "Incisive",
+      "legend_canine": "Kanin",
+      "legend_molar": "Molar",
+      "tap_hint": "Laalal bëñ ngir seetlu ne génn na",
+      "upper_jaw": "Kaw",
+      "lower_jaw": "Suuf",
+      "timeline": "Taariix",
+      "soothe_title": "Nangu ndiinol",
+      "growing_well": "{{name}} dafa màgg bu baax 🌱"
+    },
+    "development": {
+      "red_flags_kicker": "Kañ ñu demal doktoor ?",
+      "red_flags_title": "Xet yu mag ci {{ageLabel}}",
+      "red_flags_intro": "Boo xam ne {{name}} am na benn walla ñu bari ci njël yii, wax ko doktoor bi :",
+      "call_doctor": "Wooteel doktoor",
+      "disclaimer": "Xale ju nekk dafa màgg ak jamono – xibaar yi ay tànk lañu, doktoor rekk a man a wax."
+    }
+  },
+  "nutrition": {
+    "title": "Lekk",
+    "hero_kicker": "Njebbal & texture",
+    "hero_tagline": "Recettes · Bëgg · Menu · Jëf",
+    "tabs": {
+      "recipes": "Recettes",
+      "foods": "Lekk",
+      "favorites": "Bëgg",
+      "planner": "Menu",
+      "shopping": "Jëf"
+    },
+    "foods": {
+      "conservation_title": "Denc lekk gi",
+      "conservation_tagline": "Frigo · congélateur · dara · jamono",
+      "hygiene_title": "Setlu & waajal",
+      "hygiene_tagline": "Bibron · jumtukaay · setal",
+      "new_badge": "bees",
+      "allergen": "allergène",
+      "detail_texture": "Jeem",
+      "detail_tips": "Ndigël",
+      "detail_local": "Réew moomu"
+    }
+  },
+  "journal": {
+    "title": "Téere",
+    "hero_kicker": "Bis bu nekk am na njariñ",
+    "hero_tagline": "Lekk · Nelaw · Couches · Xalaat",
+    "empty": "Amul dara bindewul ci bis bii",
+    "empty_hint": "Jëfandikool butoŋ + ngir yokk jëf."
+  },
+  "profile": {
+    "title": "Sama kàddu",
+    "hero_kicker": "Sama bérëb",
+    "hero_tagline": "Liir · Dëkkuwaay · Téere",
+    "born_on": "Juddu na ci",
+    "birth_weight": "Diis bu juddu",
+    "birth_height": "Gùdd bu juddu",
+    "add_baby": "Yokk liir",
+    "settings": "Dëkkuwaay",
+    "country_vaccine": "Réew (kaleendar vaksin)",
+    "language": "Làkk",
+    "theme": "Mel",
+    "theme_auto": "Borom bopp",
+    "theme_light": "Leer",
+    "theme_dark": "Lëndëm",
+    "export_record": "Jébbal téere wér-gu-yaram",
+    "danger_zone": "Bérëb bu ñaaw",
+    "delete_baby": "Far liir bii",
+    "profile_updated": "Sama kàddu soppuwa na ✓"
+  },
+  "care": {
+    "title": "Fagaru",
+    "hero_kicker": "Sama fagaru garab",
+    "hero_tagline": "Natt · Tàng · Poop",
+    "tabs": {
+      "dose": "Natt",
+      "fever": "Tàng",
+      "stool": "Poop"
+    },
+    "dose": {
+      "medication": "Garab",
+      "weight_of_baby": "Diisu liir",
+      "form": "Jeem",
+      "recommended_dose": "Natt bu nu jubale",
+      "max_interval": "Saa 6 waxtu lépp ({{count}} yoon/24 waxtu) · teggale ak tàng ga.",
+      "ibuprofen_warning": "Mu jurul bala 3 weer, walla boo amee mbéex walla daqoon.",
+      "record_dose": "Bind nattu gu jëkk",
+      "last_dose": "Natt bu mujj",
+      "next_allowed": "Natt bi nu man a jox",
+      "too_soon": "Mu kawe — xaar",
+      "history": "Taariix 24 waxtu"
+    },
+    "fever": {
+      "level_normal": "Ci jàmm",
+      "level_mild": "Tuuti",
+      "level_moderate": "Diggu",
+      "level_high": "Màggat",
+      "baby_under_3m_title": "Liir < 3 weer",
+      "baby_under_3m_body": "Tàng bu ≥ 38°C dafa gaaw. Demal doktoor gëwëlu.",
+      "when_emergency": "Kañ la ñu demal doktoor gaaw ?"
+    },
+    "disclaimer": "Xibaar yii àgge rekk la. Xoolal notice bi, jël doktoor boo xam xam-xamu. Gaaw : SAMU 15 / 1515."
+  }
+}

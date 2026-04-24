@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 export function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -11,6 +12,7 @@ export function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signIn, signUp, isConfigured, devBypass } = useAuth();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ export function AuthPage() {
     if (error) {
       toast.error(error.message);
     } else if (mode === 'signup') {
-      toast.success('Compte créé ! Vérifiez votre email 📧');
+      toast.success(t('auth.signup_success'));
     }
   };
 
@@ -51,7 +53,7 @@ export function AuthPage() {
           transition={{ delay: 0.25, duration: 0.6 }}
           className="font-display text-white text-6xl tracking-[0.15em] mt-5 font-medium"
         >
-          AINA
+          {t('app.name')}
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -59,7 +61,7 @@ export function AuthPage() {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="font-display-intimate text-white/90 text-lg mt-1"
         >
-          Souffle de vie
+          {t('app.slogan')}
         </motion.p>
       </div>
 
@@ -81,7 +83,7 @@ export function AuthPage() {
                   mode === m ? 'bg-white text-forest-600 shadow-sm' : 'text-bark-500'
                 }`}
               >
-                {m === 'login' ? 'Connexion' : 'Créer un compte'}
+                {m === 'login' ? t('auth.login') : t('auth.signup')}
               </button>
             ))}
           </div>
@@ -92,7 +94,7 @@ export function AuthPage() {
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={t('auth.email')}
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="w-full pl-11 pr-4 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
@@ -104,7 +106,7 @@ export function AuthPage() {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Mot de passe"
+                  placeholder={t('auth.password')}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   className="w-full pl-11 pr-11 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
@@ -128,7 +130,7 @@ export function AuthPage() {
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                <>{mode === 'login' ? 'Se connecter' : 'Créer mon compte'} <Sparkles className="w-4 h-4" /></>
+                <>{mode === 'login' ? t('auth.login_cta') : t('auth.signup_cta')} <Sparkles className="w-4 h-4" /></>
               )}
             </button>
           </form>
@@ -136,20 +138,20 @@ export function AuthPage() {
           {!isConfigured && import.meta.env.DEV && (
             <div className="mt-5 pt-5 border-t border-ivory-300">
               <p className="text-[11px] text-bark-400 text-center mb-2">
-                Mode dev — Supabase non configuré
+                {t('auth.dev_mode_label')}
               </p>
               <button
                 onClick={devBypass}
                 className="w-full py-3 rounded-full bg-ivory-200 text-bark-600 font-semibold text-sm hover:bg-ivory-300 transition-colors"
               >
-                Continuer en démo locale
+                {t('auth.dev_bypass')}
               </button>
             </div>
           )}
         </motion.div>
 
         <p className="text-center text-xs text-bark-400 mt-6 px-4">
-          En continuant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+          {t('auth.terms')}
         </p>
       </div>
     </div>

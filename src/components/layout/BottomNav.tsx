@@ -1,19 +1,21 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, HeartPulse, UtensilsCrossed, BookOpen, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 // Chaque tab a sa teinte — pill morphing colorée, plus vivant que mono-rose.
 const tabs = [
-  { path: '/',          label: 'Accueil',   icon: Home,             gradient: 'linear-gradient(135deg, #FF2D78, #FF6030)', shadow: 'rgba(255, 45, 120, 0.5)' },
-  { path: '/health',    label: 'Santé',     icon: HeartPulse,       gradient: 'linear-gradient(135deg, #10b981, #34d399)', shadow: 'rgba(16, 185, 129, 0.5)' },
-  { path: '/nutrition', label: 'Nutrition', icon: UtensilsCrossed,  gradient: 'linear-gradient(135deg, #f88a1f, #FFA641)', shadow: 'rgba(248, 138, 31, 0.5)' },
-  { path: '/journal',   label: 'Journal',   icon: BookOpen,         gradient: 'linear-gradient(135deg, #0ea5e9, #38bdf8)', shadow: 'rgba(14, 165, 233, 0.5)' },
-  { path: '/profile',   label: 'Profil',    icon: User,             gradient: 'linear-gradient(135deg, #9333ea, #c084fc)', shadow: 'rgba(147, 51, 234, 0.5)' },
-];
+  { path: '/',          key: 'home',      icon: Home,             gradient: 'linear-gradient(135deg, #FF2D78, #FF6030)', shadow: 'rgba(255, 45, 120, 0.5)' },
+  { path: '/health',    key: 'health',    icon: HeartPulse,       gradient: 'linear-gradient(135deg, #10b981, #34d399)', shadow: 'rgba(16, 185, 129, 0.5)' },
+  { path: '/nutrition', key: 'nutrition', icon: UtensilsCrossed,  gradient: 'linear-gradient(135deg, #f88a1f, #FFA641)', shadow: 'rgba(248, 138, 31, 0.5)' },
+  { path: '/journal',   key: 'journal',   icon: BookOpen,         gradient: 'linear-gradient(135deg, #0ea5e9, #38bdf8)', shadow: 'rgba(14, 165, 233, 0.5)' },
+  { path: '/profile',   key: 'profile',   icon: User,             gradient: 'linear-gradient(135deg, #9333ea, #c084fc)', shadow: 'rgba(147, 51, 234, 0.5)' },
+] as const;
 
 export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const activeTab = tabs.find(t => t.path === location.pathname) ?? tabs[0];
 
   return (
@@ -51,7 +53,7 @@ export function BottomNav() {
                 strokeWidth={isActive ? 2.5 : 1.8}
               />
               <span className={`text-[10px] font-medium transition-colors ${isActive ? 'text-white' : 'text-bark-400'}`}>
-                {tab.label}
+                {t(`nav.${tab.key}`)}
               </span>
             </button>
           );

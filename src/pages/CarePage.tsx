@@ -3,12 +3,14 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Pill, Thermometer, Droplets, Phone, AlertTriangle, Info } from 'lucide-react';
 import { useBaby } from '@/contexts/BabyContext';
+import { useTranslation } from 'react-i18next';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { MEDICATION_FORMS, DOSE_PER_KG, getPracticalDose, type MedicationForm } from '@/data/medications';
 
 type CareSection = 'dose' | 'fever' | 'stool';
 
 export function CarePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { profile, weightEntries } = useBaby();
   const [section, setSection] = useState<CareSection>('dose');
@@ -35,9 +37,9 @@ export function CarePage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 hero-text mt-8"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">Ma trousse à pharmacie</p>
-          <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">Soins</h1>
-          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">Dose · Fièvre · Selles</p>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">{t('care.hero_kicker')}</p>
+          <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">{t('care.title')}</h1>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{t('care.hero_tagline')}</p>
         </motion.div>
       </div>
 

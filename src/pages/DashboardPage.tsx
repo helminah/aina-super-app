@@ -6,6 +6,7 @@ import { recipes } from '@/data/recipes';
 import { getTipOfTheDay } from '@/data/daily-tips';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
   ShieldCheck,
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 
 export function DashboardPage() {
+  const { t } = useTranslation();
   const { profile, babies, activeBabyId, switchBaby, isVaccineDone, weightEntries, dailyLogs, getLogsForDate, checkVaccineReminders } = useBaby();
   const navigate = useNavigate();
   const [showEmergency, setShowEmergency] = useState(false);
@@ -120,7 +122,7 @@ export function DashboardPage() {
           className="relative z-10 hero-text"
         >
           <p className="text-sm text-white/80 font-medium tracking-wide">
-            Bonjour, maman de
+            {t('dashboard.hello_mom_of')}
           </p>
           <div className="flex items-end gap-3 mt-1">
             <h1
@@ -380,7 +382,7 @@ export function DashboardPage() {
           <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
             <AlertTriangle className="w-4 h-4" />
           </span>
-          <span className="font-heading font-bold text-xs uppercase tracking-wider">SOS</span>
+          <span className="font-heading font-bold text-xs uppercase tracking-wider">{t('dashboard.sos_label')}</span>
         </motion.button>
       </div>
 

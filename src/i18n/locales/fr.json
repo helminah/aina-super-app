@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "AINA",
+    "slogan": "Souffle de vie",
+    "loading": "Chargement…"
+  },
+  "nav": {
+    "home": "Accueil",
+    "health": "Santé",
+    "nutrition": "Nutrition",
+    "journal": "Journal",
+    "profile": "Profil"
+  },
+  "common": {
+    "back": "Retour",
+    "next": "Continuer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "done": "Fait",
+    "overdue": "En retard",
+    "soon": "À venir",
+    "see_all": "Voir tout",
+    "learn_more": "En savoir plus",
+    "tap_to_expand": "Toucher pour en savoir plus",
+    "tap_to_collapse": "Toucher pour replier",
+    "day": "jour",
+    "days": "jours",
+    "month": "mois",
+    "week": "semaine",
+    "weeks": "semaines",
+    "boy": "Garçon",
+    "girl": "Fille"
+  },
+  "auth": {
+    "welcome": "Bienvenue",
+    "login": "Connexion",
+    "signup": "Créer un compte",
+    "login_cta": "Se connecter",
+    "signup_cta": "Créer mon compte",
+    "email": "Email",
+    "password": "Mot de passe",
+    "signup_success": "Compte créé ! Vérifiez votre email 📧",
+    "terms": "En continuant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
+    "dev_mode_label": "Mode dev — Supabase non configuré",
+    "dev_bypass": "Continuer en démo locale"
+  },
+  "onboarding": {
+    "step_of": "Étape {{current}} sur {{total}}",
+    "welcome_title": "Bienvenue dans AINA",
+    "welcome_subtitle": "Quel est le doux prénom de votre bébé ?",
+    "name_placeholder": "Prénom de bébé",
+    "birth_date_title": "Quand est-ce que {{name}} a pointé le bout de son nez ?",
+    "birth_date_subtitle": "Et est-ce un petit garçon ou une petite fille ?",
+    "measurements_title": "Mensurations à la naissance",
+    "measurements_subtitle": "Nous en avons besoin pour suivre sa croissance.",
+    "weight_kg": "Poids (kg)",
+    "height_cm": "Taille (cm)",
+    "country_title": "Où grandit {{name}} ?",
+    "country_subtitle": "Le calendrier vaccinal sera adapté au PEV du pays.",
+    "country_search": "Rechercher un pays…",
+    "country_no_results": "Aucun pays trouvé pour « {{query}} ».",
+    "vaccines_title": "Vaccins déjà reçus",
+    "vaccines_subtitle": "Cochez les vaccins que {{name}} a déjà reçus pour un suivi sur-mesure.",
+    "vaccines_too_young": "{{name}} est encore tout(e) petit(e), aucun vaccin n'est attendu pour le moment.",
+    "start": "Commencer"
+  },
+  "dashboard": {
+    "hello_mom_of": "Bonjour, maman de",
+    "tip_of_day": "Conseil du jour",
+    "next_vaccine": "Prochain Vaccin",
+    "days_until": "Dans {{days}} jour",
+    "days_until_plural": "Dans {{days}} jours",
+    "vaccine_overdue": "En retard",
+    "sleep": "Sommeil",
+    "weight": "Poids",
+    "today": "aujourd'hui",
+    "latest": "dernier relevé",
+    "birth_value": "naissance",
+    "not_yet": "Pas encore",
+    "recent_activity": "Activités Récentes",
+    "suggestion_of_day": "Suggestion du jour",
+    "sos_label": "SOS",
+    "care_kit": "Trousse",
+    "pediatric_followup": "Suivi pédiatrique avec"
+  },
+  "health": {
+    "title": "Santé",
+    "hero_tagline": "Vaccins · Croissance · Dents · Étapes",
+    "hero_kicker": "Suivi pédiatrique",
+    "tabs": {
+      "vaccines": "Vaccins",
+      "growth": "Croissance",
+      "teeth": "Dents",
+      "development": "Étapes"
+    },
+    "vaccines": {
+      "progress": "Progression",
+      "birth": "Naissance",
+      "education_title": "La vaccination, comment ça marche ?",
+      "education_kicker": "Comprendre",
+      "detail_why": "Pourquoi le faire ?",
+      "detail_disease": "La maladie en question",
+      "detail_risk": "Pourquoi c'est grave",
+      "detail_side_effects": "Effets secondaires attendus",
+      "disclaimer": "Ces informations sont indicatives. Votre pédiatre reste la référence pour toute question personnalisée."
+    },
+    "growth": {
+      "weight": "Poids (kg)",
+      "height": "Taille (cm)",
+      "hc": "PC (cm)",
+      "no_data": "Aucune mesure enregistrée pour le moment. Ajoutez un relevé pour voir l'interprétation.",
+      "add_measure": "Ajouter une mesure"
+    },
+    "teeth": {
+      "erupted": "Dents sorties",
+      "legend_incisor": "Incisive",
+      "legend_canine": "Canine",
+      "legend_molar": "Molaire",
+      "tap_hint": "Tapez une dent pour la marquer comme sortie",
+      "upper_jaw": "Mâchoire supérieure",
+      "lower_jaw": "Mâchoire inférieure",
+      "timeline": "Chronologie",
+      "soothe_title": "Soulager la poussée",
+      "growing_well": "{{name}} grandit bien 🌱"
+    },
+    "development": {
+      "red_flags_kicker": "Quand consulter ?",
+      "red_flags_title": "Signaux d'alarme à {{ageLabel}}",
+      "red_flags_intro": "Si à cet âge {{name}} présente un ou plusieurs de ces signes, parlez-en à votre pédiatre :",
+      "call_doctor": "Appeler un médecin",
+      "disclaimer": "Chaque enfant évolue à son rythme — ces repères sont indicatifs, seul un professionnel peut poser un avis."
+    }
+  },
+  "nutrition": {
+    "title": "Nutrition",
+    "hero_kicker": "Goûts & textures",
+    "hero_tagline": "Recettes · Favoris · Menu · Courses",
+    "tabs": {
+      "recipes": "Recettes",
+      "foods": "Aliments",
+      "favorites": "Favoris",
+      "planner": "Menu",
+      "shopping": "Courses"
+    },
+    "foods": {
+      "conservation_title": "Conservation des aliments",
+      "conservation_tagline": "Frigo · congélateur · restes · durées",
+      "hygiene_title": "Hygiène & préparation",
+      "hygiene_tagline": "Biberons · ustensiles · lavage",
+      "new_badge": "nouveau",
+      "allergen": "allergène",
+      "detail_texture": "Texture",
+      "detail_tips": "Conseil",
+      "detail_local": "Contexte local"
+    }
+  },
+  "journal": {
+    "title": "Journal",
+    "hero_kicker": "Chaque jour compte",
+    "hero_tagline": "Repas · Sommeil · Couches · Humeur",
+    "empty": "Aucune entrée pour cette journée",
+    "empty_hint": "Utilisez le bouton + pour ajouter un événement."
+  },
+  "profile": {
+    "title": "Profil",
+    "hero_kicker": "Mon espace",
+    "hero_tagline": "Bébés · Paramètres · Carnet",
+    "born_on": "Né(e) le",
+    "birth_weight": "Poids de naissance",
+    "birth_height": "Taille de naissance",
+    "add_baby": "Ajouter un bébé",
+    "settings": "Réglages",
+    "country_vaccine": "Pays (calendrier vaccinal)",
+    "language": "Langue",
+    "theme": "Thème",
+    "theme_auto": "Auto",
+    "theme_light": "Clair",
+    "theme_dark": "Sombre",
+    "export_record": "Exporter carnet de santé",
+    "danger_zone": "Zone sensible",
+    "delete_baby": "Supprimer ce bébé",
+    "profile_updated": "Profil mis à jour ✓"
+  },
+  "care": {
+    "title": "Soins",
+    "hero_kicker": "Ma trousse à pharmacie",
+    "hero_tagline": "Dose · Fièvre · Selles",
+    "tabs": {
+      "dose": "Dose",
+      "fever": "Fièvre",
+      "stool": "Selles"
+    },
+    "dose": {
+      "medication": "Médicament",
+      "weight_of_baby": "Poids de bébé",
+      "form": "Présentation",
+      "recommended_dose": "Dose recommandée",
+      "max_interval": "Toutes les 6h maximum ({{count}} prises/24h) · à ajuster selon la fièvre.",
+      "ibuprofen_warning": "Contre-indiqué avant 3 mois, en cas de varicelle ou déshydratation.",
+      "record_dose": "Enregistrer la prise",
+      "last_dose": "Dernière prise",
+      "next_allowed": "Prochaine prise autorisée",
+      "too_soon": "Trop tôt — attendre encore",
+      "history": "Historique 24h"
+    },
+    "fever": {
+      "level_normal": "Normal",
+      "level_mild": "Légère",
+      "level_moderate": "Modérée",
+      "level_high": "Élevée",
+      "baby_under_3m_title": "Bébé < 3 mois",
+      "baby_under_3m_body": "Toute fièvre ≥ 38°C est une urgence. Consultez immédiatement.",
+      "when_emergency": "Quand consulter en urgence ?"
+    },
+    "disclaimer": "Ces infos sont indicatives. Toujours vérifier la notice et consulter un médecin en cas de doute. En urgence vitale : SAMU 15 / 1515."
+  }
+}

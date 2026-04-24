@@ -8,6 +8,7 @@ import { getAgeInMonths } from '@/lib/age-utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, Area, AreaChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ComposedChart, Tooltip } from 'recharts';
 import { ShieldCheck, TrendingUp, Brain, Check, Plus, X, Clock, Smile } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { TeethChart } from '@/components/health/TeethChart';
 import { RedFlagsSection } from '@/components/health/RedFlagsSection';
 import { GrowthInterpretation } from '@/components/health/GrowthInterpretation';
@@ -16,10 +17,10 @@ import { Info as InfoIcon } from 'lucide-react';
 import type { Vaccine } from '@/data/vaccines';
 
 const healthTabs = [
-  { id: 'vaccines', label: 'Vaccins', icon: ShieldCheck },
-  { id: 'growth', label: 'Croissance', icon: TrendingUp },
-  { id: 'teeth', label: 'Dents', icon: Smile },
-  { id: 'development', label: 'Étapes', icon: Brain },
+  { id: 'vaccines', labelKey: 'vaccines', icon: ShieldCheck },
+  { id: 'growth', labelKey: 'growth', icon: TrendingUp },
+  { id: 'teeth', labelKey: 'teeth', icon: Smile },
+  { id: 'development', labelKey: 'development', icon: Brain },
 ] as const;
 
 type HealthTab = typeof healthTabs[number]['id'];
@@ -29,6 +30,7 @@ type GrowthMetric = typeof growthMetrics[number];
 const metricLabels: Record<GrowthMetric, string> = { weight: 'Poids (kg)', height: 'Taille (cm)', hc: 'PC (cm)' };
 
 export function HealthPage() {
+  const { t } = useTranslation();
   const { profile, isVaccineDone, toggleVaccine, weightEntries, heightEntries, hcEntries, addWeight, addHeight, addHc, isMilestoneDone, toggleMilestone } = useBaby();
   const [activeTab, setActiveTab] = useState<HealthTab>('vaccines');
   const [metric, setMetric] = useState<GrowthMetric>('weight');
@@ -106,11 +108,11 @@ export function HealthPage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 hero-text"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">Suivi pédiatrique</p>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">{t('health.hero_kicker')}</p>
           <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">
-            Santé
+            {t('health.title')}
           </h1>
-          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">Vaccins · Croissance · Développement</p>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{t('health.hero_tagline')}</p>
         </motion.div>
       </div>
 
@@ -128,7 +130,7 @@ export function HealthPage() {
                   : 'text-bark-500'
               }`}
             >
-              <Icon className="w-4 h-4" /> {tab.label}
+              <Icon className="w-4 h-4" /> {t(`health.tabs.${tab.labelKey}`)}
             </button>
           );
         })}

@@ -5,6 +5,7 @@ import { format, subDays, addDays, isSameDay, isToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Baby, Moon, Droplets, Smile, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { LogType, FeedDetails, SleepDetails, DiaperDetails, MoodDetails } from '@/types/child';
 
 const LOG_TYPES: { type: LogType; label: string; icon: typeof Baby; color: string; bg: string }[] = [
@@ -15,6 +16,7 @@ const LOG_TYPES: { type: LogType; label: string; icon: typeof Baby; color: strin
 ];
 
 export function JournalPage() {
+  const { t } = useTranslation();
   const { profile, getLogsForDate, addLog, removeLog } = useBaby();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showAdd, setShowAdd] = useState(false);
@@ -118,11 +120,11 @@ export function JournalPage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 hero-text"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">Chaque jour compte</p>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">{t('journal.hero_kicker')}</p>
           <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">
-            Journal
+            {t('journal.title')}
           </h1>
-          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">Repas · Sommeil · Couches · Humeur</p>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{t('journal.hero_tagline')}</p>
         </motion.div>
       </div>
 
@@ -152,8 +154,8 @@ export function JournalPage() {
         {logs.length === 0 ? (
           <div className="text-center py-16">
             <Clock className="w-12 h-12 text-ivory-400 mx-auto mb-3" />
-            <p className="text-bark-500 font-medium">Aucune entrée pour cette journée</p>
-            <p className="text-sm text-bark-400 mt-1">Utilisez le bouton + pour ajouter un événement.</p>
+            <p className="text-bark-500 font-medium">{t('journal.empty')}</p>
+            <p className="text-sm text-bark-400 mt-1">{t('journal.empty_hint')}</p>
           </div>
         ) : (
           <div className="space-y-3">

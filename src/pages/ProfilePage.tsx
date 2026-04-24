@@ -5,15 +5,18 @@ import { getAgeText } from '@/lib/age-utils';
 import { generateId } from '@/lib/utils';
 import type { Country, Sex, ChildProfile } from '@/types/child';
 import { COUNTRY_BY_CODE, COUNTRIES } from '@/data/countries';
+import { SUPPORTED_LANGUAGES } from '@/i18n';
 import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 // Helpers: renvoient flag + label depuis le code pays dynamique.
 const countryFlag  = (code: string) => COUNTRY_BY_CODE[code]?.flag  ?? '🏳️';
 const countryLabel = (code: string) => COUNTRY_BY_CODE[code]?.label ?? code;
 
 export function ProfilePage() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile, removeBaby } = useBaby();
   const [editing, setEditing] = useState(false);
@@ -82,11 +85,11 @@ export function ProfilePage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 hero-text"
         >
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">Mon espace</p>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/95 font-semibold">{t('profile.hero_kicker')}</p>
           <h1 className="font-display font-semibold text-white text-6xl leading-[0.95] mt-1.5">
-            Profil
+            {t('profile.title')}
           </h1>
-          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">Bébés · Paramètres · Carnet</p>
+          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{t('profile.hero_tagline')}</p>
         </motion.div>
       </div>
 
@@ -210,11 +213,13 @@ export function ProfilePage() {
 
       {/* Settings */}
       <div className="bg-ivory-50 rounded-2xl p-5 mb-5 shadow-sm">
-        <h3 className="font-heading font-bold text-bark-800 mb-3 flex items-center gap-2"><Settings className="w-5 h-5" /> Réglages</h3>
+        <h3 className="font-heading font-bold text-bark-800 mb-3 flex items-center gap-2">
+          <Settings className="w-5 h-5" /> {t('profile.settings')}
+        </h3>
 
         {/* Country */}
         <div className="mb-4">
-          <p className="text-sm text-bark-600 font-medium mb-2">Pays (calendrier vaccinal)</p>
+          <p className="text-sm text-bark-600 font-medium mb-2">{t('profile.country_vaccine')}</p>
           <select
             value={profile.country}
             onChange={e => updateProfile({ country: e.target.value as Country })}
@@ -224,6 +229,30 @@ export function ProfilePage() {
               <option key={c.code} value={c.code}>{c.flag} {c.label}</option>
             ))}
           </select>
+        </div>
+
+        {/* Language */}
+        <div className="mb-4">
+          <p className="text-sm text-bark-600 font-medium mb-2">{t('profile.language')}</p>
+          <div className="grid grid-cols-2 gap-2">
+            {SUPPORTED_LANGUAGES.map(lang => {
+              const active = i18n.language.startsWith(lang.code);
+              return (
+                <button
+                  key={lang.code}
+                  onClick={() => i18n.changeLanguage(lang.code)}
+                  className={`flex items-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold transition-all ${
+                    active
+                      ? 'bg-violet-500 text-white shadow-md shadow-violet-500/30'
+                      : 'bg-ivory-200 text-bark-600'
+                  }`}
+                >
+                  <span className="text-lg">{lang.flag}</span>
+                  <span className="flex-1 text-left">{lang.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
