@@ -6,6 +6,7 @@ import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { SplashScreen } from '@/components/SplashScreen';
 import { QuickSettings } from '@/components/QuickSettings';
+import { AIChatAssistant } from '@/components/AIChatAssistant';
 import { AuthPage } from '@/pages/AuthPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { HealthPage } from '@/pages/HealthPage';
@@ -89,6 +90,7 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <QuickSettings />
+      <AIChatAssistant />
     </>
   );
 }

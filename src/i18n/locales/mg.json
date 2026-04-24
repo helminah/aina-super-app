@@ -2,7 +2,8 @@
   "app": {
     "name": "AINA",
     "slogan": "Fofonain'ny aina",
-    "loading": "Miandry…"
+    "loading": "Miandry…",
+    "medical_disclaimer": "AINA dia fitaovana fampahafantarana. Ny votoatiny dia tsy misolo ny hevitry ny mpitsabo."
   },
   "nav": {
     "home": "Fandraisana",

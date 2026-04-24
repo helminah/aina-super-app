@@ -6,6 +6,7 @@ import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { COUNTRY_BY_CODE } from '@/data/countries';
 import { ConservationGuide } from './ConservationGuide';
+import { AIRecipeGenerator } from './AIRecipeGenerator';
 
 /**
  * FoodGuide — onglet "Aliments" : introduction par âge, conservation, allergènes.
@@ -203,6 +204,9 @@ export function FoodGuide() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Assistant IA en bas de l'onglet Aliments */}
+      <AIRecipeGenerator />
     </div>
   );
 }

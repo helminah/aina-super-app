@@ -2,36 +2,31 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Globe, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { DR_HELMINAH_LINKS, type DrHelminahLinkKey } from '@/config/drhelminah';
 
 /**
- * AboutPage — présentation Dr Helminah + liens réseaux sociaux + site.
- * Pas de WhatsApp (choix explicite — contact pro via site/réseaux).
+ * AboutPage — présentation Dr Helminah + liens depuis config/drhelminah.ts.
+ * Les liens vides (chaîne "") sont masqués automatiquement.
  */
 
-interface SocialLink {
-  key: 'website' | 'instagram' | 'tiktok' | 'facebook' | 'youtube' | 'linkedin';
-  href: string;
-  icon: string;       // emoji pour éviter dépendance SVG, cohérent avec l'app
-  gradient: string;   // bg de la carte
-}
-
-// À remplacer par les vrais handles si différents — placeholder raisonnables.
-const SOCIALS: SocialLink[] = [
-  { key: 'website',   href: 'https://drhelminah.com',                   icon: '🌐', gradient: 'from-violet-500 to-violet-400' },
-  { key: 'instagram', href: 'https://instagram.com/dr.helminah',        icon: '📸', gradient: 'from-rose-500 to-orange-400' },
-  { key: 'tiktok',    href: 'https://tiktok.com/@dr.helminah',          icon: '🎵', gradient: 'from-bark-800 to-bark-700' },
-  { key: 'facebook',  href: 'https://facebook.com/dr.helminah',         icon: '👥', gradient: 'from-sky-500 to-sky-400' },
-  { key: 'youtube',   href: 'https://youtube.com/@drhelminah',          icon: '▶️', gradient: 'from-red-500 to-red-400' },
-  { key: 'linkedin',  href: 'https://linkedin.com/in/dr-helminah',      icon: '💼', gradient: 'from-sky-700 to-sky-500' },
-];
+const LINK_META: Record<Exclude<DrHelminahLinkKey, 'website'>, { icon: string; gradient: string }> = {
+  instagram: { icon: '📸', gradient: 'from-rose-500 to-orange-400' },
+  tiktok:    { icon: '🎵', gradient: 'from-bark-800 to-bark-700' },
+  facebook:  { icon: '👥', gradient: 'from-sky-500 to-sky-400' },
+  youtube:   { icon: '▶️', gradient: 'from-red-500 to-red-400' },
+  linkedin:  { icon: '💼', gradient: 'from-sky-700 to-sky-500' },
+};
 
 export function AboutPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const visibleSocials = (Object.keys(LINK_META) as Array<keyof typeof LINK_META>)
+    .filter(k => DR_HELMINAH_LINKS[k])
+    .map(k => ({ key: k, href: DR_HELMINAH_LINKS[k], ...LINK_META[k] }));
+
   return (
     <div className="pb-24 safe-top min-h-full bg-ivory-100">
-      {/* Hero violet doux */}
       <div className="relative mesh-violet grain overflow-hidden pt-10 pb-16 px-5">
         <button
           onClick={() => navigate(-1)}
@@ -57,7 +52,6 @@ export function AboutPage() {
         </motion.div>
       </div>
 
-      {/* Bio */}
       <div className="px-5 -mt-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -71,46 +65,48 @@ export function AboutPage() {
           <p className="text-sm text-bark-700 leading-relaxed">{t('about.bio')}</p>
         </motion.div>
 
-        {/* Liens réseaux */}
-        <div className="mt-6">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-bark-500 font-semibold mb-3 px-1">
-            {t('about.links_title')}
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            {SOCIALS.map((s, i) => (
-              <motion.a
-                key={s.key}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + i * 0.05 }}
-                className={`relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br ${s.gradient} text-white elev-2 active:scale-[0.98] transition-transform`}
-              >
-                <div className="flex items-start justify-between">
-                  <span className="text-3xl">{s.icon}</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-white/70" />
-                </div>
-                <p className="font-heading font-bold mt-3 text-sm">{t(`about.${s.key}`)}</p>
-                <p className="text-[11px] text-white/80 truncate mt-0.5">{s.href.replace('https://', '')}</p>
-              </motion.a>
-            ))}
+        {visibleSocials.length > 0 && (
+          <div className="mt-6">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-bark-500 font-semibold mb-3 px-1">
+              {t('about.links_title')}
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {visibleSocials.map((s, i) => (
+                <motion.a
+                  key={s.key}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.05 }}
+                  className={`relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br ${s.gradient} text-white elev-2 active:scale-[0.98] transition-transform`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className="text-3xl">{s.icon}</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-white/70" />
+                  </div>
+                  <p className="font-heading font-bold mt-3 text-sm">{t(`about.${s.key}`)}</p>
+                  <p className="text-[11px] text-white/80 truncate mt-0.5">{s.href.replace('https://', '').replace('http://', '')}</p>
+                </motion.a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Site principal en CTA */}
-        <motion.a
-          href="https://drhelminah.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-5 w-full py-4 rounded-full bg-violet-500 text-white font-heading font-bold text-base flex items-center justify-center gap-2 elev-brand"
-        >
-          <Globe className="w-4 h-4" /> drhelminah.com
-        </motion.a>
+        {DR_HELMINAH_LINKS.website && (
+          <motion.a
+            href={DR_HELMINAH_LINKS.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="mt-5 w-full py-4 rounded-full bg-violet-500 text-white font-heading font-bold text-base flex items-center justify-center gap-2 elev-brand"
+          >
+            <Globe className="w-4 h-4" /> {DR_HELMINAH_LINKS.website.replace('https://', '').replace('http://', '')}
+          </motion.a>
+        )}
 
         <p className="text-[11px] text-bark-400 italic text-center mt-4">
           AINA — {t('app.slogan')}

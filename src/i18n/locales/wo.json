@@ -2,7 +2,8 @@
   "app": {
     "name": "AINA",
     "slogan": "Sawu dund",
-    "loading": "Ay xaar…"
+    "loading": "Ay xaar…",
+    "medical_disclaimer": "AINA mooy jumtukaay bu yebal xibaar. Li nu xam du wuutu xam-xamu doktoor."
   },
   "nav": {
     "home": "Kër",

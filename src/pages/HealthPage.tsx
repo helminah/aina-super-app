@@ -13,6 +13,7 @@ import { TeethChart } from '@/components/health/TeethChart';
 import { RedFlagsSection } from '@/components/health/RedFlagsSection';
 import { GrowthInterpretation } from '@/components/health/GrowthInterpretation';
 import { VaccineEducationCard, VaccineDetailSheet } from '@/components/health/VaccineEducation';
+import { AIRedFlagChecker } from '@/components/health/AIRedFlagChecker';
 import { Info as InfoIcon } from 'lucide-react';
 import type { Vaccine } from '@/data/vaccines';
 
@@ -393,6 +394,7 @@ export function HealthPage() {
             })}
           </div>
           <RedFlagsSection />
+          <AIRedFlagChecker />
         </div>
       )}
       </div>

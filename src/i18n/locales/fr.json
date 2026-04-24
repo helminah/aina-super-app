@@ -2,7 +2,8 @@
   "app": {
     "name": "AINA",
     "slogan": "Souffle de vie",
-    "loading": "Chargement…"
+    "loading": "Chargement…",
+    "medical_disclaimer": "AINA est un outil d'information. Les contenus ne remplacent pas l'avis d'un professionnel de santé."
   },
   "nav": {
     "home": "Accueil",

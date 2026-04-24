@@ -2,7 +2,8 @@
   "app": {
     "name": "AINA",
     "slogan": "Breath of life",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "medical_disclaimer": "AINA is an information tool. Its content does not replace professional medical advice."
   },
   "nav": {
     "home": "Home",

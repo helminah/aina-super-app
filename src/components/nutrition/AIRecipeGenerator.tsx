@@ -1,0 +1,277 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, Clock, Flame, ChefHat, CalendarRange, RefreshCw, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useBaby } from '@/contexts/BabyContext';
+import { getAgeInMonths } from '@/lib/age-utils';
+import {
+  generateRecipe,
+  generateWeeklyMealPlan,
+  AnthropicApiError,
+  type Recipe,
+  type WeeklyMealPlan,
+} from '@/lib/anthropic';
+
+type ViewMode = 'recipe' | 'plan' | null;
+
+/**
+ * AIRecipeGenerator — génération de recette ou de plan semaine par Claude.
+ * - Récupère âge + pays automatiquement depuis BabyContext
+ * - Loading state avec animation
+ * - Affichage structuré avec le design system AINA (glassmorphism + amber/orange)
+ */
+export function AIRecipeGenerator() {
+  const { profile } = useBaby();
+  const { t } = useTranslation();
+
+  const [ingredients, setIngredients] = useState('');
+  const [loading, setLoading] = useState<ViewMode>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [plan, setPlan] = useState<WeeklyMealPlan | null>(null);
+
+  if (!profile) return null;
+  const ageMonths = getAgeInMonths(profile.birthDate);
+
+  const parseIngredients = (raw: string): string[] =>
+    raw.split(/[,\n;]/).map(s => s.trim()).filter(Boolean);
+
+  const handleRecipe = async () => {
+    setError(null);
+    setRecipe(null);
+    setPlan(null);
+    setLoading('recipe');
+    try {
+      const r = await generateRecipe({
+        babyAgeMonths: ageMonths,
+        ingredients: parseIngredients(ingredients),
+        country: profile.country,
+      });
+      setRecipe(r);
+    } catch (e) {
+      setError(e instanceof AnthropicApiError ? e.message : 'Erreur inattendue');
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const handlePlan = async () => {
+    setError(null);
+    setRecipe(null);
+    setPlan(null);
+    setLoading('plan');
+    try {
+      const p = await generateWeeklyMealPlan({
+        babyAgeMonths: ageMonths,
+        allergies: [],
+        country: profile.country,
+      });
+      setPlan(p);
+    } catch (e) {
+      setError(e instanceof AnthropicApiError ? e.message : 'Erreur inattendue');
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  return (
+    <div className="mt-6 rounded-2xl overflow-hidden elev-2 relative">
+      {/* Header aurora amber */}
+      <div className="relative mesh-amber grain overflow-hidden px-5 pt-5 pb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative z-10 hero-text"
+        >
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-white" />
+            <p className="text-[11px] uppercase tracking-[0.2em] text-white/90 font-semibold">
+              Assistant nutrition
+            </p>
+          </div>
+          <p className="font-heading font-bold text-white text-lg mt-1">
+            Recette personnalisée pour {profile.name}
+          </p>
+          <p className="text-white/85 text-xs mt-0.5">
+            {ageMonths} mois · adapté au PEV {profile.country}
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Body */}
+      <div className="bg-white p-5 space-y-3">
+        <div>
+          <label className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold block mb-2">
+            Quels ingrédients as-tu ?
+          </label>
+          <textarea
+            value={ingredients}
+            onChange={e => setIngredients(e.target.value)}
+            placeholder="mil, mangue, lait, patate douce, carotte…"
+            rows={2}
+            className="w-full px-4 py-3 rounded-xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-amber-300 text-sm resize-none"
+          />
+          <p className="text-[10px] text-bark-400 mt-1">Séparés par virgule — ou laisse vide pour suggestion libre.</p>
+        </div>
+
+        <div className="flex gap-2">
+          <button
+            onClick={handleRecipe}
+            disabled={loading !== null}
+            className="flex-1 py-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 transition-all active:scale-[0.98] shadow-md shadow-amber-500/30"
+          >
+            {loading === 'recipe' ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" /> Génération…
+              </>
+            ) : (
+              <>
+                <ChefHat className="w-4 h-4" /> Recette
+              </>
+            )}
+          </button>
+          <button
+            onClick={handlePlan}
+            disabled={loading !== null}
+            className="flex-1 py-3 rounded-full bg-white border border-amber-200 text-amber-700 font-heading font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 transition-all active:scale-[0.98]"
+          >
+            {loading === 'plan' ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" /> Plan…
+              </>
+            ) : (
+              <>
+                <CalendarRange className="w-4 h-4" /> Plan semaine
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-start gap-2 p-3 rounded-xl bg-red-50 border border-red-100 text-sm text-red-700"
+          >
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span className="leading-relaxed">{error}</span>
+          </motion.div>
+        )}
+
+        {/* Loading skeleton */}
+        <AnimatePresence>
+          {loading && !error && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-2 pt-1"
+            >
+              {[0, 1, 2].map(i => (
+                <div
+                  key={i}
+                  className="h-3 bg-gradient-to-r from-ivory-200 via-amber-100 to-ivory-200 rounded"
+                  style={{
+                    width: `${100 - i * 12}%`,
+                    backgroundSize: '200% 100%',
+                    animation: `gradient-shift 1.6s ease-in-out infinite`,
+                  }}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Recipe */}
+        <AnimatePresence mode="wait">
+          {recipe && !loading && (
+            <motion.div
+              key="recipe"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="pt-3 space-y-4"
+            >
+              <div>
+                <h3 className="font-heading font-bold text-bark-800 text-base">{recipe.title}</h3>
+                <div className="flex items-center gap-3 mt-1 text-xs text-bark-500">
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {recipe.prepMinutes} min</span>
+                  <span className="flex items-center gap-1"><Flame className="w-3 h-3" /> {recipe.ageRange}</span>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold">{recipe.texture}</span>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">Ingrédients</p>
+                <ul className="space-y-1">
+                  {recipe.ingredients.map((ing, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-bark-700">
+                      <span className="w-1 h-1 rounded-full bg-amber-500" />
+                      <span className="font-semibold">{ing.qty}</span>
+                      <span>{ing.name}</span>
+                      {ing.notes && <span className="text-xs text-bark-400">· {ing.notes}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">Préparation</p>
+                <ol className="space-y-2">
+                  {recipe.steps.map((step, i) => (
+                    <li key={i} className="flex gap-3 text-sm text-bark-700">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-amber-100 text-amber-700 text-[11px] font-bold flex items-center justify-center mt-0.5">
+                        {i + 1}
+                      </span>
+                      <span className="leading-relaxed">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-amber-50 border border-emerald-100 p-3">
+                <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">Apports</p>
+                <p className="text-sm text-bark-700 mt-1 leading-relaxed">{recipe.nutritionNotes}</p>
+              </div>
+            </motion.div>
+          )}
+
+          {plan && !loading && (
+            <motion.div
+              key="plan"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="pt-3 space-y-2"
+            >
+              <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">
+                Plan sur 7 jours
+              </p>
+              {plan.days.map((d, i) => (
+                <motion.div
+                  key={d.day}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  className="rounded-xl bg-ivory-100 p-3"
+                >
+                  <p className="font-heading font-bold text-bark-800 text-sm">{d.day}</p>
+                  <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-bark-600">
+                    <div><span className="text-amber-600 font-semibold">Petit-déj</span><br />{d.breakfast}</div>
+                    <div><span className="text-amber-600 font-semibold">Déjeuner</span><br />{d.lunch}</div>
+                    <div><span className="text-amber-600 font-semibold">Goûter</span><br />{d.snack}</div>
+                    <div><span className="text-amber-600 font-semibold">Dîner</span><br />{d.dinner}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Silence le linter pour t (i18n prêt pour futures trads) */}
+        <span className="hidden">{t('app.name')}</span>
+      </div>
+    </div>
+  );
+}
