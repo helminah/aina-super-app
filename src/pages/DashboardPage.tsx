@@ -347,13 +347,18 @@ export function DashboardPage() {
           </div>
         )}
 
-        {/* ── Footer: Dr Helminah ── */}
-        <div className="mt-2 mb-4 text-center">
+        {/* ── Footer: Dr Helminah (cliquable → /about) ── */}
+        <button
+          onClick={() => navigate('/about')}
+          className="mt-2 mb-4 w-full text-center py-2 rounded-xl transition-colors hover:bg-white/40 active:bg-white/60"
+        >
           <p className="text-xs text-bark-400">
             {t('dashboard.pediatric_followup')}{' '}
-            <span className="font-semibold text-forest-600">Dr Helminah</span>
+            <span className="font-semibold text-forest-600 underline underline-offset-2 decoration-forest-300">
+              Dr Helminah
+            </span>
           </p>
-        </div>
+        </button>
 
       </div>
 

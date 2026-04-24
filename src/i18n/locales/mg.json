@@ -85,7 +85,7 @@
     "suggestion_of_day": "Soso-kevitra androany",
     "sos_label": "SOS",
     "care_kit": "Fitaovana",
-    "pediatric_followup": "Fanaraha-maso amin'ny Dr"
+    "pediatric_followup": "Novokarin'i Dr"
   },
   "health": {
     "title": "Fahasalamana",
@@ -592,5 +592,17 @@
   },
   "hygiene": {
     "title": "Fahadiovana & fiomanana"
+  },
+  "about": {
+    "title": "Momba an'i Dr Helminah",
+    "subtitle": "Mpitsabo zaza · Mpamorona ny AINA",
+    "bio": "Dr Helminah Randriamananoro dia manampy ny fianakaviana amin'ny fanaraha-maso ny fahasalamana sy ny sakafon'ny zaza. AINA dia vokatry ny traikefany amin'ny fitsaboana zaza.",
+    "links_title": "Hahita ahy",
+    "website": "Tranokala",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "youtube": "YouTube",
+    "linkedin": "LinkedIn"
   }
 }

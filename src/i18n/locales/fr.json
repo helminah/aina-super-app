@@ -85,7 +85,7 @@
     "suggestion_of_day": "Suggestion du jour",
     "sos_label": "SOS",
     "care_kit": "Trousse",
-    "pediatric_followup": "Suivi pédiatrique avec"
+    "pediatric_followup": "Fait par"
   },
   "health": {
     "title": "Santé",
@@ -592,5 +592,17 @@
   },
   "hygiene": {
     "title": "Hygiène & préparation"
+  },
+  "about": {
+    "title": "À propos de Dr Helminah",
+    "subtitle": "Pédiatre · Créatrice d'AINA",
+    "bio": "Dr Helminah Randriamananoro accompagne les familles dans le suivi santé et nutrition de leurs bébés. AINA est née de son expérience en pédiatrie francophone.",
+    "links_title": "Me retrouver",
+    "website": "Site web",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "youtube": "YouTube",
+    "linkedin": "LinkedIn"
   }
 }

@@ -85,7 +85,7 @@
     "suggestion_of_day": "Suggestion of the day",
     "sos_label": "SOS",
     "care_kit": "Care",
-    "pediatric_followup": "Pediatric follow-up with"
+    "pediatric_followup": "Made by"
   },
   "health": {
     "title": "Health",
@@ -592,5 +592,17 @@
   },
   "hygiene": {
     "title": "Hygiene & preparation"
+  },
+  "about": {
+    "title": "About Dr Helminah",
+    "subtitle": "Pediatrician · Creator of AINA",
+    "bio": "Dr Helminah Randriamananoro supports families with their babies' health and nutrition. AINA was born from her experience in francophone pediatrics.",
+    "links_title": "Find me",
+    "website": "Website",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "youtube": "YouTube",
+    "linkedin": "LinkedIn"
   }
 }
