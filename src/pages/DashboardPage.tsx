@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { AppointmentWidget } from '@/components/dashboard/AppointmentWidget';
+import { BabyAvatar } from '@/components/BabyAvatar';
 import {
   AlertTriangle,
   ShieldCheck,
@@ -18,6 +19,7 @@ import {
   Moon,
   Scale,
   Clock,
+  Pill,
 } from 'lucide-react';
 
 export function DashboardPage() {
@@ -116,10 +118,16 @@ export function DashboardPage() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="relative z-10 hero-text"
         >
-          <p className="text-sm text-white/80 font-medium tracking-wide">
-            {t('dashboard.hello_mom_of')}
-          </p>
-          <div className="flex items-end gap-3 mt-1">
+          <div className="flex items-center gap-3">
+            <BabyAvatar baby={profile} size="sm" ring />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-white/80 font-medium tracking-wide">
+                {t('dashboard.hello_mom_of')}
+              </p>
+              <p className="text-white/95 text-xs font-medium tracking-wide">{ageText}</p>
+            </div>
+          </div>
+          <div className="flex items-end gap-3 mt-3">
             <h1
               className={`font-display text-white leading-[0.95] font-semibold ${profile.name.length > 8 ? 'text-5xl' : profile.name.length > 6 ? 'text-[3.5rem]' : 'text-6xl'}`}
             >
@@ -153,7 +161,6 @@ export function DashboardPage() {
               </div>
             )}
           </div>
-          <p className="text-white/95 text-sm mt-2.5 font-medium tracking-wide">{ageText}</p>
         </motion.div>
       </div>
 
@@ -290,6 +297,22 @@ export function DashboardPage() {
           </div>
         </div>
 
+        {/* ── Trousse à pharmacie (accès rapide /care) ── */}
+        <button
+          onClick={() => navigate('/care')}
+          className="w-full bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-4 mb-4 text-left flex items-center gap-4 active:scale-[0.99] transition-transform"
+        >
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-red-500 to-rose-500 flex items-center justify-center flex-shrink-0">
+            <Pill className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-red-700 font-semibold">Ma trousse</p>
+            <p className="font-heading font-bold text-bark-800 mt-0.5 text-sm">Dose · Fièvre · Selles</p>
+            <p className="text-xs text-bark-500 mt-0.5">Calcul dose, guide fièvre, analyse selles</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-red-400 flex-shrink-0" />
+        </button>
+
         {/* ── Recipe Suggestion ── */}
         {suggestedRecipe && ageMonths >= 6 && (
           <button
@@ -362,34 +385,21 @@ export function DashboardPage() {
 
       </div>
 
-      {/* FAB stack : Trousse + SOS — actions urgence/soins accessibles */}
-      <div className="fixed bottom-24 right-5 z-30 flex flex-col items-end gap-3">
-        <motion.button
-          onClick={() => navigate('/care')}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.5, type: 'spring', stiffness: 300, damping: 22 }}
-          whileTap={{ scale: 0.92 }}
-          className="w-12 h-12 rounded-full bg-white text-red-500 border border-red-100 shadow-md flex items-center justify-center"
-          aria-label="Trousse à pharmacie"
-        >
-          <span className="text-xl">💊</span>
-        </motion.button>
-        <motion.button
-          onClick={() => setShowEmergency(true)}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 22 }}
-          whileTap={{ scale: 0.92 }}
-          className="flex items-center gap-2 pr-5 pl-3.5 py-3 rounded-full bg-red-500 text-white shadow-[0_12px_30px_-8px_rgba(239,68,68,0.55)]"
-          aria-label="Mode urgence"
-        >
-          <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-            <AlertTriangle className="w-4 h-4" />
-          </span>
-          <span className="font-heading font-bold text-xs uppercase tracking-wider">{t('dashboard.sos_label')}</span>
-        </motion.button>
-      </div>
+      {/* FAB SOS unique (bottom-right). Trousse devient card dans le flux. Chatbot FAB est à bottom-left. */}
+      <motion.button
+        onClick={() => setShowEmergency(true)}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 22 }}
+        whileTap={{ scale: 0.92 }}
+        className="fixed bottom-24 right-5 z-30 flex items-center gap-2 pr-5 pl-3.5 py-3 rounded-full bg-red-500 text-white shadow-[0_12px_30px_-8px_rgba(239,68,68,0.55)] print:hidden"
+        aria-label="Mode urgence"
+      >
+        <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+          <AlertTriangle className="w-4 h-4" />
+        </span>
+        <span className="font-heading font-bold text-xs uppercase tracking-wider">{t('dashboard.sos_label')}</span>
+      </motion.button>
 
       {/* ── Emergency Modal ── */}
       <AnimatePresence>

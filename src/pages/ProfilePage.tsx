@@ -7,7 +7,8 @@ import type { Country, Sex, ChildProfile } from '@/types/child';
 import { COUNTRY_BY_CODE, COUNTRIES } from '@/data/countries';
 import { SUPPORTED_LANGUAGES } from '@/i18n';
 import { useTheme, type ThemeMode } from '@/contexts/ThemeContext';
-import { Sun, Moon, SunMoon } from 'lucide-react';
+import { Sun, Moon, SunMoon, Camera } from 'lucide-react';
+import { BabyAvatar } from '@/components/BabyAvatar';
 import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,6 +17,25 @@ import { useTranslation } from 'react-i18next';
 // Helpers: renvoient flag + label depuis le code pays dynamique.
 const countryFlag  = (code: string) => COUNTRY_BY_CODE[code]?.flag  ?? '🏳️';
 const countryLabel = (code: string) => COUNTRY_BY_CODE[code]?.label ?? code;
+
+/**
+ * Compresse une image (File) vers un data URL webp carré ~400px.
+ * Évite de saturer le localStorage avec des photos iPhone full-size.
+ */
+async function fileToCompressedDataUrl(file: File, maxSize = 400): Promise<string> {
+  const bitmap = await createImageBitmap(file);
+  const size = Math.min(bitmap.width, bitmap.height);
+  const scale = Math.min(1, maxSize / size);
+  const w = Math.round(bitmap.width * scale);
+  const h = Math.round(bitmap.height * scale);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas 2D non disponible');
+  ctx.drawImage(bitmap, 0, 0, w, h);
+  return canvas.toDataURL('image/webp', 0.85);
+}
 
 export function ProfilePage() {
   const { t, i18n } = useTranslation();
@@ -151,12 +171,39 @@ export function ProfilePage() {
       {/* Baby card */}
       <div className="bg-ivory-50 rounded-2xl p-5 mb-5 shadow-sm">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-full bg-forest-100 flex items-center justify-center text-3xl">
-            {profile.sex === 'boy' ? '👦' : '👧'}
-          </div>
+          <label className="relative cursor-pointer group flex-shrink-0" aria-label="Changer la photo">
+            <BabyAvatar baby={profile} size="md" />
+            <span className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-violet-500 text-white flex items-center justify-center elev-2 group-hover:scale-110 transition-transform">
+              <Camera className="w-3.5 h-3.5" />
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async e => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                try {
+                  const dataUrl = await fileToCompressedDataUrl(file);
+                  updateProfile({ photoDataUrl: dataUrl });
+                  toast.success('Photo mise à jour 📸');
+                } catch {
+                  toast.error('Impossible de charger l\'image');
+                }
+              }}
+            />
+          </label>
           <div>
             <h2 className="font-heading text-xl font-bold text-bark-800">{profile.name}</h2>
             <p className="text-sm text-forest-500">{getAgeText(profile.birthDate)}</p>
+            {profile.photoDataUrl && (
+              <button
+                onClick={() => updateProfile({ photoDataUrl: undefined })}
+                className="text-[10px] text-bark-400 underline mt-1"
+              >
+                Retirer la photo
+              </button>
+            )}
           </div>
         </div>
 

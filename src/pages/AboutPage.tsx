@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Globe, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Globe, ExternalLink, Instagram, Facebook, Youtube, Linkedin, Music2 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DR_HELMINAH_LINKS, type DrHelminahLinkKey } from '@/config/drhelminah';
 
@@ -9,12 +10,12 @@ import { DR_HELMINAH_LINKS, type DrHelminahLinkKey } from '@/config/drhelminah';
  * Les liens vides (chaîne "") sont masqués automatiquement.
  */
 
-const LINK_META: Record<Exclude<DrHelminahLinkKey, 'website'>, { icon: string; gradient: string }> = {
-  instagram: { icon: '📸', gradient: 'from-rose-500 to-orange-400' },
-  tiktok:    { icon: '🎵', gradient: 'from-bark-800 to-bark-700' },
-  facebook:  { icon: '👥', gradient: 'from-sky-500 to-sky-400' },
-  youtube:   { icon: '▶️', gradient: 'from-red-500 to-red-400' },
-  linkedin:  { icon: '💼', gradient: 'from-sky-700 to-sky-500' },
+const LINK_META: Record<Exclude<DrHelminahLinkKey, 'website'>, { Icon: LucideIcon; gradient: string }> = {
+  instagram: { Icon: Instagram, gradient: 'from-rose-500 via-fuchsia-500 to-orange-400' },
+  tiktok:    { Icon: Music2,    gradient: 'from-bark-800 via-sky-400 to-rose-400' },
+  facebook:  { Icon: Facebook,  gradient: 'from-sky-600 to-sky-400' },
+  youtube:   { Icon: Youtube,   gradient: 'from-red-600 to-red-500' },
+  linkedin:  { Icon: Linkedin,  gradient: 'from-sky-700 to-sky-500' },
 };
 
 export function AboutPage() {
@@ -23,7 +24,7 @@ export function AboutPage() {
 
   const visibleSocials = (Object.keys(LINK_META) as Array<keyof typeof LINK_META>)
     .filter(k => DR_HELMINAH_LINKS[k])
-    .map(k => ({ key: k, href: DR_HELMINAH_LINKS[k], ...LINK_META[k] }));
+    .map(k => ({ key: k, href: DR_HELMINAH_LINKS[k] as string, ...LINK_META[k] }));
 
   return (
     <div className="pb-24 safe-top min-h-full bg-ivory-100">
@@ -71,25 +72,28 @@ export function AboutPage() {
               {t('about.links_title')}
             </p>
             <div className="grid grid-cols-2 gap-3">
-              {visibleSocials.map((s, i) => (
-                <motion.a
-                  key={s.key}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + i * 0.05 }}
-                  className={`relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br ${s.gradient} text-white elev-2 active:scale-[0.98] transition-transform`}
-                >
-                  <div className="flex items-start justify-between">
-                    <span className="text-3xl">{s.icon}</span>
-                    <ExternalLink className="w-3.5 h-3.5 text-white/70" />
-                  </div>
-                  <p className="font-heading font-bold mt-3 text-sm">{t(`about.${s.key}`)}</p>
-                  <p className="text-[11px] text-white/80 truncate mt-0.5">{s.href.replace('https://', '').replace('http://', '')}</p>
-                </motion.a>
-              ))}
+              {visibleSocials.map((s, i) => {
+                const { Icon } = s;
+                return (
+                  <motion.a
+                    key={s.key}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + i * 0.05 }}
+                    className={`relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br ${s.gradient} text-white elev-2 active:scale-[0.98] transition-transform`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <Icon className="w-7 h-7" strokeWidth={1.8} />
+                      <ExternalLink className="w-3.5 h-3.5 text-white/70" />
+                    </div>
+                    <p className="font-heading font-bold mt-3 text-sm">{t(`about.${s.key}`)}</p>
+                    <p className="text-[11px] text-white/80 truncate mt-0.5">{s.href.replace('https://', '').replace('http://', '')}</p>
+                  </motion.a>
+                );
+              })}
             </div>
           </div>
         )}

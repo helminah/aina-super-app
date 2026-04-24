@@ -13,6 +13,7 @@ export interface ChildProfile {
   country: Country;
   completedVaccines: string[];
   createdAt: string;
+  photoDataUrl?: string;  // base64, optionnel
 }
 
 export interface WeightEntry { date: string; weight: number; }

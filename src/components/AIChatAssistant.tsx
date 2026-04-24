@@ -79,7 +79,7 @@ export function AIChatAssistant() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.6, type: 'spring', stiffness: 300, damping: 22 }}
           whileTap={{ scale: 0.92 }}
-          className="fixed bottom-44 right-5 z-30 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-rose-500 text-white flex items-center justify-center shadow-[0_12px_28px_-8px_rgba(147,51,234,0.5)] print:hidden"
+          className="fixed bottom-24 left-5 z-30 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-rose-500 text-white flex items-center justify-center shadow-[0_12px_28px_-8px_rgba(147,51,234,0.5)] print:hidden"
           aria-label="AINA IA"
         >
           <MessageCircle className="w-6 h-6" strokeWidth={2} />
