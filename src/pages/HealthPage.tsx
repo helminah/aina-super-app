@@ -7,11 +7,14 @@ import { weightBoys, weightGirls, heightBoys, heightGirls, hcBoys, hcGirls } fro
 import { getAgeInMonths } from '@/lib/age-utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, Area, AreaChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ComposedChart, Tooltip } from 'recharts';
-import { ShieldCheck, TrendingUp, Brain, Check, Plus, X, Clock } from 'lucide-react';
+import { ShieldCheck, TrendingUp, Brain, Check, Plus, X, Clock, Smile } from 'lucide-react';
+import { TeethChart } from '@/components/health/TeethChart';
+import { RedFlagsSection } from '@/components/health/RedFlagsSection';
 
 const healthTabs = [
   { id: 'vaccines', label: 'Vaccins', icon: ShieldCheck },
   { id: 'growth', label: 'Croissance', icon: TrendingUp },
+  { id: 'teeth', label: 'Dentition', icon: Smile },
   { id: 'development', label: 'Développement', icon: Brain },
 ] as const;
 
@@ -293,6 +296,9 @@ export function HealthPage() {
         </div>
       )}
 
+      {/* Teeth Tab */}
+      {activeTab === 'teeth' && <TeethChart />}
+
       {/* Development Tab */}
       {activeTab === 'development' && (
         <div>
@@ -355,6 +361,7 @@ export function HealthPage() {
               );
             })}
           </div>
+          <RedFlagsSection />
         </div>
       )}
       </div>

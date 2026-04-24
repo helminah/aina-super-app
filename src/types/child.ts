@@ -40,6 +40,7 @@ export interface DailyLogEntry {
 }
 
 export interface MilestoneRecord { milestoneId: string; achievedDate: string; }
+export interface ToothRecord { toothId: string; eruptionDate: string; }
 
 export interface Recipe {
   id: number;
