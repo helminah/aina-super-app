@@ -42,6 +42,24 @@ export interface DailyLogEntry {
 export interface MilestoneRecord { milestoneId: string; achievedDate: string; }
 export interface ToothRecord { toothId: string; eruptionDate: string; }
 
+export interface DoseRecord {
+  id: string;
+  medication: 'paracetamol' | 'ibuprofen';
+  doseMg: number;
+  givenAt: string; // ISO timestamp
+  note?: string;
+}
+
+export interface Appointment {
+  id: string;
+  title: string;
+  date: string;       // YYYY-MM-DD
+  time?: string;      // HH:mm
+  type: 'checkup' | 'vaccine' | 'specialist' | 'other';
+  location?: string;
+  note?: string;
+}
+
 export interface Recipe {
   id: number;
   title: string;

@@ -7,6 +7,7 @@ import { getTipOfTheDay } from '@/data/daily-tips';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { AppointmentWidget } from '@/components/dashboard/AppointmentWidget';
 import {
   AlertTriangle,
   ShieldCheck,
@@ -191,6 +192,11 @@ export function DashboardPage() {
             </div>
           </button>
         )}
+
+        {/* Rendez-vous à venir */}
+        <div className="mb-4">
+          <AppointmentWidget />
+        </div>
 
         {/* Conseil du jour — surface blanche, accent ambré (rythme visuel après hero rose) */}
         <div className="bg-white rounded-2xl p-5 mb-4 elev-2">

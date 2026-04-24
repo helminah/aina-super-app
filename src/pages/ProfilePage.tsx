@@ -293,7 +293,7 @@ export function ProfilePage() {
         onClick={() => navigate('/report')}
         className="w-full py-3 rounded-2xl bg-ivory-200 text-bark-700 font-semibold text-sm flex items-center justify-center gap-2 mb-3"
       >
-        <FileText className="w-4 h-4" /> Exporter carnet de santé
+        <FileText className="w-4 h-4" /> {t('profile.export_record')}
       </button>
 
       {/* Danger zone */}

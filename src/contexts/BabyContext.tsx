@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import type { ChildProfile, WeightEntry, HeightEntry, HeadCircEntry, VaccineRecord, DailyLogEntry, MilestoneRecord, ToothRecord, MealPlan } from '@/types/child';
+import type { ChildProfile, WeightEntry, HeightEntry, HeadCircEntry, VaccineRecord, DailyLogEntry, MilestoneRecord, ToothRecord, DoseRecord, Appointment, MealPlan } from '@/types/child';
 import { vaccines as allVaccines } from '@/data/vaccines';
 import { safeGet, safeSet } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
@@ -44,6 +44,14 @@ interface BabyContextType {
   toggleTooth: (toothId: string) => void;
   isToothErupted: (toothId: string) => boolean;
 
+  doseRecords: DoseRecord[];
+  addDose: (entry: Omit<DoseRecord, 'id'>) => void;
+  removeDose: (id: string) => void;
+
+  appointments: Appointment[];
+  addAppointment: (appt: Omit<Appointment, 'id'>) => void;
+  removeAppointment: (id: string) => void;
+
   mealPlan: MealPlan;
   setMealSlot: (key: string, recipeId: number | undefined) => void;
   clearMealPlan: () => void;
@@ -76,7 +84,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
     if (oldProfile) {
       // Migrate old data to new per-baby keys
       const id = oldProfile.id;
-      const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'mealplan', 'favorites', 'shopping-checked'];
+      const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'doses', 'appointments', 'mealplan', 'favorites', 'shopping-checked'];
       keys.forEach(k => {
         const oldVal = safeGet(`aina-${k}`, null);
         if (oldVal !== null) {
@@ -130,6 +138,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   const [dailyLogs, setDailyLogs] = useState<DailyLogEntry[]>(() => safeGet(bk(bid, 'logs'), []));
   const [milestoneRecords, setMilestoneRecords] = useState<MilestoneRecord[]>(() => safeGet(bk(bid, 'milestones'), []));
   const [teethRecords, setTeethRecords] = useState<ToothRecord[]>(() => safeGet(bk(bid, 'teeth'), []));
+  const [doseRecords, setDoseRecords] = useState<DoseRecord[]>(() => safeGet(bk(bid, 'doses'), []));
+  const [appointments, setAppointments] = useState<Appointment[]>(() => safeGet(bk(bid, 'appointments'), []));
   const [mealPlan, setMealPlan] = useState<MealPlan>(() => safeGet(bk(bid, 'mealplan'), {}));
   const [favorites, setFavorites] = useState<number[]>(() => safeGet(bk(bid, 'favorites'), []));
   const [shoppingChecked, setShoppingChecked] = useState<string[]>(() => safeGet(bk(bid, 'shopping-checked'), []));
@@ -146,6 +156,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'logs'), dailyLogs); }, [dailyLogs, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'milestones'), milestoneRecords); }, [milestoneRecords, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'teeth'), teethRecords); }, [teethRecords, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'doses'), doseRecords); }, [doseRecords, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'appointments'), appointments); }, [appointments, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'mealplan'), mealPlan); }, [mealPlan, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'favorites'), favorites); }, [favorites, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'shopping-checked'), shoppingChecked); }, [shoppingChecked, activeBabyId]);
@@ -159,6 +171,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
     setDailyLogs(safeGet(bk(id, 'logs'), []));
     setMilestoneRecords(safeGet(bk(id, 'milestones'), []));
     setTeethRecords(safeGet(bk(id, 'teeth'), []));
+    setDoseRecords(safeGet(bk(id, 'doses'), []));
+    setAppointments(safeGet(bk(id, 'appointments'), []));
     setMealPlan(safeGet(bk(id, 'mealplan'), {}));
     setFavorites(safeGet(bk(id, 'favorites'), []));
     setShoppingChecked(safeGet(bk(id, 'shopping-checked'), []));
@@ -182,7 +196,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
 
   const removeBaby = (id: string) => {
     // Clean up per-baby storage
-    const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'mealplan', 'favorites', 'shopping-checked'];
+    const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'doses', 'appointments', 'mealplan', 'favorites', 'shopping-checked'];
     keys.forEach(k => localStorage.removeItem(bk(id, k)));
 
     setBabies(prev => {
@@ -256,6 +270,18 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   };
   const isToothErupted = (toothId: string) => teethRecords.some(t => t.toothId === toothId);
 
+  const addDose = (entry: Omit<DoseRecord, 'id'>) => {
+    const rec: DoseRecord = { ...entry, id: generateId() };
+    setDoseRecords(prev => [rec, ...prev]);
+  };
+  const removeDose = (id: string) => setDoseRecords(prev => prev.filter(d => d.id !== id));
+
+  const addAppointment = (appt: Omit<Appointment, 'id'>) => {
+    const rec: Appointment = { ...appt, id: generateId() };
+    setAppointments(prev => [...prev, rec].sort((a, b) => (a.date + (a.time ?? '')).localeCompare(b.date + (b.time ?? ''))));
+  };
+  const removeAppointment = (id: string) => setAppointments(prev => prev.filter(a => a.id !== id));
+
   const setMealSlot = (key: string, recipeId: number | undefined) => {
     setMealPlan(prev => {
       const next = { ...prev };
@@ -306,6 +332,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
       dailyLogs, addLog, removeLog, getLogsForDate,
       milestoneRecords, toggleMilestone, isMilestoneDone,
       teethRecords, toggleTooth, isToothErupted,
+      doseRecords, addDose, removeDose,
+      appointments, addAppointment, removeAppointment,
       mealPlan, setMealSlot, clearMealPlan,
       favorites, toggleFavorite, isFavorite,
       shoppingChecked, toggleShoppingItem, clearShoppingChecked,

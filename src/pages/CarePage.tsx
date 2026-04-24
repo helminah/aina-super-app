@@ -89,12 +89,32 @@ export function CarePage() {
 // ────────────────────────────────────────────────────────────
 
 function DoseCalculator({ weight }: { weight: number }) {
+  const { doseRecords, addDose, removeDose } = useBaby();
   const [medication, setMedication] = useState<'paracetamol' | 'ibuprofen'>('paracetamol');
   const [form, setForm] = useState<MedicationForm>(MEDICATION_FORMS.paracetamol[0]);
   const [customWeight, setCustomWeight] = useState(weight);
 
   const doseMg = Math.round(customWeight * DOSE_PER_KG[medication]);
   const practical = getPracticalDose(doseMg, form);
+
+  // Last dose for this med + next allowed time (6h)
+  const lastDose = doseRecords.find(d => d.medication === medication);
+  const INTERVAL_MS = 6 * 60 * 60 * 1000;
+  const nextAllowedAt = lastDose ? new Date(new Date(lastDose.givenAt).getTime() + INTERVAL_MS) : null;
+  const nowMs = Date.now();
+  const mustWait = nextAllowedAt && nextAllowedAt.getTime() > nowMs;
+  const waitMinutes = mustWait ? Math.ceil((nextAllowedAt.getTime() - nowMs) / 60000) : 0;
+
+  // Last 24h history (all meds)
+  const recent = doseRecords.filter(d => Date.now() - new Date(d.givenAt).getTime() < 24 * 60 * 60 * 1000);
+
+  const handleRecord = () => {
+    addDose({
+      medication,
+      doseMg,
+      givenAt: new Date().toISOString(),
+    });
+  };
 
   return (
     <div className="space-y-4">
@@ -174,7 +194,53 @@ function DoseCalculator({ weight }: { weight: number }) {
           Toutes les 6h maximum ({medication === 'paracetamol' ? '4 prises/24h' : '3 prises/24h'}) · à ajuster selon
           la fièvre.
         </p>
+
+        <button
+          onClick={handleRecord}
+          disabled={!!mustWait}
+          className={`mt-4 w-full py-3 rounded-full font-heading font-bold text-sm transition-all ${
+            mustWait
+              ? 'bg-white/15 text-white/60 cursor-not-allowed'
+              : 'bg-white text-red-600 active:scale-[0.98]'
+          }`}
+        >
+          {mustWait ? `Trop tôt — attendre ~${waitMinutes} min` : 'Enregistrer la prise ✓'}
+        </button>
       </div>
+
+      {/* History 24h */}
+      {recent.length > 0 && (
+        <div className="bg-white rounded-2xl p-5 elev-1">
+          <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">Historique 24h</p>
+          <div className="space-y-2">
+            {recent.map(d => {
+              const date = new Date(d.givenAt);
+              const ago = Math.round((Date.now() - date.getTime()) / 60000);
+              const agoLabel = ago < 60 ? `il y a ${ago} min` : `il y a ${Math.round(ago / 60)}h${ago % 60 > 0 ? ` ${ago % 60}min` : ''}`;
+              return (
+                <div key={d.id} className="flex items-center gap-3 py-2 border-b border-ivory-200 last:border-0">
+                  <span className="text-xl">{d.medication === 'paracetamol' ? '💊' : '💉'}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-bark-800 capitalize">
+                      {d.medication === 'paracetamol' ? 'Paracétamol' : 'Ibuprofène'} {d.doseMg} mg
+                    </p>
+                    <p className="text-xs text-bark-400">
+                      {date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} · {agoLabel}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => removeDose(d.id)}
+                    className="text-bark-300 hover:text-red-500 text-xs"
+                    aria-label="Supprimer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
