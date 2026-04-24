@@ -5,6 +5,7 @@ import { foodGuide, foodAgeGroups, categoryLabels, type FoodItem, type FoodCateg
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { COUNTRY_BY_CODE } from '@/data/countries';
+import { ConservationGuide } from './ConservationGuide';
 
 /**
  * FoodGuide — onglet "Aliments" : introduction par âge, conservation, allergènes.
@@ -46,6 +47,9 @@ export function FoodGuide() {
 
   return (
     <div className="space-y-5">
+      {/* Guides (conservation + hygiène) en tête */}
+      <ConservationGuide />
+
       {/* Age group picker */}
       <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1">
         {foodAgeGroups.map(g => {

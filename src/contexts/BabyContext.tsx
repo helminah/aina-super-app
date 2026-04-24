@@ -104,9 +104,27 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   const profile = babies.find(b => b.id === activeBabyId) || null;
   const bid = activeBabyId || '__none__';
 
+  // Helpers pour dériver l'entrée de naissance depuis le profil (évite à la maman de la ressaisir).
+  function seedWeight(id: string): WeightEntry[] {
+    const stored = safeGet<WeightEntry[]>(bk(id, 'weights'), []);
+    const baby = safeGet<ChildProfile[]>('aina-babies', []).find(b => b.id === id);
+    if (!baby) return stored;
+    const hasBirth = stored.some(e => e.date === baby.birthDate);
+    return hasBirth ? stored : [{ date: baby.birthDate, weight: baby.birthWeight }, ...stored]
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }
+  function seedHeight(id: string): HeightEntry[] {
+    const stored = safeGet<HeightEntry[]>(bk(id, 'heights'), []);
+    const baby = safeGet<ChildProfile[]>('aina-babies', []).find(b => b.id === id);
+    if (!baby) return stored;
+    const hasBirth = stored.some(e => e.date === baby.birthDate);
+    return hasBirth ? stored : [{ date: baby.birthDate, height: baby.birthHeight }, ...stored]
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }
+
   // Per-baby data
-  const [weightEntries, setWeightEntries] = useState<WeightEntry[]>(() => safeGet(bk(bid, 'weights'), []));
-  const [heightEntries, setHeightEntries] = useState<HeightEntry[]>(() => safeGet(bk(bid, 'heights'), []));
+  const [weightEntries, setWeightEntries] = useState<WeightEntry[]>(() => seedWeight(bid));
+  const [heightEntries, setHeightEntries] = useState<HeightEntry[]>(() => seedHeight(bid));
   const [hcEntries, setHcEntries] = useState<HeadCircEntry[]>(() => safeGet(bk(bid, 'hc'), []));
   const [vaccineRecords, setVaccineRecords] = useState<VaccineRecord[]>(() => safeGet(bk(bid, 'vaccines'), []));
   const [dailyLogs, setDailyLogs] = useState<DailyLogEntry[]>(() => safeGet(bk(bid, 'logs'), []));
@@ -134,8 +152,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
 
   // Load baby data when switching
   const loadBabyData = useCallback((id: string) => {
-    setWeightEntries(safeGet(bk(id, 'weights'), []));
-    setHeightEntries(safeGet(bk(id, 'heights'), []));
+    setWeightEntries(seedWeight(id));
+    setHeightEntries(seedHeight(id));
     setHcEntries(safeGet(bk(id, 'hc'), []));
     setVaccineRecords(safeGet(bk(id, 'vaccines'), []));
     setDailyLogs(safeGet(bk(id, 'logs'), []));

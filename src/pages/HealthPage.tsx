@@ -10,12 +10,16 @@ import { LineChart, Line, Area, AreaChart, XAxis, YAxis, CartesianGrid, Responsi
 import { ShieldCheck, TrendingUp, Brain, Check, Plus, X, Clock, Smile } from 'lucide-react';
 import { TeethChart } from '@/components/health/TeethChart';
 import { RedFlagsSection } from '@/components/health/RedFlagsSection';
+import { GrowthInterpretation } from '@/components/health/GrowthInterpretation';
+import { VaccineEducationCard, VaccineDetailSheet } from '@/components/health/VaccineEducation';
+import { Info as InfoIcon } from 'lucide-react';
+import type { Vaccine } from '@/data/vaccines';
 
 const healthTabs = [
   { id: 'vaccines', label: 'Vaccins', icon: ShieldCheck },
   { id: 'growth', label: 'Croissance', icon: TrendingUp },
-  { id: 'teeth', label: 'Dentition', icon: Smile },
-  { id: 'development', label: 'Développement', icon: Brain },
+  { id: 'teeth', label: 'Dents', icon: Smile },
+  { id: 'development', label: 'Étapes', icon: Brain },
 ] as const;
 
 type HealthTab = typeof healthTabs[number]['id'];
@@ -32,6 +36,7 @@ export function HealthPage() {
   const [measureDate, setMeasureDate] = useState(new Date().toISOString().split('T')[0]);
   const [measureValue, setMeasureValue] = useState('');
   const [selectedAgeRange, setSelectedAgeRange] = useState('');
+  const [vaccineDetail, setVaccineDetail] = useState<Vaccine | null>(null);
 
   if (!profile) return null;
 
@@ -117,7 +122,7 @@ export function HealthPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
+              className={`flex items-center gap-1.5 px-2 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
                 activeTab === tab.id
                   ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30'
                   : 'text-bark-500'
@@ -134,6 +139,9 @@ export function HealthPage() {
       {/* Vaccines Tab */}
       {activeTab === 'vaccines' && (
         <div className="space-y-3 animate-stagger">
+          {/* Card éducative en tête */}
+          <VaccineEducationCard />
+
           {/* Progress */}
           <div className="glass-card-green rounded-2xl p-4 mb-2">
             <div className="flex justify-between text-sm mb-2">
@@ -180,23 +188,34 @@ export function HealthPage() {
                       const done = isVaccineDone(v.id);
                       const overdue = !done && v.ageMonths < ageMonths;
                       return (
-                        <button
+                        <div
                           key={v.id}
-                          onClick={() => toggleVaccine(v.id)}
-                          className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${
-                            done ? 'bg-forest-50' : overdue ? 'bg-red-50' : 'bg-ivory-50'
+                          className={`w-full rounded-xl flex items-center gap-2 transition-all ${
+                            done ? 'bg-emerald-50' : overdue ? 'bg-red-50' : 'bg-white elev-1'
                           }`}
                         >
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
-                            done ? 'bg-forest-600 border-forest-600' : overdue ? 'border-red-300' : 'border-ivory-400'
-                          }`}>
-                            {done && <Check className="w-3 h-3 text-white" />}
-                          </div>
-                          <div className="text-left flex-1">
-                            <p className={`text-sm ${done ? 'text-forest-600' : overdue ? 'text-red-700' : 'text-bark-700'}`}>{v.name}</p>
-                            <p className="text-xs text-bark-400">{v.diseases}</p>
-                          </div>
-                        </button>
+                          <button
+                            onClick={() => toggleVaccine(v.id)}
+                            className="flex-1 flex items-center gap-3 p-3 text-left"
+                          >
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                              done ? 'bg-emerald-500 border-emerald-500' : overdue ? 'border-red-300' : 'border-ivory-400'
+                            }`}>
+                              {done && <Check className="w-3 h-3 text-white" />}
+                            </div>
+                            <div className="text-left flex-1 min-w-0">
+                              <p className={`text-sm font-semibold ${done ? 'text-emerald-700' : overdue ? 'text-red-700' : 'text-bark-700'}`}>{v.name}</p>
+                              <p className="text-xs text-bark-400 truncate">{v.diseases}</p>
+                            </div>
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setVaccineDetail(v); }}
+                            className="p-3 pr-3.5 text-bark-400 hover:text-emerald-600 transition-colors"
+                            aria-label="Infos détaillées"
+                          >
+                            <InfoIcon className="w-4 h-4" />
+                          </button>
+                        </div>
                       );
                     })}
                   </div>
@@ -211,18 +230,28 @@ export function HealthPage() {
       {activeTab === 'growth' && (
         <div>
           {/* Metric selector */}
-          <div className="flex gap-2 mb-5">
+          <div className="flex gap-2 mb-4">
             {growthMetrics.map(m => (
               <button
                 key={m}
                 onClick={() => setMetric(m)}
                 className={`flex-1 py-2 rounded-full text-sm font-semibold transition-all ${
-                  metric === m ? 'bg-forest-600 text-white' : 'bg-ivory-50 text-bark-500'
+                  metric === m ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30' : 'bg-white text-bark-500'
                 }`}
               >
                 {metricLabels[m]}
               </button>
             ))}
+          </div>
+
+          {/* Interpretation rassurante — avant le graph */}
+          <div className="mb-4">
+            <GrowthInterpretation
+              metric={metric === 'hc' ? 'hc' : metric === 'height' ? 'height' : 'weight'}
+              sex={profile.sex}
+              childName={profile.name}
+              childData={getEntries()}
+            />
           </div>
 
           {/* Chart */}
@@ -365,6 +394,8 @@ export function HealthPage() {
         </div>
       )}
       </div>
+
+      <VaccineDetailSheet vaccine={vaccineDetail} onClose={() => setVaccineDetail(null)} />
     </div>
   );
 }

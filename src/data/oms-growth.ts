@@ -114,3 +114,60 @@ export const hcGirls: GrowthPoint[] = [
   { month: 18, p3: 43.6, p15: 44.5, p50: 46.2, p85: 47.4, p97: 48.4 },
   { month: 24, p3: 44.6, p15: 45.5, p50: 47.2, p85: 48.5, p97: 49.5 },
 ];
+
+// ────────────────────────────────────────────────────────────────
+// Helpers d'interprétation — zones de croissance, interpolation, détection cassure
+// ────────────────────────────────────────────────────────────────
+
+export type GrowthMetric = 'weight' | 'height' | 'hc';
+export type GrowthZone = 'normal' | 'watch' | 'alert-low' | 'alert-high' | 'curve-break';
+
+import type { Sex } from '@/types/child';
+
+const dataMap: Record<GrowthMetric, Record<Sex, GrowthPoint[]>> = {
+  weight: { boy: weightBoys, girl: weightGirls },
+  height: { boy: heightBoys, girl: heightGirls },
+  hc:     { boy: hcBoys,     girl: hcGirls },
+};
+
+export function getPercentileData(metric: GrowthMetric, sex: Sex): GrowthPoint[] {
+  return dataMap[metric][sex];
+}
+
+export const metricInfo: Record<GrowthMetric, { label: string; lower: string; unit: string }> = {
+  weight: { label: 'Poids',  lower: 'poids',           unit: 'kg' },
+  height: { label: 'Taille', lower: 'taille',          unit: 'cm' },
+  hc:     { label: 'PC',     lower: 'périmètre crânien', unit: 'cm' },
+};
+
+export function getGrowthZone(value: number, p: GrowthPoint): GrowthZone {
+  if (value < p.p3)  return 'alert-low';
+  if (value > p.p97) return 'alert-high';
+  if (value < p.p15 || value > p.p85) return 'watch';
+  return 'normal';
+}
+
+/** Percentile approximatif (3/15/50/85/97) pour contextualiser le message. */
+export function findNearestPercentile(value: number, p: GrowthPoint): 'p3' | 'p15' | 'p50' | 'p85' | 'p97' {
+  const diffs = (['p3', 'p15', 'p50', 'p85', 'p97'] as const).map(k => ({ k, d: Math.abs(p[k] - value) }));
+  diffs.sort((a, b) => a.d - b.d);
+  return diffs[0].k;
+}
+
+/** Cassure : l'enfant a franchi ≥ 2 bandes de percentile entre 2 relevés. */
+export function detectCurveBreak(values: { month: number; value: number }[], data: GrowthPoint[]): boolean {
+  if (values.length < 2) return false;
+  const sorted = [...values].sort((a, b) => a.month - b.month);
+  const prev = sorted[sorted.length - 2];
+  const curr = sorted[sorted.length - 1];
+  const band = (month: number, val: number) => {
+    const p = data.find(d => d.month >= month) ?? data[data.length - 1];
+    if (val < p.p3)  return 0;
+    if (val < p.p15) return 1;
+    if (val < p.p50) return 2;
+    if (val < p.p85) return 3;
+    if (val < p.p97) return 4;
+    return 5;
+  };
+  return Math.abs(band(curr.month, curr.value) - band(prev.month, prev.value)) >= 2;
+}
