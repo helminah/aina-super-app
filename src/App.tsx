@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { SplashScreen } from '@/components/SplashScreen';
+import { QuickSettings } from '@/components/QuickSettings';
 import { AuthPage } from '@/pages/AuthPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { HealthPage } from '@/pages/HealthPage';
@@ -52,27 +53,40 @@ export default function App() {
   }
 
   if (!user) {
-    return <AuthPage />;
+    return (
+      <>
+        <AuthPage />
+        <QuickSettings />
+      </>
+    );
   }
 
   if (babies.length === 0 || !profile) {
-    return <OnboardingFlow />;
+    return (
+      <>
+        <OnboardingFlow />
+        <QuickSettings />
+      </>
+    );
   }
 
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/health" element={<HealthPage />} />
-        <Route path="/nutrition" element={<NutritionPage />} />
-        <Route path="/journal" element={<JournalPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-      </Route>
-      <Route path="/recipe/:id" element={<RecipeDetailPage />} />
-      <Route path="/doctor" element={<DoctorPage />} />
-      <Route path="/report" element={<HealthReportPage />} />
-      <Route path="/care" element={<CarePage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/health" element={<HealthPage />} />
+          <Route path="/nutrition" element={<NutritionPage />} />
+          <Route path="/journal" element={<JournalPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+        <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+        <Route path="/doctor" element={<DoctorPage />} />
+        <Route path="/report" element={<HealthReportPage />} />
+        <Route path="/care" element={<CarePage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <QuickSettings />
+    </>
   );
 }
