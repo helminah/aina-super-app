@@ -4,7 +4,8 @@ import { recipes } from '@/data/recipes';
 import type { AiRecipeEntry } from '@/types/child';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles } from 'lucide-react';
+import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
 import { AIRecipeGenerator } from '@/components/nutrition/AIRecipeGenerator';
 import { useTranslation } from 'react-i18next';
@@ -612,6 +613,25 @@ export function NutritionPage() {
               </div>
               <div className="flex gap-3 mt-5">
                 <button onClick={clearShoppingChecked} className="flex-1 py-3 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm">{t('nutrition.uncheck_all')}</button>
+                <button
+                  onClick={async () => {
+                    const lines = shoppingList.map(item =>
+                      `${item.emoji} ${item.name} — ${item.qty}`
+                    ).join('\n');
+                    const text = `🛒 Ma liste de courses AINA\n${'─'.repeat(28)}\n\n${lines}\n\n🌿 Généré par AINA`;
+                    if (navigator.share) {
+                      try {
+                        await navigator.share({ title: 'Ma liste de courses AINA', text });
+                      } catch { /* annulé */ }
+                    } else {
+                      await navigator.clipboard.writeText(text);
+                      toast.success('Liste copiée !', { description: 'Colle-la dans WhatsApp ou SMS' });
+                    }
+                  }}
+                  className="flex-1 py-3 rounded-full bg-forest-600 text-white font-bold text-sm flex items-center justify-center gap-2"
+                >
+                  <Share2 className="w-4 h-4" /> Partager
+                </button>
               </div>
             </>
           )}
