@@ -144,6 +144,7 @@ export function AIRedFlagChecker() {
                   </button>
                 )}
               </div>
+            </div>
 
             <button
               onClick={() => handleAnalyze(symptoms)}
