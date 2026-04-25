@@ -143,14 +143,14 @@ export function AIRedFlagChecker() {
                   >
                     <X className="w-3 h-3" />
                   </button>
-                  <p className="text-[10px] text-red-600 font-semibold mt-1">📷 Photo analysée par Claude</p>
+                  <p className="text-[10px] text-bark-500 mt-1">📷 Photo jointe · aide à décrire l'observation</p>
                 </div>
               ) : (
                 <label className="flex items-center gap-2 text-xs text-bark-500 cursor-pointer hover:text-red-500 transition-colors w-fit">
                   <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
                     <Camera className="w-4 h-4 text-red-400" />
                   </div>
-                  <span>Joindre une photo (éruption, plaie, rash…)</span>
+                  <span>Joindre une photo pour mieux décrire (optionnel)</span>
                   <input
                     type="file"
                     accept="image/*"
