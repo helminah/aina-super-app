@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Plus, X, MapPin, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -18,59 +19,53 @@ export function AppointmentWidget() {
   const today = new Date().toISOString().split('T')[0];
   const upcoming = appointments.filter(a => a.date >= today).slice(0, 3);
 
-  if (upcoming.length === 0 && !showAdd) {
-    return (
-      <button
-        onClick={() => setShowAdd(true)}
-        className="w-full bg-white rounded-2xl p-4 elev-1 flex items-center gap-3 text-left"
-      >
-        <div className="w-11 h-11 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0">
-          <Calendar className="w-5 h-5 text-violet-600" />
-        </div>
-        <div className="flex-1">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-violet-600 font-semibold">{t('appointment.kicker')}</p>
-          <p className="font-heading font-bold text-bark-800 mt-0.5">{t('appointment.no_appointments')}</p>
-          <p className="text-xs text-bark-500 mt-0.5">{t('appointment.add_first')}</p>
-        </div>
-        <Plus className="w-4 h-4 text-violet-600" />
-      </button>
-    );
-  }
-
   return (
     <>
-      <div className="bg-white rounded-2xl p-5 elev-2">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-violet-600" />
-            <p className="text-[11px] uppercase tracking-[0.15em] text-violet-700 font-semibold">{t('appointment.upcoming_kicker')}</p>
+      {upcoming.length === 0 && !showAdd ? (
+        <button
+          onClick={() => setShowAdd(true)}
+          className="w-full bg-white rounded-2xl p-4 elev-1 flex items-center gap-3 text-left"
+        >
+          <div className="w-11 h-11 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0">
+            <Calendar className="w-5 h-5 text-violet-600" />
           </div>
-          <button
-            onClick={() => setShowAdd(true)}
-            className="text-xs text-violet-600 font-semibold flex items-center gap-1"
-          >
-            <Plus className="w-3.5 h-3.5" /> {t('common.add')}
-          </button>
+          <div className="flex-1">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-violet-600 font-semibold">{t('appointment.kicker')}</p>
+            <p className="font-heading font-bold text-bark-800 mt-0.5">{t('appointment.no_appointments')}</p>
+            <p className="text-xs text-bark-500 mt-0.5">{t('appointment.add_first')}</p>
+          </div>
+          <Plus className="w-4 h-4 text-violet-600" />
+        </button>
+      ) : (
+        <div className="bg-white rounded-2xl p-5 elev-2">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-violet-600" />
+              <p className="text-[11px] uppercase tracking-[0.15em] text-violet-700 font-semibold">{t('appointment.upcoming_kicker')}</p>
+            </div>
+            <button onClick={() => setShowAdd(true)} className="text-xs text-violet-600 font-semibold flex items-center gap-1">
+              <Plus className="w-3.5 h-3.5" /> {t('common.add')}
+            </button>
+          </div>
+          <div className="space-y-2">
+            {upcoming.map(appt => (
+              <AppointmentRow key={appt.id} appt={appt} onRemove={() => removeAppointment(appt.id)} />
+            ))}
+          </div>
         </div>
+      )}
 
-        <div className="space-y-2">
-          {upcoming.map(appt => (
-            <AppointmentRow key={appt.id} appt={appt} onRemove={() => removeAppointment(appt.id)} />
-          ))}
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {showAdd && (
-          <AddAppointmentSheet
-            onClose={() => setShowAdd(false)}
-            onSubmit={(a) => {
-              addAppointment(a);
-              setShowAdd(false);
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
+          {showAdd && (
+            <AddAppointmentSheet
+              onClose={() => setShowAdd(false)}
+              onSubmit={(a) => { addAppointment(a); setShowAdd(false); }}
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }

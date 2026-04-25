@@ -354,7 +354,7 @@ export function NutritionPage() {
               </div>
               <div className="bg-white p-4 flex flex-col items-center gap-3">
                 <p className="text-xs text-bark-500 text-center">
-                  {profile?.name} a {ageMonths} mois — encore {6 - ageMonths} mois avant l'introduction alimentaire.
+                  {t('ai_recipe.milk_only_months', { name: profile?.name, months: ageMonths, remaining: 6 - ageMonths })}
                 </p>
                 <button
                   onClick={() => setShowRecipesAnyway(true)}
@@ -532,8 +532,29 @@ export function NutritionPage() {
         </div>
       )}
 
+      {/* PLANNER & SHOPPING : bloqué < 4 mois avec message explicatif */}
+      {(view === 'planner' || view === 'shopping') && ageMonths < 4 && !pickerSlot && (
+        <div className="rounded-2xl overflow-hidden elev-2">
+          <div className="bg-gradient-to-br from-sky-400 to-blue-600 px-5 pt-5 pb-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">🤱</span>
+              <p className="font-heading font-bold text-white text-base">Lait maternel uniquement</p>
+            </div>
+            <p className="text-white/90 text-sm leading-relaxed">
+              {profile?.name} a {ageMonths} mois. Avant 4 mois, l'OMS recommande exclusivement le lait maternel ou le lait infantile.
+            </p>
+          </div>
+          <div className="bg-white p-4 space-y-2">
+            {['❌ Aucun aliment solide', '❌ Pas de thé, jus ou eau sucrée', '❌ Pas de bouillies ni céréales', '✅ Lait maternel ou infantile uniquement'].map(item => (
+              <p key={item} className={`text-xs ${item.startsWith('✅') ? 'text-forest-600 font-semibold' : 'text-bark-600'}`}>{item}</p>
+            ))}
+            <p className="text-[10px] text-bark-400 mt-2 italic">Source : Organisation Mondiale de la Santé (OMS) — recommandation allaitement exclusif 0-6 mois</p>
+          </div>
+        </div>
+      )}
+
       {/* PLANNER VIEW */}
-      {view === 'planner' && !pickerSlot && (
+      {view === 'planner' && !pickerSlot && ageMonths >= 4 && (
         <div>
           {/* Auto-fill — popup chaleureux */}
           <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-100 p-4">
@@ -623,7 +644,7 @@ export function NutritionPage() {
       )}
 
       {/* SHOPPING VIEW */}
-      {view === 'shopping' && !pickerSlot && (
+      {view === 'shopping' && !pickerSlot && ageMonths >= 4 && (
         <div>
           {shoppingList.length > 0 && !normalizedList && (
             <button
