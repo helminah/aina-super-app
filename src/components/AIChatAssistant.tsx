@@ -5,7 +5,7 @@ import { MessageCircle, X, Send, RefreshCw, Camera } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
-import { streamChatMessage, AnthropicApiError, type ChatMessage } from '@/lib/anthropic';
+import { streamChatMessage, type ChatMessage } from '@/lib/anthropic';
 
 /**
  * AIChatAssistant — bouton flottant + sheet de conversation avec "AINA IA".

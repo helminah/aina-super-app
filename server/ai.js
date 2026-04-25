@@ -45,7 +45,9 @@ export async function callClaude({
     messages: [{ role: 'user', content: userContent }],
   };
   if (thinking) {
-    params.thinking = { type: 'enabled', budget_tokens: Math.min(maxTokens - 500, 2000) };
+    // Opus 4.7 : nouvelle syntaxe adaptive (remplace enabled + budget_tokens)
+    params.thinking = { type: 'adaptive' };
+    params.output_config = { effort: 'high' };
   }
   const resp = await anthropic.messages.create(params);
   const textBlock = resp.content.find(b => b.type === 'text');
