@@ -148,32 +148,51 @@ export function NutritionPage() {
   }, [favorites, aiRecipes]);
 
   // Shopping list generation (statique + AI)
+  // Mots liés au lait — exclus de la liste de courses (géré séparément par la mère)
+  const MILK_WORDS = ['lait', 'milk', 'ronono', 'meew', 'infantile', 'maternel', 'allaitement'];
+  const isMilk = (name: string) => MILK_WORDS.some(w => name.toLowerCase().includes(w));
+
   const shoppingList = useMemo(() => {
-    const ingredientMap = new Map<string, { qty: string; emoji: string; count: number }>();
+    const ingredientMap = new Map<string, { qty: string; emoji: string; count: number; unit: string }>();
+
+    const addIngredient = (name: string, qty: string, emoji: string) => {
+      if (isMilk(name)) return; // exclut le lait
+      const existing = ingredientMap.get(name);
+      // Extrait la valeur numérique et l'unité de la quantité (ex: "200 g" → 200, "g")
+      const match = qty.match(/^([\d.,]+)\s*(.*)$/);
+      const num = match ? parseFloat(match[1].replace(',', '.')) : null;
+      const unit = match ? match[2].trim() : '';
+      if (existing) {
+        if (num !== null && existing.unit === unit) {
+          // Additionne les quantités si même unité
+          const prevMatch = existing.qty.match(/^([\d.,]+)/);
+          const prevNum = prevMatch ? parseFloat(prevMatch[1].replace(',', '.')) : 0;
+          existing.qty = `${Math.round((prevNum + num) * 10) / 10} ${unit}`.trim();
+        } else {
+          existing.count += 1;
+          existing.qty = existing.count > 1 ? `${qty} x${existing.count}` : qty;
+        }
+      } else {
+        ingredientMap.set(name, { qty, emoji, count: 1, unit });
+      }
+    };
+
     Object.values(mealPlan).forEach(recipeId => {
       if (recipeId === undefined) return;
       const staticR = recipes.find(r => r.id === recipeId);
       if (staticR) {
-        staticR.ingredients.forEach(ing => {
-          const localName = tl(ing.name);
-          const existing = ingredientMap.get(localName);
-          if (existing) existing.count += 1;
-          else ingredientMap.set(localName, { qty: ing.qty, emoji: ing.emoji, count: 1 });
-        });
+        staticR.ingredients.forEach(ing => addIngredient(tl(ing.name), ing.qty, ing.emoji));
         return;
       }
       const aiR = aiRecipes.find(r => r.id === recipeId);
       if (aiR) {
-        aiR.ingredients.forEach(ing => {
-          const existing = ingredientMap.get(ing.name);
-          if (existing) existing.count += 1;
-          else ingredientMap.set(ing.name, { qty: ing.qty, emoji: '✨', count: 1 });
-        });
+        aiR.ingredients.forEach(ing => addIngredient(ing.name, ing.qty, '✨'));
       }
     });
+
     return Array.from(ingredientMap.entries()).map(([name, data]) => ({
       name,
-      qty: data.count > 1 ? `${data.qty} x${data.count}` : data.qty,
+      qty: data.qty,
       emoji: data.emoji,
     }));
   }, [mealPlan, aiRecipes]);
@@ -496,7 +515,7 @@ export function NutritionPage() {
                       setMealSlot(`${day}_${mealId}`, r.id);
                     });
                   });
-                  setView('shopping');
+                  setPlanDay(DAY_IDS[0]);
                 }}
                 className="flex-1 py-2 rounded-full bg-forest-600 text-white text-xs font-bold"
               >
