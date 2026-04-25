@@ -250,6 +250,37 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/normalize-shopping
+ * body: { items: [{name, qty, emoji}] }
+ * Normalise la liste pour le marché : supprime eau/liquides non achetables,
+ * convertit en équivalents pratiques (320g → "2 patates moyennes").
+ */
+app.post('/api/normalize-shopping', async (req, res) => {
+  try {
+    const { items } = req.body ?? {};
+    if (!Array.isArray(items) || items.length === 0) return res.status(400).json({ error: 'items requis' });
+
+    const itemsText = items.map(i => `${i.emoji} ${i.name}: ${i.qty}`).join('\n');
+    const userMessage = `Voici une liste de courses automatique générée pour des recettes bébé :
+${itemsText}
+
+Normalise cette liste pour qu'une maman puisse l'utiliser au marché africain. Règles strictes :
+- SUPPRIME : eau, eau de cuisson, eau chaude, eau froide, eau tiède (non achetable)
+- CONVERTIS en équivalents pratiques : "320g patate douce" → "2 patates douces moyennes", "15 gouttes citron" → "½ citron", "200ml lait" → déjà exclu
+- Si quantité déjà claire (ex: "3 carottes"), garde-la
+- Garde le même emoji
+- Réponds UNIQUEMENT en JSON valide : [{"name":"...","qty":"...","emoji":"..."}]`;
+
+    const { text } = await callClaude({ system: 'Tu es un assistant de cuisine pour mamans africaines. Tu normalises les listes de courses en équivalents pratiques pour le marché local. Réponds toujours en JSON valide uniquement.', userMessage, maxTokens: 600 });
+    const data = extractJson(text);
+    res.json({ items: Array.isArray(data) ? data : [] });
+  } catch (err) {
+    console.error('[api/normalize-shopping]', err);
+    res.status(500).json({ error: err?.message || 'erreur serveur' });
+  }
+});
+
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`✓ AINA proxy Anthropic prêt sur http://localhost:${PORT}`);

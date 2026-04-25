@@ -102,6 +102,9 @@ export function NutritionPage() {
   const [pickerSlot, setPickerSlot] = useState<string | null>(null);
   const [expandedAiId, setExpandedAiId] = useState<number | null>(null);
   const [showRecipesAnyway, setShowRecipesAnyway] = useState(false);
+  const [showAutoFillDialog, setShowAutoFillDialog] = useState(false);
+  const [normalizedList, setNormalizedList] = useState<{name:string;qty:string;emoji:string}[]|null>(null);
+  const [normalizingList, setNormalizingList] = useState(false);
   const [planDay, setPlanDay] = useState<typeof DAY_IDS[number]>(DAY_IDS[0]);
 
   // Merge AI + static recipes dans la grille (AI d'abord — plus frais).
@@ -288,12 +291,14 @@ export function NutritionPage() {
           { id: 'shopping' as const, labelKey: 'nutrition.tabs.shopping', icon: ShoppingCart },
         ]).map(tab => {
           const Icon = tab.icon;
+          const blocked = (tab.id === 'planner' || tab.id === 'shopping') && ageMonths < 4;
           return (
             <button
               key={tab.id}
-              onClick={() => { setView(tab.id); setPickerSlot(null); }}
+              onClick={() => { if (!blocked) { setView(tab.id); setPickerSlot(null); } }}
+              disabled={blocked}
               className={`flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
-                view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'
+                blocked ? 'text-bark-300 cursor-not-allowed' : view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'
               }`}
             >
               <Icon className="w-3.5 h-3.5" /> {t(tab.labelKey)}
@@ -303,7 +308,21 @@ export function NutritionPage() {
       </div>
 
       {/* FOODS VIEW */}
-      {view === 'foods' && !pickerSlot && <FoodGuide />}
+      {view === 'foods' && !pickerSlot && (
+        ageMonths < 6 ? (
+          <div className="rounded-2xl overflow-hidden elev-2">
+            <div className="bg-gradient-to-br from-sky-400 to-blue-500 px-5 pt-5 pb-5">
+              <div className="flex items-center gap-2 mb-2"><span className="text-2xl">🤱</span>
+                <p className="font-heading font-bold text-white text-base">{t('ai_recipe.milk_only_title')}</p>
+              </div>
+              <p className="text-white/90 text-sm leading-relaxed">{t('ai_recipe.milk_only_body')}</p>
+            </div>
+            <div className="bg-white p-4 text-center">
+              <p className="text-xs text-bark-500">{profile?.name} a {ageMonths} mois — le guide alimentaire sera disponible à 6 mois.</p>
+            </div>
+          </div>
+        ) : <FoodGuide />
+      )}
 
       {/* RECIPES VIEW */}
       {(view === 'recipes' || pickerSlot) && (
@@ -501,28 +520,34 @@ export function NutritionPage() {
       {/* PLANNER VIEW */}
       {view === 'planner' && !pickerSlot && (
         <div>
-          {/* Auto-fill buttons */}
-          <div className="flex gap-2 mb-4">
-            <p className="text-xs text-bark-500 self-center font-semibold">Générer :</p>
-            {[1, 3, 7].map(days => (
-              <button
-                key={days}
-                onClick={() => {
-                  const ageApropriate = recipes.filter(r => r.age <= Math.max(ageMonths, 6));
-                  const pool = ageApropriate.length > 0 ? ageApropriate : recipes;
-                  DAY_IDS.slice(0, days).forEach(day => {
-                    MEAL_IDS.forEach(mealId => {
-                      const r = pool[Math.floor(Math.random() * pool.length)];
-                      setMealSlot(`${day}_${mealId}`, r.id);
+          {/* Auto-fill — popup chaleureux */}
+          <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-100 p-4">
+            <p className="text-sm font-heading font-bold text-bark-800 mb-1">Tu manques d'inspiration ? 🌿</p>
+            <p className="text-xs text-bark-500 mb-3">Laisse AINA préparer un menu varié et équilibré, adapté à l'âge de ton bébé. Tu peux toujours modifier les repas après !</p>
+            <div className="flex gap-2">
+              {[1, 3, 7].map(days => (
+                <button
+                  key={days}
+                  onClick={() => {
+                    const ageAppropriate = recipes.filter(r => r.age <= Math.max(ageMonths, 6));
+                    const pool = ageAppropriate.length > 0 ? ageAppropriate : recipes;
+                    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+                    let idx = 0;
+                    DAY_IDS.slice(0, days).forEach(day => {
+                      MEAL_IDS.forEach(mealId => {
+                        setMealSlot(`${day}_${mealId}`, shuffled[idx % shuffled.length].id);
+                        idx++;
+                      });
                     });
-                  });
-                  setPlanDay(DAY_IDS[0]);
-                }}
-                className="flex-1 py-2 rounded-full bg-forest-600 text-white text-xs font-bold"
-              >
-                {days === 1 ? '1 jour' : `${days} jours`}
-              </button>
-            ))}
+                    setPlanDay(DAY_IDS[0]);
+                    toast.success(`Menu ${days === 1 ? '1 jour' : `${days} jours`} généré !`, { description: 'Tu peux modifier chaque repas 😊' });
+                  }}
+                  className="flex-1 py-2 rounded-full bg-amber-500 text-white text-xs font-bold shadow-sm"
+                >
+                  {days === 1 ? '1 jour' : `${days} jours`}
+                </button>
+              ))}
+            </div>
           </div>
           {/* Day selector */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar mb-4 pb-1">
@@ -585,6 +610,33 @@ export function NutritionPage() {
       {/* SHOPPING VIEW */}
       {view === 'shopping' && !pickerSlot && (
         <div>
+          {shoppingList.length > 0 && !normalizedList && (
+            <button
+              onClick={async () => {
+                setNormalizingList(true);
+                try {
+                  const resp = await fetch('/api/normalize-shopping', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: shoppingList }),
+                  });
+                  const data = await resp.json();
+                  if (data.items?.length) setNormalizedList(data.items);
+                } catch { /* fallback silencieux */ }
+                setNormalizingList(false);
+              }}
+              disabled={normalizingList}
+              className="w-full mb-3 py-2.5 rounded-full bg-violet-500 text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+            >
+              {normalizingList ? '✨ AINA adapte ta liste...' : '✨ Adapter pour le marché avec AINA'}
+            </button>
+          )}
+          {normalizedList && (
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[11px] text-violet-600 font-semibold">✨ Liste adaptée par AINA</span>
+              <button onClick={() => setNormalizedList(null)} className="text-[10px] text-bark-400 underline">Voir originale</button>
+            </div>
+          )}
           {shoppingList.length === 0 ? (
             <div className="text-center py-16">
               <ShoppingCart className="w-12 h-12 text-ivory-400 mx-auto mb-3" />
@@ -594,7 +646,7 @@ export function NutritionPage() {
           ) : (
             <>
               <div className="space-y-2">
-                {shoppingList.map(item => (
+                {(normalizedList ?? shoppingList).map(item => (
                   <button
                     key={item.name}
                     onClick={() => toggleShoppingItem(item.name)}
