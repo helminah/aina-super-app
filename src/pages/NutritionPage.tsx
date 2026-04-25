@@ -99,6 +99,7 @@ export function NutritionPage() {
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [pickerSlot, setPickerSlot] = useState<string | null>(null);
+  const [expandedAiId, setExpandedAiId] = useState<number | null>(null);
   const [planDay, setPlanDay] = useState<typeof DAY_IDS[number]>(DAY_IDS[0]);
 
   // Merge AI + static recipes dans la grille (AI d'abord — plus frais).
@@ -179,7 +180,7 @@ export function NutritionPage() {
   const RecipeCard = ({ recipe }: { recipe: DisplayRecipe }) => {
     const activate = () => {
       if (pickerSlot) { selectRecipeForSlot(recipe.id); return; }
-      if (recipe.isAi) return; // pas de page détail pour AI — navigation désactivée
+      if (recipe.isAi) { setExpandedAiId(expandedAiId === recipe.id ? null : recipe.id); return; }
       navigate(`/recipe/${recipe.id}`);
     };
     return (
@@ -286,9 +287,16 @@ export function NutritionPage() {
       {/* RECIPES VIEW */}
       {(view === 'recipes' || pickerSlot) && (
         <div>
-          {/* < 6 mois : lait maternel uniquement — AIRecipeGenerator gère tout */}
-          {ageMonths < 6 && !pickerSlot && <AIRecipeGenerator />}
-          {(ageMonths >= 6 || pickerSlot) && <div>
+          {/* Bannière lait maternel < 6 mois (discrète, grille toujours visible) */}
+          {ageMonths < 6 && !pickerSlot && (
+            <div className="mb-4 rounded-2xl bg-sky-50 border border-sky-100 p-3 flex items-start gap-3">
+              <span className="text-lg mt-0.5">🤱</span>
+              <div>
+                <p className="font-semibold text-sky-800 text-xs">{t('ai_recipe.milk_only_title')}</p>
+                <p className="text-[11px] text-sky-600 mt-0.5">{t('ai_recipe.milk_only_body')}</p>
+              </div>
+            </div>
+          )}
           {/* Search */}
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
@@ -336,17 +344,53 @@ export function NutritionPage() {
           {/* Recipe grid */}
           <div className="grid grid-cols-2 gap-3">
             {filteredRecipes.map(r => (
-              <div key={r.id} className="relative">
+              <div key={r.id} className="relative col-span-1">
                 <RecipeCard recipe={r} />
               </div>
             ))}
           </div>
+          {/* Détail recette IA expandée */}
+          {expandedAiId && (() => {
+            const aiR = aiRecipes.find(a => a.id === expandedAiId);
+            if (!aiR) return null;
+            return (
+              <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-4 elev-2 space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="font-heading font-bold text-bark-800">{aiR.title}</p>
+                  <button onClick={() => setExpandedAiId(null)} className="w-6 h-6 rounded-full bg-ivory-100 flex items-center justify-center"><X className="w-3 h-3 text-bark-400" /></button>
+                </div>
+                <div className="flex gap-2 text-xs text-bark-500">
+                  <span><Clock className="w-3 h-3 inline" /> {aiR.prepMinutes} min</span>
+                  <span>{aiR.texture}</span>
+                  <span>{aiR.ageRange}</span>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold text-bark-500 uppercase tracking-wider mb-1">{t('ai_recipe.ingredients_title')}</p>
+                  <ul className="space-y-0.5">
+                    {aiR.ingredients.map((ing, i) => (
+                      <li key={i} className="text-xs text-bark-700 flex gap-2"><span className="text-bark-400">·</span><span><b>{ing.qty}</b> {ing.name}</span></li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold text-bark-500 uppercase tracking-wider mb-1">{t('ai_recipe.preparation_title')}</p>
+                  <ol className="space-y-1">
+                    {aiR.steps.map((step, i) => (
+                      <li key={i} className="text-xs text-bark-700 flex gap-2"><span className="font-bold text-amber-500">{i + 1}.</span>{step}</li>
+                    ))}
+                  </ol>
+                </div>
+                <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-3">
+                  <p className="text-xs text-emerald-700 leading-relaxed">{aiR.nutritionNotes}</p>
+                </div>
+              </motion.div>
+            );
+          })()}
           {filteredRecipes.length === 0 && (
             <p className="text-center text-bark-500 py-10">{t('nutrition.no_recipes')}</p>
           )}
 
-          {!pickerSlot && <AIRecipeGenerator />}
-          </div>}
+          {!pickerSlot && ageMonths >= 6 && <AIRecipeGenerator />}
         </div>
       )}
 

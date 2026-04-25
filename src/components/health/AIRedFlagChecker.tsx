@@ -120,48 +120,30 @@ export function AIRedFlagChecker() {
               <label className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold block mb-2">
                 {t('red_flag_checker.observation_label')}
               </label>
-              <textarea
-                value={symptoms}
-                onChange={e => setSymptoms(e.target.value)}
-                placeholder={t('red_flag_checker.observation_placeholder')}
-                rows={4}
-                className="w-full px-4 py-3 rounded-xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-red-300 text-sm resize-none"
-              />
-              <p className="text-[10px] text-bark-400 mt-1">
-                {t('red_flag_checker.observation_hint')}
-              </p>
-            </div>
-
-            {/* Photo optionnelle — vision Opus 4.7 */}
-            <div>
-              {imagePreview ? (
-                <div className="relative inline-block">
-                  <img src={imagePreview} alt="photo jointe" className="h-20 w-20 rounded-xl object-cover border-2 border-red-200" />
-                  <button
-                    onClick={clearImage}
-                    className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center"
-                    aria-label="Retirer la photo"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                  <p className="text-[10px] text-bark-500 mt-1">📷 Photo jointe · aide à décrire l'observation</p>
-                </div>
-              ) : (
-                <label className="flex items-center gap-2 text-xs text-bark-500 cursor-pointer hover:text-red-500 transition-colors w-fit">
-                  <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
-                    <Camera className="w-4 h-4 text-red-400" />
-                  </div>
-                  <span>Joindre une photo pour mieux décrire (optionnel)</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    className="hidden"
-                    onChange={handleImageSelect}
-                  />
+              <div className="relative">
+                <textarea
+                  value={symptoms}
+                  onChange={e => setSymptoms(e.target.value)}
+                  placeholder={t('red_flag_checker.observation_placeholder')}
+                  rows={4}
+                  className="w-full pl-4 pr-12 py-3 rounded-xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-red-300 text-sm resize-none"
+                />
+                <label className="absolute right-3 top-3 w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center cursor-pointer hover:bg-red-50 transition-colors" aria-label="Joindre une photo">
+                  {imagePreview
+                    ? <img src={imagePreview} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    : <Camera className="w-4 h-4 text-red-400" />
+                  }
+                  <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageSelect} />
                 </label>
-              )}
-            </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] text-bark-400">{t('red_flag_checker.observation_hint')}</p>
+                {imagePreview && (
+                  <button onClick={clearImage} className="text-[10px] text-red-400 underline flex items-center gap-1">
+                    <X className="w-2.5 h-2.5" /> Retirer la photo
+                  </button>
+                )}
+              </div>
 
             <button
               onClick={() => handleAnalyze(symptoms)}
