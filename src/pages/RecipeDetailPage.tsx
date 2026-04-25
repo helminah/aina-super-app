@@ -6,6 +6,22 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { tl } from '@/lib/i18n-data';
 
+/** Affiche un badge FR si le champ n'est pas traduit dans la langue courante */
+function LocalizedText({ value, className }: { value: string | { fr: string; en?: string; mg?: string; wo?: string }; className?: string }) {
+  const { i18n } = useTranslation();
+  const isPlainString = typeof value === 'string';
+  const hasTranslation = !isPlainString && (value as Record<string, string>)[i18n.language.slice(0, 2)];
+  const text = tl(value as Parameters<typeof tl>[0]);
+  return (
+    <span className={className}>
+      {text}
+      {(isPlainString || !hasTranslation) && i18n.language !== 'fr' && (
+        <span className="ml-1.5 text-[9px] px-1.5 py-0.5 rounded bg-ivory-200 text-bark-400 font-semibold align-middle">FR</span>
+      )}
+    </span>
+  );
+}
+
 const AGE_COLORS: Record<number, string> = {
   6: '#3c6931', 7: '#42A5F5', 8: '#FF9800', 9: '#E91E63',
   10: '#9C27B0', 11: '#00897B', 12: '#D32F2F',
@@ -79,7 +95,7 @@ export function RecipeDetailPage() {
                 </div>
                 <div className="pb-4">
                   <p className="font-heading font-bold text-sm text-bark-800">{tl(step.t)}</p>
-                  <p className="text-sm text-bark-500 mt-0.5">{tl(step.d)}</p>
+                  <LocalizedText value={step.d} className="text-sm text-bark-500 mt-0.5" />
                   <span className="text-xs text-bark-400 mt-1 inline-block">{step.min} min</span>
                 </div>
               </div>
@@ -90,13 +106,13 @@ export function RecipeDetailPage() {
         {/* Why */}
         <div className="mt-5 bg-forest-50 rounded-2xl p-4">
           <h3 className="font-heading font-bold text-forest-700 text-sm mb-1">{t('recipe_detail.why_title')}</h3>
-          <p className="text-sm text-forest-600 leading-relaxed">{tl(recipe.why)}</p>
+          <LocalizedText value={recipe.why} className="text-sm text-forest-600 leading-relaxed" />
         </div>
 
         {/* Doctor advice */}
         <div className="mt-4 bg-terra-50 rounded-2xl p-4 mb-8">
           <h3 className="font-heading font-bold text-terra-600 text-sm mb-1 flex items-center gap-1.5"><ChefHat className="w-4 h-4" /> {t('recipe_detail.doctor_advice_title')}</h3>
-          <p className="text-sm text-terra-500 leading-relaxed">{tl(recipe.conseil)}</p>
+          <LocalizedText value={recipe.conseil} className="text-sm text-terra-500 leading-relaxed" />
         </div>
 
         {/* Nutrition table */}

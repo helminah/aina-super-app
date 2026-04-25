@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useBaby } from '@/contexts/BabyContext';
 import { recipes } from '@/data/recipes';
 import type { AiRecipeEntry } from '@/types/child';
@@ -103,6 +103,13 @@ export function NutritionPage() {
   const [expandedAiId, setExpandedAiId] = useState<number | null>(null);
   const [showRecipesAnyway, setShowRecipesAnyway] = useState(false);
   const [showAutoFillDialog, setShowAutoFillDialog] = useState(false);
+  const seenTabs = useRef<Set<string>>(new Set(JSON.parse(localStorage.getItem('aina_seen_tabs') || '[]')));
+  const tabHints: Record<string, string> = {
+    foods: '🥕 Guide des aliments — quoi introduire et quand selon l\'âge',
+    favorites: '❤️ Tes recettes favorites et toutes tes recettes IA sauvegardées',
+    planner: '📅 Planifie les repas de la semaine jour par jour',
+    shopping: '🛒 Ta liste de courses générée depuis le planning',
+  };
   const [normalizedList, setNormalizedList] = useState<{name:string;qty:string;emoji:string}[]|null>(null);
   const [normalizingList, setNormalizingList] = useState(false);
   const [planDay, setPlanDay] = useState<typeof DAY_IDS[number]>(DAY_IDS[0]);
@@ -295,7 +302,15 @@ export function NutritionPage() {
           return (
             <button
               key={tab.id}
-              onClick={() => { if (!blocked) { setView(tab.id); setPickerSlot(null); } }}
+              onClick={() => {
+                if (blocked) return;
+                setView(tab.id); setPickerSlot(null);
+                if (!seenTabs.current.has(tab.id) && tabHints[tab.id]) {
+                  toast(tabHints[tab.id], { duration: 3000 });
+                  seenTabs.current.add(tab.id);
+                  localStorage.setItem('aina_seen_tabs', JSON.stringify([...seenTabs.current]));
+                }
+              }}
               disabled={blocked}
               className={`flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
                 blocked ? 'text-bark-300 cursor-not-allowed' : view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'

@@ -960,5 +960,16 @@
     "facebook": "Facebook",
     "youtube": "YouTube",
     "linkedin": "LinkedIn"
+  },
+  "intro": {
+    "slide1_title": "Dalal ak Jamm ci AINA",
+    "slide1_body": "Sa dëkkandoo ci wér-gu-yaram xale, am na ci waxtu yëp, ci làkk bi nga xam.",
+    "slide2_title": "Lekk bu Afrik & IA",
+    "slide2_body": "Bind lëkk yi nga am dëkk, AINA génère recipe bu bax gi, mak ci at bu baax bi xale.",
+    "slide3_title": "AINA IA — doktoor bi ci gànnaar bi",
+    "slide3_body": "Laaj lu dëkk, yónni sëriñ. AINA leeral la te du dëgël diagnosis. Wolof, malagasy, fransi wala angle.",
+    "next": "Ci kanam →",
+    "start": "Dem! 🌿",
+    "skip": "Jëmaat fidañ"
   }
 }

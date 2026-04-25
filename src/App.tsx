@@ -19,13 +19,18 @@ import { DoctorPage } from '@/pages/DoctorPage';
 import { CarePage } from '@/pages/CarePage';
 import { AboutPage } from '@/pages/AboutPage';
 import { SupabaseSyncBridge } from '@/components/SupabaseSyncBridge';
+import { IntroGuide } from '@/components/IntroGuide';
 
 // Affiché une seule fois par session (cold open)
 const SPLASH_FLAG = 'aina-splash-shown';
+const INTRO_FLAG = 'aina-intro-done';
 
 export default function App() {
   const { profile, babies } = useBaby();
   const { user, loading } = useAuth();
+  const [introDone, setIntroDone] = useState(() => {
+    try { return localStorage.getItem(INTRO_FLAG) === '1'; } catch { return true; }
+  });
   const [splashDone, setSplashDone] = useState(() => {
     try {
       return sessionStorage.getItem(SPLASH_FLAG) === '1';
@@ -76,6 +81,12 @@ export default function App() {
 
   return (
     <>
+      {!introDone && (
+        <IntroGuide onDone={() => {
+          localStorage.setItem(INTRO_FLAG, '1');
+          setIntroDone(true);
+        }} />
+      )}
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<DashboardPage />} />

@@ -960,5 +960,16 @@
     "facebook": "Facebook",
     "youtube": "YouTube",
     "linkedin": "LinkedIn"
+  },
+  "intro": {
+    "slide1_title": "Bienvenue sur AINA",
+    "slide1_body": "Ton assistant pédiatrique personnel, disponible 24h/24, dans ta langue. Recettes, vaccins, croissance — tout pour le bien-être de ton bébé.",
+    "slide2_title": "Nutrition locale & IA",
+    "slide2_body": "Entre les ingrédients que tu as chez toi, et AINA génère une recette adaptée à l'âge exact de ton bébé. Mil, manioc, mangue — leur nourriture, pas celle des livres.",
+    "slide3_title": "AINA IA — ton pédiatre de poche",
+    "slide3_body": "Pose toutes tes questions, envoie une photo. AINA t'oriente sans jamais poser de diagnostic. En wolof, en malgache, en français ou en anglais.",
+    "next": "Suivant →",
+    "start": "C'est parti ! 🌿",
+    "skip": "Passer l'intro"
   }
 }

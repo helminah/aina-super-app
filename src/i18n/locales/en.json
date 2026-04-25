@@ -960,5 +960,16 @@
     "facebook": "Facebook",
     "youtube": "YouTube",
     "linkedin": "LinkedIn"
+  },
+  "intro": {
+    "slide1_title": "Welcome to AINA",
+    "slide1_body": "Your personal pediatric companion, available 24/7, in your language. Recipes, vaccines, growth tracking — everything for your baby's wellbeing.",
+    "slide2_title": "Local Nutrition & AI",
+    "slide2_body": "Enter the ingredients you have at home, and AINA generates a recipe adapted to your baby's exact age. Millet, cassava, mango — their food, not a textbook recipe.",
+    "slide3_title": "AINA IA — your pocket pediatrician",
+    "slide3_body": "Ask any question, send a photo. AINA guides you without ever making a diagnosis. In Wolof, Malagasy, French or English.",
+    "next": "Next →",
+    "start": "Let's go! 🌿",
+    "skip": "Skip intro"
   }
 }
