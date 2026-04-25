@@ -1,6 +1,6 @@
 # AINA — Breath of Life
 
-[![Built with Claude Haiku](https://img.shields.io/badge/Built%20with-Claude%20Haiku%204.5-8B5CF6)](https://www.anthropic.com/claude)
+[![Built with Claude Opus 4.7](https://img.shields.io/badge/Built%20with-Claude%20Opus%204.7-8B5CF6)](https://www.anthropic.com/claude)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19-61DAFB)](https://react.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green)](#license)

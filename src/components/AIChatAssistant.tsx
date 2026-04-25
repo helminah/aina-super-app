@@ -5,7 +5,7 @@ import { MessageCircle, X, Send, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
-import { sendChatMessage, AnthropicApiError, type ChatMessage } from '@/lib/anthropic';
+import { streamChatMessage, AnthropicApiError, type ChatMessage } from '@/lib/anthropic';
 
 /**
  * AIChatAssistant — bouton flottant + sheet de conversation avec "AINA IA".
@@ -48,21 +48,30 @@ export function AIChatAssistant() {
     setError(null);
     const userMsg: ChatMessage = { role: 'user', content: content.trim() };
     const next = [...messages, userMsg];
-    setMessages(next);
+    // Ajoute immédiatement un message assistant vide — rempli token par token.
+    setMessages([...next, { role: 'assistant', content: '' }]);
     setInput('');
     setLoading(true);
-    try {
-      const { reply } = await sendChatMessage({
-        messages: next,
-        babyAgeMonths: ageMonths,
-        country: profile.country,
-      });
-      setMessages([...next, { role: 'assistant', content: reply }]);
-    } catch (e) {
-      setError(e instanceof AnthropicApiError ? e.message : t('chat.unexpected_error'));
-    } finally {
-      setLoading(false);
-    }
+
+    await streamChatMessage(
+      { messages: next, babyAgeMonths: ageMonths, country: profile.country },
+      (token) => {
+        setMessages(prev => {
+          const copy = [...prev];
+          const last = copy[copy.length - 1];
+          if (last?.role === 'assistant') {
+            copy[copy.length - 1] = { ...last, content: last.content + token };
+          }
+          return copy;
+        });
+      },
+      () => { setLoading(false); },
+      (errMsg) => {
+        setError(errMsg);
+        setMessages(prev => prev.slice(0, -1)); // retire le placeholder vide
+        setLoading(false);
+      },
+    );
   };
 
   const reset = () => {

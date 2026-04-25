@@ -8,7 +8,9 @@
  * En dev local, fallback sur http://localhost:3001.
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// En prod (Vercel), les routes /api/* sont same-origin — pas besoin de VITE_API_URL.
+// En dev local, le proxy Vite (/api → localhost:3001) prend le relais.
+const API_URL = import.meta.env.VITE_API_URL ?? '';
 
 // ────────────────────────────────────────────────────────────────
 // Types
@@ -163,6 +165,59 @@ export function sendChatMessage(params: {
     babyAgeMonths: params.babyAgeMonths,
     country: params.country,
   });
+}
+
+/**
+ * Streaming SSE du chatbot — tokens arrivant en temps réel.
+ * Le serveur envoie des événements `data: {"token":"..."}` puis `data: {"done":true}`.
+ */
+export async function streamChatMessage(
+  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string },
+  onToken: (token: string) => void,
+  onDone: () => void,
+  onError: (error: string) => void,
+): Promise<void> {
+  let resp: Response;
+  try {
+    resp = await fetch(`${API_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+  } catch {
+    onError('Proxy Anthropic injoignable. Démarre le serveur avec `npm run dev:full`.');
+    return;
+  }
+
+  if (!resp.ok) {
+    let errorMsg = `Erreur HTTP ${resp.status}`;
+    try { const j = await resp.json(); if (j?.error) errorMsg = j.error; } catch { /* ignore */ }
+    onError(errorMsg);
+    return;
+  }
+
+  const reader = resp.body!.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const parts = buffer.split('\n\n');
+    buffer = parts.pop() ?? '';
+    for (const part of parts) {
+      const line = part.trim();
+      if (!line.startsWith('data: ')) continue;
+      try {
+        const data = JSON.parse(line.slice(6));
+        if (data.error) { onError(data.error); return; }
+        if (data.token) onToken(data.token);
+        if (data.done) { onDone(); return; }
+      } catch { /* ignore malformed SSE */ }
+    }
+  }
+  onDone();
 }
 
 export { AnthropicApiError };
