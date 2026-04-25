@@ -735,7 +735,7 @@ export function NutritionPage() {
         </div>
       )}
       </div>
+      {glassNode}
     </div>
-    {glassNode}
   );
 }
