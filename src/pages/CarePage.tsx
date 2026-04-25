@@ -69,7 +69,7 @@ export function CarePage() {
 
       <div className="px-5">
         {section === 'dose' && <DoseCalculator weight={latestWeight} />}
-        {section === 'fever' && <FeverGuide ageMonths={getAgeInMonths(profile.birthDate)} weight={latestWeight} />}
+        {section === 'fever' && <FeverGuide ageMonths={getAgeInMonths(profile.birthDate)} weight={latestWeight} country={profile.country} />}
         {section === 'stool' && <StoolGuide />}
       </div>
 
@@ -256,7 +256,7 @@ function DoseCalculator({ weight }: { weight: number }) {
 // Fever Guide
 // ────────────────────────────────────────────────────────────
 
-function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }) {
+function FeverGuide({ ageMonths, weight, country }: { ageMonths: number; weight: number; country: string }) {
   const { t } = useTranslation();
   const doseMg = Math.round(weight * 15);
 
