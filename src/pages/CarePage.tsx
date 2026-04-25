@@ -288,10 +288,10 @@ function FeverGuide({ ageMonths, weight, country }: { ageMonths: number; weight:
                 {t('care.fever.baby_under_3m_body')}
               </p>
               <a
-                href={`tel:${getEmergency(profile.country).number}`}
+                href={`tel:${getEmergency(country).number}`}
                 className="mt-3 inline-flex items-center gap-2 py-2 px-4 rounded-full bg-white text-red-600 font-heading font-bold text-sm"
               >
-                <Phone className="w-4 h-4" /> {getEmergency(profile.country).label} ({getEmergency(profile.country).number})
+                <Phone className="w-4 h-4" /> {getEmergency(country).label} ({getEmergency(country).number})
               </a>
             </div>
           </div>
