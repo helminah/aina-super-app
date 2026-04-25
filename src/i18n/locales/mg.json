@@ -250,7 +250,8 @@
     "milk_only_months": "{{name}} dia {{months}} volana — mbola {{remaining}} volana alohan'ny fampidirana sakafo.",
     "milk_only_preview": "Jereo ny recipe ho fiomanana",
     "preview_mode_banner": "Fomba fiomanana — recipe ho an'ny 6 volana",
-    "preview_mode_back": "Miverina"
+    "preview_mode_back": "Miverina",
+    "milk_only_anyway": "Hijery ihany"
   },
   "profile_form": {
     "change_photo": "Hanova sary",

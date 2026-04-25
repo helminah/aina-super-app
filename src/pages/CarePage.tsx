@@ -6,6 +6,7 @@ import { useBaby } from '@/contexts/BabyContext';
 import { useTranslation } from 'react-i18next';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { MEDICATION_FORMS, DOSE_PER_KG, getPracticalDose, type MedicationForm } from '@/data/medications';
+import { getEmergency } from '@/data/emergency-numbers';
 
 type CareSection = 'dose' | 'fever' | 'stool';
 
@@ -287,10 +288,10 @@ function FeverGuide({ ageMonths, weight }: { ageMonths: number; weight: number }
                 {t('care.fever.baby_under_3m_body')}
               </p>
               <a
-                href="tel:15"
+                href={`tel:${getEmergency(profile.country).number}`}
                 className="mt-3 inline-flex items-center gap-2 py-2 px-4 rounded-full bg-white text-red-600 font-heading font-bold text-sm"
               >
-                <Phone className="w-4 h-4" /> SAMU (15)
+                <Phone className="w-4 h-4" /> {getEmergency(profile.country).label} ({getEmergency(profile.country).number})
               </a>
             </div>
           </div>

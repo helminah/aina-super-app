@@ -250,7 +250,8 @@
     "milk_only_months": "{{name}} a {{months}} mois — encore {{remaining}} mois avant l'introduction alimentaire.",
     "milk_only_preview": "Voir les recettes pour préparer l'introduction",
     "preview_mode_banner": "Mode préparation — recettes pour quand bébé aura 6 mois",
-    "preview_mode_back": "Retour"
+    "preview_mode_back": "Retour",
+    "milk_only_anyway": "Regarder quand même"
   },
   "profile_form": {
     "change_photo": "Changer la photo",

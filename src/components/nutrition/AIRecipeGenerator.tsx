@@ -53,9 +53,15 @@ export function AIRecipeGenerator() {
           </p>
           <button
             onClick={() => setShowPreview(true)}
-            className="w-full py-3 rounded-full bg-ivory-100 text-bark-700 font-semibold text-sm hover:bg-amber-50 transition-colors"
+            className="w-full py-3 rounded-full bg-amber-500 text-white font-heading font-bold text-sm shadow-md shadow-amber-500/30"
           >
             👀 {t('ai_recipe.milk_only_preview')}
+          </button>
+          <button
+            onClick={() => setShowPreview(true)}
+            className="text-xs text-bark-400 underline"
+          >
+            {t('ai_recipe.milk_only_anyway')}
           </button>
         </div>
       </div>

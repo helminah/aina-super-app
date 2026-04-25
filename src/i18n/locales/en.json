@@ -250,7 +250,8 @@
     "milk_only_months": "{{name}} is {{months}} months old — {{remaining}} more month(s) before food introduction.",
     "milk_only_preview": "See recipes to prepare for food introduction",
     "preview_mode_banner": "Preview mode — recipes for when baby turns 6 months",
-    "preview_mode_back": "Back"
+    "preview_mode_back": "Back",
+    "milk_only_anyway": "Look anyway"
   },
   "profile_form": {
     "change_photo": "Change photo",

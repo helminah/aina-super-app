@@ -250,7 +250,8 @@
     "milk_only_months": "{{name}} am na {{months}} weer — {{remaining}} weer ci kanam ak lekk.",
     "milk_only_preview": "Xool recipe yi ngir preparar",
     "preview_mode_banner": "Yoon bu preparar — recipe yi ba 6 weer",
-    "preview_mode_back": "Dellu"
+    "preview_mode_back": "Dellu",
+    "milk_only_anyway": "Xool rekk"
   },
   "profile_form": {
     "change_photo": "Soppi foto",

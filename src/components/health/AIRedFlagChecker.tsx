@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { analyzeRedFlags, AnthropicApiError, type RedFlagAnalysis, type RedFlagLevel } from '@/lib/anthropic';
+import { getEmergency } from '@/data/emergency-numbers';
 
 /**
  * AIRedFlagChecker — le parent décrit ce qu'il observe, l'IA classe
@@ -200,10 +201,10 @@ export function AIRedFlagChecker() {
 
               {isUrgent && (
                 <a
-                  href="tel:15"
+                  href={`tel:${getEmergency(profile.country).number}`}
                   className="w-full py-3 rounded-full bg-red-500 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-red-500/40"
                 >
-                  <Phone className="w-4 h-4" /> {t('red_flag_checker.call_samu')}
+                  <Phone className="w-4 h-4" /> {getEmergency(profile.country).label} — {getEmergency(profile.country).number}
                 </a>
               )}
 
