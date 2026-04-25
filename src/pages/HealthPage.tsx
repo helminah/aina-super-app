@@ -175,7 +175,16 @@ export function HealthPage() {
               const groupDone = group.vaccines.every(v => isVaccineDone(v.id));
               const groupOverdue = !groupDone && group.vaccines.some(v => !isVaccineDone(v.id) && v.ageMonths < ageMonths);
               const doneCount = group.vaccines.filter(v => isVaccineDone(v.id)).length;
-              const groupHeader = group.ageMonths === 0 ? t('health.vaccines.birth') : getLocalizedField(group.vaccines[0].ageLabel);
+              const isPEV = ['pev-base'].includes(
+                ([] as string[]).concat(group.vaccines[0]?.country ?? []).some(c => c) ? 'pev-base' : ''
+              );
+              const pevMap: Record<string, string> = {
+                '2 mois': '6 semaines (1 mois ½)', '3 mois': '10 semaines (2 mois ½)', '4 mois': '14 semaines (3 mois ½)',
+              };
+              const rawLabel = getLocalizedField(group.vaccines[0].ageLabel);
+              const groupHeader = group.ageMonths === 0
+                ? t('health.vaccines.birth')
+                : (pevMap[group.vaccines[0].ageLabel.fr] ?? rawLabel);
               return (
                 <div key={group.ageKey} className="mt-4">
                   <div className="flex items-center gap-2 mb-2">

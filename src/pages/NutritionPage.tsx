@@ -100,6 +100,7 @@ export function NutritionPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [pickerSlot, setPickerSlot] = useState<string | null>(null);
   const [expandedAiId, setExpandedAiId] = useState<number | null>(null);
+  const [showRecipesAnyway, setShowRecipesAnyway] = useState(false);
   const [planDay, setPlanDay] = useState<typeof DAY_IDS[number]>(DAY_IDS[0]);
 
   // Merge AI + static recipes dans la grille (AI d'abord — plus frais).
@@ -287,16 +288,40 @@ export function NutritionPage() {
       {/* RECIPES VIEW */}
       {(view === 'recipes' || pickerSlot) && (
         <div>
-          {/* Bannière lait maternel < 6 mois (discrète, grille toujours visible) */}
-          {ageMonths < 6 && !pickerSlot && (
-            <div className="mb-4 rounded-2xl bg-sky-50 border border-sky-100 p-3 flex items-start gap-3">
-              <span className="text-lg mt-0.5">🤱</span>
-              <div>
-                <p className="font-semibold text-sky-800 text-xs">{t('ai_recipe.milk_only_title')}</p>
-                <p className="text-[11px] text-sky-600 mt-0.5">{t('ai_recipe.milk_only_body')}</p>
+          {/* Surcouche lait maternel < 6 mois */}
+          {ageMonths < 6 && !pickerSlot && !showRecipesAnyway ? (
+            <div className="rounded-2xl overflow-hidden elev-2 mb-4">
+              <div className="bg-gradient-to-br from-sky-400 to-blue-500 px-5 pt-5 pb-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🤱</span>
+                  <p className="font-heading font-bold text-white text-base">{t('ai_recipe.milk_only_title')}</p>
+                </div>
+                <p className="text-white/90 text-sm leading-relaxed">{t('ai_recipe.milk_only_body')}</p>
+              </div>
+              <div className="bg-white p-4 flex flex-col items-center gap-3">
+                <p className="text-xs text-bark-500 text-center">
+                  {profile?.name} a {ageMonths} mois — encore {6 - ageMonths} mois avant l'introduction alimentaire.
+                </p>
+                <button
+                  onClick={() => setShowRecipesAnyway(true)}
+                  className="w-full py-3 rounded-full bg-amber-500 text-white font-heading font-bold text-sm shadow-md shadow-amber-500/30"
+                >
+                  👀 {t('ai_recipe.milk_only_preview')}
+                </button>
+                <button onClick={() => setShowRecipesAnyway(true)} className="text-xs text-bark-400 underline">
+                  {t('ai_recipe.milk_only_anyway')}
+                </button>
               </div>
             </div>
-          )}
+          ) : ageMonths < 6 && !pickerSlot ? (
+            <div className="mb-3 rounded-xl bg-sky-50 border border-sky-100 px-3 py-2 flex items-center gap-2">
+              <span>🤱</span>
+              <p className="text-[11px] text-sky-700 font-medium flex-1">{t('ai_recipe.milk_only_title')} — mode préparation</p>
+              <button onClick={() => setShowRecipesAnyway(false)} className="text-[10px] text-sky-500 underline">Masquer</button>
+            </div>
+          ) : null}
+          {/* Search — visible seulement si >= 6 mois OU showRecipesAnyway */}
+          {(ageMonths >= 6 || showRecipesAnyway || pickerSlot) && <div>
           {/* Search */}
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
@@ -391,6 +416,7 @@ export function NutritionPage() {
           )}
 
           {!pickerSlot && ageMonths >= 6 && <AIRecipeGenerator />}
+          </div>}
         </div>
       )}
 
@@ -455,6 +481,29 @@ export function NutritionPage() {
       {/* PLANNER VIEW */}
       {view === 'planner' && !pickerSlot && (
         <div>
+          {/* Auto-fill buttons */}
+          <div className="flex gap-2 mb-4">
+            <p className="text-xs text-bark-500 self-center font-semibold">Générer :</p>
+            {[1, 3, 7].map(days => (
+              <button
+                key={days}
+                onClick={() => {
+                  const ageApropriate = recipes.filter(r => r.age <= Math.max(ageMonths, 6));
+                  const pool = ageApropriate.length > 0 ? ageApropriate : recipes;
+                  DAY_IDS.slice(0, days).forEach(day => {
+                    MEAL_IDS.forEach(mealId => {
+                      const r = pool[Math.floor(Math.random() * pool.length)];
+                      setMealSlot(`${day}_${mealId}`, r.id);
+                    });
+                  });
+                  setView('shopping');
+                }}
+                className="flex-1 py-2 rounded-full bg-forest-600 text-white text-xs font-bold"
+              >
+                {days === 1 ? '1 jour' : `${days} jours`}
+              </button>
+            ))}
+          </div>
           {/* Day selector */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar mb-4 pb-1">
             {DAY_IDS.map(day => {

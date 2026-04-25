@@ -19,6 +19,7 @@ export function HealthReportPage() {
     heightEntries,
     hcEntries,
     isVaccineDone,
+    isMilestoneDone,
   } = useBaby();
 
   if (!profile) return null;
@@ -199,14 +200,14 @@ export function HealthReportPage() {
             {t('health_report.section_development', { range: translateAgeRange(currentAgeRange) })}
           </h2>
           <div className="space-y-2">
-            {currentMilestones.map(m => (
+            {currentMilestones.filter(m => isMilestoneDone(m.id)).map(m => (
               <div key={m.id} className="flex items-start gap-3 py-1.5">
                 <span className="text-sm mt-0.5">{m.domainEmoji}</span>
                 <span className="text-sm text-black">{getLocalizedField(m.description)}</span>
               </div>
             ))}
-            {currentMilestones.length === 0 && (
-              <p className="text-sm text-gray-500">{t('health_report.no_milestones')}</p>
+            {currentMilestones.filter(m => isMilestoneDone(m.id)).length === 0 && (
+              <p className="text-sm text-gray-400 italic">{t('health_report.no_milestones')}</p>
             )}
           </div>
         </section>

@@ -8,9 +8,9 @@ import { COUNTRIES, REGION_ORDER } from '@/data/countries';
 
 // Calendrier PEV OMS : 6 semaines / 10 semaines / 14 semaines (≠ schéma européen 2/4/6 mois)
 const PEV_WEEK_LABELS: Record<string, { fr: string; en: string; mg: string; wo: string }> = {
-  '2 mois':  { fr: '6 semaines',  en: '6 weeks',  mg: 'herinandro 6',  wo: '6 ayubés'  },
-  '3 mois':  { fr: '10 semaines', en: '10 weeks', mg: 'herinandro 10', wo: '10 ayubés' },
-  '4 mois':  { fr: '14 semaines', en: '14 weeks', mg: 'herinandro 14', wo: '14 ayubés' },
+  '2 mois':  { fr: '6 semaines (1 mois ½)',  en: '6 weeks (1.5 months)',  mg: 'herinandro 6 (volana 1½)',  wo: '6 ayubés (1½ weer)'  },
+  '3 mois':  { fr: '10 semaines (2 mois ½)', en: '10 weeks (2.5 months)', mg: 'herinandro 10 (volana 2½)', wo: '10 ayubés (2½ weer)' },
+  '4 mois':  { fr: '14 semaines (3 mois ½)', en: '14 weeks (3.5 months)', mg: 'herinandro 14 (volana 3½)', wo: '14 ayubés (3½ weer)' },
 };
 import { getAgeInMonths } from '@/lib/age-utils';
 import { getLocalizedField } from '@/lib/i18n-data';
