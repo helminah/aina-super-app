@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, RefreshCw } from 'lucide-react';
+import { MessageCircle, X, Send, RefreshCw, Camera } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
@@ -31,6 +31,9 @@ export function AIChatAssistant() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imageMediaType, setImageMediaType] = useState<string>('image/jpeg');
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll
@@ -41,7 +44,22 @@ export function AIChatAssistant() {
 
   if (!profile) return null;
   const ageMonths = getAgeInMonths(profile.birthDate);
-  const canSend = input.trim().length >= 2 && !loading && messages.filter(m => m.role === 'user').length < MAX_TURNS;
+  const canSend = (input.trim().length >= 2 || !!imageBase64) && !loading && messages.filter(m => m.role === 'user').length < MAX_TURNS;
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target?.result as string;
+      setImagePreview(dataUrl);
+      const [header, b64] = dataUrl.split(',');
+      const mime = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg';
+      setImageBase64(b64);
+      setImageMediaType(mime);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const send = async (content: string) => {
     if (!content.trim() || loading) return;
@@ -53,8 +71,13 @@ export function AIChatAssistant() {
     setInput('');
     setLoading(true);
 
+    const pendingImage = imageBase64;
+    const pendingMime = imageMediaType;
+    setImageBase64(null);
+    setImagePreview(null);
+
     await streamChatMessage(
-      { messages: next, babyAgeMonths: ageMonths, country: profile.country },
+      { messages: next, babyAgeMonths: ageMonths, country: profile.country, imageBase64: pendingImage ?? undefined, imageMediaType: pendingMime },
       (token) => {
         setMessages(prev => {
           const copy = [...prev];
@@ -216,6 +239,17 @@ export function AIChatAssistant() {
 
               {/* Input */}
               <div className="p-3 bg-white border-t border-ivory-200">
+                {imagePreview && (
+                  <div className="relative inline-block mb-2">
+                    <img src={imagePreview} alt="photo" className="h-14 w-14 rounded-xl object-cover border border-violet-200" />
+                    <button
+                      onClick={() => { setImageBase64(null); setImagePreview(null); }}
+                      className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-violet-500 text-white flex items-center justify-center"
+                    >
+                      <X className="w-2.5 h-2.5" />
+                    </button>
+                  </div>
+                )}
                 <div className="flex gap-2 items-end">
                   <textarea
                     value={input}
@@ -230,6 +264,10 @@ export function AIChatAssistant() {
                     rows={1}
                     className="flex-1 px-4 py-2.5 rounded-2xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-violet-300 text-sm resize-none max-h-24"
                   />
+                  <label className="w-10 h-10 rounded-full bg-ivory-200 flex items-center justify-center cursor-pointer flex-shrink-0 hover:bg-violet-100 transition-colors" aria-label="Joindre une photo">
+                    <Camera className="w-4 h-4 text-bark-500" />
+                    <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageSelect} />
+                  </label>
                   <button
                     onClick={() => send(input)}
                     disabled={!canSend}

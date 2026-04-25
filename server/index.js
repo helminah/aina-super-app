@@ -121,7 +121,7 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
  */
 app.post('/api/redflag', async (req, res) => {
   try {
-    const { symptoms, babyAgeMonths } = req.body ?? {};
+    const { symptoms, babyAgeMonths, imageBase64, imageMediaType } = req.body ?? {};
 
     if (typeof symptoms !== 'string' || symptoms.trim().length < 3) {
       return res.status(400).json({ error: 'symptoms requis (description textuelle)' });
@@ -149,6 +149,8 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
       userMessage,
       maxTokens: 3000,
       thinking: true,
+      imageBase64: imageBase64 ?? null,
+      imageMediaType: imageMediaType ?? 'image/jpeg',
     });
 
     const data = extractJson(text);
@@ -176,7 +178,7 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
  */
 app.post('/api/chat', async (req, res) => {
   try {
-    const { messages, babyAgeMonths, country } = req.body ?? {};
+    const { messages, babyAgeMonths, country, imageBase64, imageMediaType } = req.body ?? {};
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'messages requis (array non vide)' });
     }
@@ -198,6 +200,21 @@ app.post('/api/chat', async (req, res) => {
         ...contextualizedMessages[0],
         content: `[Contexte bébé : ${babyAgeMonths} mois${country ? `, ${country}` : ''}]\n\n${contextualizedMessages[0].content}`,
       };
+    }
+
+    // Si une image est jointe, on la place dans le dernier message utilisateur.
+    if (imageBase64) {
+      const lastIdx = contextualizedMessages.length - 1;
+      const last = contextualizedMessages[lastIdx];
+      if (last.role === 'user') {
+        contextualizedMessages[lastIdx] = {
+          ...last,
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: imageMediaType ?? 'image/jpeg', data: imageBase64 } },
+            { type: 'text', text: typeof last.content === 'string' ? last.content : '' },
+          ],
+        };
+      }
     }
 
     res.setHeader('Content-Type', 'text/event-stream');

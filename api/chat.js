@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { messages, babyAgeMonths, country } = req.body ?? {};
+    const { messages, babyAgeMonths, country, imageBase64, imageMediaType } = req.body ?? {};
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'messages requis (array non vide)' });
     }
@@ -29,6 +29,20 @@ export default async function handler(req, res) {
         ...contextualizedMessages[0],
         content: `[Contexte bébé : ${babyAgeMonths} mois${country ? `, ${country}` : ''}]\n\n${contextualizedMessages[0].content}`,
       };
+    }
+
+    if (imageBase64) {
+      const lastIdx = contextualizedMessages.length - 1;
+      const last = contextualizedMessages[lastIdx];
+      if (last.role === 'user') {
+        contextualizedMessages[lastIdx] = {
+          ...last,
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: imageMediaType ?? 'image/jpeg', data: imageBase64 } },
+            { type: 'text', text: typeof last.content === 'string' ? last.content : '' },
+          ],
+        };
+      }
     }
 
     res.setHeader('Content-Type', 'text/event-stream');

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert } from 'lucide-react';
+import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert, Camera, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
@@ -21,16 +21,46 @@ export function AIRedFlagChecker() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [additional, setAdditional] = useState('');
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imageMediaType, setImageMediaType] = useState<string>('image/jpeg');
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   if (!profile) return null;
   const ageMonths = getAgeInMonths(profile.birthDate);
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target?.result as string;
+      setImagePreview(dataUrl);
+      // Extrait base64 pur (sans le préfixe data:...)
+      const [header, b64] = dataUrl.split(',');
+      const mime = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg';
+      setImageBase64(b64);
+      setImageMediaType(mime);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const clearImage = () => {
+    setImageBase64(null);
+    setImagePreview(null);
+    setImageMediaType('image/jpeg');
+  };
+
   const handleAnalyze = async (text: string) => {
-    if (text.trim().length < 3) return;
+    if (text.trim().length < 3 && !imageBase64) return;
     setError(null);
     setLoading(true);
     try {
-      const r = await analyzeRedFlags({ symptoms: text, babyAgeMonths: ageMonths });
+      const r = await analyzeRedFlags({
+        symptoms: text,
+        babyAgeMonths: ageMonths,
+        imageBase64: imageBase64 ?? undefined,
+        imageMediaType,
+      });
       setResult(r);
       setAdditional('');
     } catch (e) {
@@ -45,6 +75,7 @@ export function AIRedFlagChecker() {
     setSymptoms('');
     setAdditional('');
     setError(null);
+    clearImage();
   };
 
   const handleAddDetail = () => {
@@ -100,9 +131,40 @@ export function AIRedFlagChecker() {
               </p>
             </div>
 
+            {/* Photo optionnelle — vision Opus 4.7 */}
+            <div>
+              {imagePreview ? (
+                <div className="relative inline-block">
+                  <img src={imagePreview} alt="photo jointe" className="h-20 w-20 rounded-xl object-cover border-2 border-red-200" />
+                  <button
+                    onClick={clearImage}
+                    className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+                    aria-label="Retirer la photo"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                  <p className="text-[10px] text-red-600 font-semibold mt-1">📷 Photo analysée par Claude</p>
+                </div>
+              ) : (
+                <label className="flex items-center gap-2 text-xs text-bark-500 cursor-pointer hover:text-red-500 transition-colors w-fit">
+                  <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
+                    <Camera className="w-4 h-4 text-red-400" />
+                  </div>
+                  <span>Joindre une photo (éruption, plaie, rash…)</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handleImageSelect}
+                  />
+                </label>
+              )}
+            </div>
+
             <button
               onClick={() => handleAnalyze(symptoms)}
-              disabled={loading || symptoms.trim().length < 3}
+              disabled={loading || (symptoms.trim().length < 3 && !imageBase64)}
               className="w-full py-3 rounded-full bg-gradient-to-r from-red-500 to-rose-500 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 transition-all active:scale-[0.98] shadow-md shadow-red-500/30"
             >
               {loading ? (

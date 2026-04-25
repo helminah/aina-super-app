@@ -144,10 +144,14 @@ export function generateWeeklyMealPlan(params: {
 export function analyzeRedFlags(params: {
   symptoms: string;
   babyAgeMonths: number;
+  imageBase64?: string;
+  imageMediaType?: string;
 }): Promise<RedFlagAnalysis> {
   return postJson<RedFlagAnalysis>('/api/redflag', {
     symptoms: params.symptoms,
     babyAgeMonths: params.babyAgeMonths,
+    imageBase64: params.imageBase64,
+    imageMediaType: params.imageMediaType,
   });
 }
 
@@ -172,7 +176,7 @@ export function sendChatMessage(params: {
  * Le serveur envoie des événements `data: {"token":"..."}` puis `data: {"done":true}`.
  */
 export async function streamChatMessage(
-  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string },
+  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string; imageBase64?: string; imageMediaType?: string },
   onToken: (token: string) => void,
   onDone: () => void,
   onError: (error: string) => void,

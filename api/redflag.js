@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { symptoms, babyAgeMonths } = req.body ?? {};
+    const { symptoms, babyAgeMonths, imageBase64, imageMediaType } = req.body ?? {};
 
     if (typeof symptoms !== 'string' || symptoms.trim().length < 3) {
       return res.status(400).json({ error: 'symptoms requis (description textuelle)' });
@@ -33,6 +33,8 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
       userMessage,
       maxTokens: 3000,
       thinking: true,
+      imageBase64: imageBase64 ?? null,
+      imageMediaType: imageMediaType ?? 'image/jpeg',
     });
 
     const data = extractJson(text);

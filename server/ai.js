@@ -20,14 +20,29 @@ export function extractJson(text) {
 
 /**
  * Appel Claude standard (non-streaming) avec prompt caching.
- * `thinking: true` active l'extended thinking d'Opus 4.7 (redflag uniquement).
+ * `thinking: true` active l'extended thinking d'Opus 4.7.
+ * `imageBase64` + `imageMediaType` activent la vision multimodale d'Opus 4.7.
  */
-export async function callClaude({ system, userMessage, maxTokens = 2048, thinking = false }) {
+export async function callClaude({
+  system,
+  userMessage,
+  maxTokens = 2048,
+  thinking = false,
+  imageBase64 = null,
+  imageMediaType = 'image/jpeg',
+}) {
+  const userContent = imageBase64
+    ? [
+        { type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageBase64 } },
+        { type: 'text', text: userMessage },
+      ]
+    : userMessage;
+
   const params = {
     model: MODEL,
     max_tokens: maxTokens,
     system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
-    messages: [{ role: 'user', content: userMessage }],
+    messages: [{ role: 'user', content: userContent }],
   };
   if (thinking) {
     params.thinking = { type: 'enabled', budget_tokens: Math.min(maxTokens - 500, 2000) };
