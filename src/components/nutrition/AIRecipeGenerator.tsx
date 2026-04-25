@@ -31,9 +31,36 @@ export function AIRecipeGenerator() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [plan, setPlan] = useState<WeeklyMealPlan | null>(null);
   const [savedRecipeId, setSavedRecipeId] = useState<number | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   if (!profile) return null;
   const ageMonths = getAgeInMonths(profile.birthDate);
+
+  // Avant 6 mois → lait maternel exclusif (OMS)
+  if (ageMonths < 6 && !showPreview) {
+    return (
+      <div className="mt-6 rounded-2xl overflow-hidden elev-2">
+        <div className="bg-gradient-to-br from-sky-400 to-blue-500 grain px-5 pt-5 pb-4">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xl">🤱</span>
+            <p className="font-heading font-bold text-white text-base">{t('ai_recipe.milk_only_title')}</p>
+          </div>
+          <p className="text-white/90 text-sm leading-relaxed">{t('ai_recipe.milk_only_body')}</p>
+        </div>
+        <div className="bg-white p-4 text-center space-y-3">
+          <p className="text-xs text-bark-500">
+            {t('ai_recipe.milk_only_months', { name: profile.name, months: ageMonths, remaining: 6 - ageMonths })}
+          </p>
+          <button
+            onClick={() => setShowPreview(true)}
+            className="w-full py-3 rounded-full bg-ivory-100 text-bark-700 font-semibold text-sm hover:bg-amber-50 transition-colors"
+          >
+            👀 {t('ai_recipe.milk_only_preview')}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const parseIngredients = (raw: string): string[] =>
     raw.split(/[,\n;]/).map(s => s.trim()).filter(Boolean);
@@ -103,6 +130,13 @@ export function AIRecipeGenerator() {
 
   return (
     <div className="mt-6 rounded-2xl overflow-hidden elev-2 relative">
+      {/* Bandeau "mode préparation" si bébé < 6 mois */}
+      {ageMonths < 6 && (
+        <div className="bg-sky-50 border-b border-sky-100 px-4 py-2 flex items-center justify-between">
+          <p className="text-xs text-sky-700 font-medium">🤱 {t('ai_recipe.preview_mode_banner')}</p>
+          <button onClick={() => setShowPreview(false)} className="text-[10px] text-sky-500 underline">{t('ai_recipe.preview_mode_back')}</button>
+        </div>
+      )}
       {/* Header aurora amber */}
       <div className="relative mesh-amber grain overflow-hidden px-5 pt-5 pb-4">
         <motion.div

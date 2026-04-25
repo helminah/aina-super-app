@@ -5,6 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { vaccines } from '@/data/vaccines';
 import { COUNTRIES, REGION_ORDER } from '@/data/countries';
+
+// Calendrier PEV OMS : 6 semaines / 10 semaines / 14 semaines (≠ schéma européen 2/4/6 mois)
+const PEV_WEEK_LABELS: Record<string, { fr: string; en: string; mg: string; wo: string }> = {
+  '2 mois':  { fr: '6 semaines',  en: '6 weeks',  mg: 'herinandro 6',  wo: '6 ayubés'  },
+  '3 mois':  { fr: '10 semaines', en: '10 weeks', mg: 'herinandro 10', wo: '10 ayubés' },
+  '4 mois':  { fr: '14 semaines', en: '14 weeks', mg: 'herinandro 14', wo: '14 ayubés' },
+};
 import { getAgeInMonths } from '@/lib/age-utils';
 import { getLocalizedField } from '@/lib/i18n-data';
 import { generateId } from '@/lib/utils';
@@ -18,7 +25,7 @@ const slideVariants = {
 };
 
 export function OnboardingFlow() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { setProfile, toggleVaccine } = useBaby();
   const [step, setStep] = useState(1);
   const [dir, setDir] = useState(1);
@@ -76,16 +83,26 @@ export function OnboardingFlow() {
 
   const vaccineGroups = () => {
     const applicable = applicableVaccines();
-    const groups: { ageKey: string; ageMonths: number; label: string; vaccineIds: string[] }[] = [];
+    const groups: { ageKey: string; ageMonths: number; label: string; vaccineIds: string[]; vaccineNames: string[] }[] = [];
     const seen = new Set<string>();
+    const isPEV = COUNTRIES.find(c => c.code === country)?.schedule === 'pev-base';
+    const lang = i18n.language as 'fr' | 'en' | 'mg' | 'wo';
     for (const v of applicable) {
       const ageKey = v.ageLabel.fr;
       if (!seen.has(ageKey)) {
         seen.add(ageKey);
+        let ageDisplay: string;
+        if (isPEV && PEV_WEEK_LABELS[ageKey]) {
+          ageDisplay = PEV_WEEK_LABELS[ageKey][lang] ?? PEV_WEEK_LABELS[ageKey].fr;
+        } else {
+          ageDisplay = getLocalizedField(v.ageLabel);
+        }
         const groupLabel = v.ageMonths === 0
           ? t('onboarding.birth_vaccines')
-          : t('onboarding.age_vaccines', { age: getLocalizedField(v.ageLabel) });
-        groups.push({ ageKey, ageMonths: v.ageMonths, label: groupLabel, vaccineIds: applicable.filter(vv => vv.ageLabel.fr === ageKey).map(vv => vv.id) });
+          : t('onboarding.age_vaccines', { age: ageDisplay });
+        const vaccineIds = applicable.filter(vv => vv.ageLabel.fr === ageKey).map(vv => vv.id);
+        const vaccineNames = applicable.filter(vv => vv.ageLabel.fr === ageKey).map(vv => getLocalizedField(vv.name));
+        groups.push({ ageKey, ageMonths: v.ageMonths, label: groupLabel, vaccineIds, vaccineNames });
       }
     }
     return groups;
@@ -278,9 +295,9 @@ export function OnboardingFlow() {
                               <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                             )}
                           </div>
-                          <div>
+                          <div className="flex-1 min-w-0">
                             <p className="font-medium text-bark-800">{group.label}</p>
-                            <p className="text-xs text-bark-500">{t('onboarding.vaccine_count', { count: group.vaccineIds.length })}</p>
+                            <p className="text-xs text-bark-500 truncate">{group.vaccineNames.join(' · ')}</p>
                           </div>
                         </button>
                       );

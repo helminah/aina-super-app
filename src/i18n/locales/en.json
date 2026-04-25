@@ -244,7 +244,13 @@
     "lunch": "Lunch",
     "snack": "Snack",
     "dinner": "Dinner",
-    "unexpected_error": "Unexpected error"
+    "unexpected_error": "Unexpected error",
+    "milk_only_title": "Breast milk only before 6 months",
+    "milk_only_body": "WHO recommends exclusive breastfeeding (or infant formula) until 6 months. No solid food is needed before this age.",
+    "milk_only_months": "{{name}} is {{months}} months old — {{remaining}} more month(s) before food introduction.",
+    "milk_only_preview": "See recipes to prepare for food introduction",
+    "preview_mode_banner": "Preview mode — recipes for when baby turns 6 months",
+    "preview_mode_back": "Back"
   },
   "profile_form": {
     "change_photo": "Change photo",
@@ -945,7 +951,7 @@
   "about": {
     "title": "About Dr Helminah",
     "subtitle": "Pediatrician · Creator of AINA",
-    "bio": "Originally from Madagascar, Dr Helminah Randriamananoro is a qualified pediatrician specialized in infant health and nutrition (0-24 months). She practices in Dakar, Senegal, where she supports French-speaking families from Sub-Saharan Africa and Europe on a daily basis.\n\nPassionate about preventive medicine and equal access to care, she created AINA — Breath of Life — to bring pediatric expertise within reach of every parent, anywhere in the world, in their own language. AINA does not replace a medical consultation: it guides, reassures, and helps ask the right questions at the right time.",
+    "bio": "Originally from Madagascar, Dr Helminah Randriamananoro is in pediatrics in Dakar, Senegal, where she supports French-speaking families from Sub-Saharan Africa and Europe on a daily basis.\n\nPassionate about preventive medicine and equal access to care, she created AINA — Breath of Life — to bring pediatric expertise within reach of every parent, anywhere in the world, in their own language. AINA does not replace a medical consultation: it guides, reassures, and helps ask the right questions at the right time.",
     "links_title": "Find me",
     "website": "Website",
     "instagram": "Instagram",

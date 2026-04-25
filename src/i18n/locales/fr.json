@@ -244,7 +244,13 @@
     "lunch": "Déjeuner",
     "snack": "Goûter",
     "dinner": "Dîner",
-    "unexpected_error": "Erreur inattendue"
+    "unexpected_error": "Erreur inattendue",
+    "milk_only_title": "Lait maternel uniquement avant 6 mois",
+    "milk_only_body": "L'OMS recommande l'allaitement maternel exclusif (ou lait infantile) jusqu'à 6 mois. Aucun aliment solide n'est nécessaire avant cet âge.",
+    "milk_only_months": "{{name}} a {{months}} mois — encore {{remaining}} mois avant l'introduction alimentaire.",
+    "milk_only_preview": "Voir les recettes pour préparer l'introduction",
+    "preview_mode_banner": "Mode préparation — recettes pour quand bébé aura 6 mois",
+    "preview_mode_back": "Retour"
   },
   "profile_form": {
     "change_photo": "Changer la photo",
@@ -945,7 +951,7 @@
   "about": {
     "title": "À propos de Dr Helminah",
     "subtitle": "Pédiatre · Créatrice d'AINA",
-    "bio": "D'origine malgache, Dr Helminah Randriamananoro est médecin pédiatre diplômée, spécialisée dans la santé et la nutrition du nourrisson (0-24 mois). Elle exerce à Dakar, au Sénégal, où elle suit au quotidien des familles francophones d'Afrique subsaharienne et d'Europe.\n\nPassionnée par la médecine préventive et l'équité d'accès aux soins, elle a créé AINA — Souffle de Vie — pour mettre l'expertise pédiatrique à portée de chaque parent, partout dans le monde et dans leur langue. AINA ne remplace pas une consultation : elle oriente, rassure, et aide à poser les bonnes questions au bon moment.",
+    "bio": "D'origine malgache, Dr Helminah Randriamananoro est en pédiatrie à Dakar, au Sénégal, où elle accompagne au quotidien des familles francophones d'Afrique subsaharienne et d'Europe.\n\nPassionnée par la médecine préventive et l'équité d'accès aux soins, elle a créé AINA — Souffle de Vie — pour mettre l'expertise pédiatrique à portée de chaque parent, partout dans le monde et dans leur langue. AINA ne remplace pas une consultation : elle oriente, rassure, et aide à poser les bonnes questions au bon moment.",
     "links_title": "Me retrouver",
     "website": "Site web",
     "instagram": "Instagram",

@@ -244,7 +244,13 @@
     "lunch": "Lekk bu kanam",
     "snack": "Lekk kese",
     "dinner": "Lekk ngontu",
-    "unexpected_error": "Njumtekaay bu nu xalatul"
+    "unexpected_error": "Njumtekaay bu nu xalatul",
+    "milk_only_title": "Meew rekk ba 6 weer",
+    "milk_only_body": "OMS def ne dara meew bu xeex (walla lait infantile) ba 6 weer. Lekk yokk amul yoon ba fi.",
+    "milk_only_months": "{{name}} am na {{months}} weer — {{remaining}} weer ci kanam ak lekk.",
+    "milk_only_preview": "Xool recipe yi ngir preparar",
+    "preview_mode_banner": "Yoon bu preparar — recipe yi ba 6 weer",
+    "preview_mode_back": "Dellu"
   },
   "profile_form": {
     "change_photo": "Soppi foto",
@@ -945,7 +951,7 @@
   "about": {
     "title": "Ci mbirum Dr Helminah",
     "subtitle": "Doktoor xale · Bi sos AINA",
-    "bio": "Jëm Madagaskar, Dr Helminah Randriamananoro dafa doktoor xale bu am diggante, bu xam xam ci wér-gu-yaram ak lekk liir yu xale yu 0-24 weer. Dafa liggéey ci Dakar, Sénégal, fii dafa ànd ak njaboot fransi yu Afrik ak Erop bu soppiku.\n\nNoonu ko bëgg fitsaboana bu xëtu jàmm ak yëgël bi ci jëm yëp, dafa sos AINA — Ëmb u Jikko — ngir joxe xam-xam pedri yi ci tay bu baax yi, fan fan lañuy dem, ci làkk bi ñu xam. AINA du jël solo doktoor : dafa leeral, yëgël te fëccal laaj yu baax.",
+    "bio": "Jëm Madagaskar, Dr Helminah Randriamananoro dafa ci pediatrie ci Dakar, Sénégal, fii dafa ànd ak njaboot yu bari yu Afrik ak Erop bu soppiku fransi.\n\nNoonu ko bëgg fitsaboana bu xëtu jàmm, dafa sos AINA — Ëmb u Jikko — ngir joxe xam-xam pedri yi ci tay bu baax yi, fan fan lañuy dem, ci làkk bi ñu xam. AINA du jël solo doktoor : dafa leeral, yëgël te fëccal laaj yu baax.",
     "links_title": "Fi ma mën a gis",
     "website": "Saytu",
     "instagram": "Instagram",

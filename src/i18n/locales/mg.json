@@ -244,7 +244,13 @@
     "lunch": "Sakafo antoandro",
     "snack": "Hanina kely",
     "dinner": "Sakafo hariva",
-    "unexpected_error": "Hadisoana tsy nampoizina"
+    "unexpected_error": "Hadisoana tsy nampoizina",
+    "milk_only_title": "Ronono ihany mialoha ny 6 volana",
+    "milk_only_body": "Ny OMS dia manoro ny fanondranana ronono manontolo (na lait artificiel) hatramin'ny 6 volana. Tsy ilaina ny sakafo hafa mialoha io.",
+    "milk_only_months": "{{name}} dia {{months}} volana — mbola {{remaining}} volana alohan'ny fampidirana sakafo.",
+    "milk_only_preview": "Jereo ny recipe ho fiomanana",
+    "preview_mode_banner": "Fomba fiomanana — recipe ho an'ny 6 volana",
+    "preview_mode_back": "Miverina"
   },
   "profile_form": {
     "change_photo": "Hanova sary",
@@ -949,7 +955,7 @@
   "about": {
     "title": "Momba an'i Dr Helminah",
     "subtitle": "Mpitsabo ankizy · Namorona ny AINA",
-    "bio": "Avy any Madagasikara, Dr Helminah Randriamananoro dia dokotera ankizy voalamina, manam-pahaizana amin'ny fahasalamana sy ny sakafo mahasoa ny zazakely (0-24 volana). Miasa any Dakar, Sénégal izy, manome fanohanana andavanandro ho an'ny fianakaviana frantsay any Afrika sy Eoropa.\n\nNoho ny fitiavany ny fitsaboana fiarovana sy ny fidirana ho an'ny rehetra, dia namorona ny AINA — Aingam-aina — izy mba hitondra ny fahaizana pediatra ho akaiky ny ray aman-dreny rehetra, na aiza na aiza izy ireo, amin'ny teniny. Ny AINA tsy misolo ny dokotera : manampy, mampitsony ary mitarika ny fanontaniana mety amin'ny fotoana mety.",
+    "bio": "Avy any Madagasikara, Dr Helminah Randriamananoro dia amin'ny pediatrie any Dakar, Sénégal, manome fanohanana andavanandro ho an'ny fianakaviana frantsay any Afrika sy Eoropa.\n\nNoho ny fitiavany ny fitsaboana fiarovana sy ny fidirana ho an'ny rehetra, dia namorona ny AINA — Aingam-aina — mba hitondra ny fahaizana pedria ho akaiky ny ray aman-dreny rehetra. Ny AINA tsy misolo ny dokotera : manampy, mampitsony ary mitarika ny fanontaniana mety amin'ny fotoana mety.",
     "links_title": "Hifandray amiko",
     "website": "Tranonkala",
     "instagram": "Instagram",
