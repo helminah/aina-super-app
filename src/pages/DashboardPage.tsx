@@ -4,6 +4,7 @@ import { getAgeText, getAgeInMonths } from '@/lib/age-utils';
 import { vaccines } from '@/data/vaccines';
 import { recipes } from '@/data/recipes';
 import { getTipOfTheDay } from '@/data/daily-tips';
+import { getLocalizedField } from '@/lib/i18n-data';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -22,14 +23,34 @@ import {
   Pill,
 } from 'lucide-react';
 
+const EMERGENCY_NUMBERS: Record<string, string> = {
+  // Europe
+  france: '15', belgique: '112', suisse: '144', luxembourg: '112', canada: '911',
+  // Afrique de l'Ouest
+  senegal: '15', 'cote-ivoire': '185', mali: '15', 'burkina-faso': '112',
+  niger: '15', benin: '15', togo: '15', guinee: '15', mauritanie: '15',
+  // Afrique Centrale
+  cameroun: '15', gabon: '1300', congo: '15', rdc: '12', tchad: '15', rca: '15',
+  // Afrique de l'Est
+  rwanda: '912', burundi: '117', djibouti: '15',
+  // Océan Indien
+  madagascar: '15', comores: '15', maurice: '114', seychelles: '999',
+  // Maghreb
+  maroc: '15', algerie: '14', tunisie: '190',
+  // Amérique
+  haiti: '118',
+};
+
 export function DashboardPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { profile, babies, activeBabyId, switchBaby, isVaccineDone, weightEntries, dailyLogs, getLogsForDate, checkVaccineReminders } = useBaby();
   const navigate = useNavigate();
   const [showEmergency, setShowEmergency] = useState(false);
   const [showBabyMenu, setShowBabyMenu] = useState(false);
 
   if (!profile) return null;
+
+  const emergencyNumber = EMERGENCY_NUMBERS[profile.country] ?? '112';
 
   const ageText = getAgeText(profile.birthDate);
   const ageMonths = getAgeInMonths(profile.birthDate);
@@ -60,7 +81,7 @@ export function DashboardPage() {
 
   // Today's recipe suggestion
   const dayIndex = new Date().getDate();
-  const ageApplicable = recipes.filter(r => r.age <= Math.max(6, Math.min(12, ageMonths)));
+  const ageApplicable = recipes.filter(r => r.age <= Math.max(6, Math.min(18, ageMonths)));
   const suggestedRecipe = ageApplicable.length > 0 ? ageApplicable[dayIndex % ageApplicable.length] : null;
 
   // Tip of the day
@@ -83,15 +104,7 @@ export function DashboardPage() {
   // Recent activity (last 5 logs)
   const recentLogs = dailyLogs.slice(0, 5);
 
-  const logTypeLabel = (type: string) => {
-    switch (type) {
-      case 'feed': return 'Biberon / Tétée';
-      case 'sleep': return 'Sieste / Dodo';
-      case 'diaper': return 'Couche';
-      case 'mood': return 'Humeur';
-      default: return type;
-    }
-  };
+  const logTypeLabel = (type: string) => t(`journal.log_types.${type}`, { defaultValue: type });
   const logTypeEmoji = (type: string) => {
     switch (type) {
       case 'feed': return '🍼';
@@ -104,8 +117,10 @@ export function DashboardPage() {
 
   const emergencySteps = t('emergency.steps', { returnObjects: true, defaultValue: [] }) as Array<{ title: string; desc: string }>;
 
+  const dateLocaleMap: Record<string, string> = { fr: 'fr-FR', en: 'en-US', mg: 'mg-MG', wo: 'fr-SN' };
+  const dateLocale = dateLocaleMap[i18n.language.split('-')[0]] || 'fr-FR';
   const formatVaccineDate = (date: Date) => {
-    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return date.toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
   return (
@@ -179,8 +194,8 @@ export function DashboardPage() {
               <div className="flex-1">
                 <p className={`font-heading font-bold text-sm ${overdueReminders.length > 0 ? 'text-red-700' : 'text-amber-700'}`}>
                   {overdueReminders.length > 0
-                    ? `${overdueReminders.length} vaccin${overdueReminders.length > 1 ? 's' : ''} en retard`
-                    : `${soonReminders.length} vaccin${soonReminders.length > 1 ? 's' : ''} à venir`}
+                    ? t('dashboard.vaccines_overdue', { count: overdueReminders.length })
+                    : t('dashboard.vaccines_upcoming', { count: soonReminders.length })}
                 </p>
                 <p className={`text-xs mt-0.5 ${overdueReminders.length > 0 ? 'text-red-500' : 'text-amber-500'}`}>
                   {overdueReminders.length > 0
@@ -209,8 +224,8 @@ export function DashboardPage() {
               <p className="text-[11px] text-amber-500 font-semibold uppercase tracking-[0.15em]">
                 {tip.categoryEmoji} {t('dashboard.tip_of_day')}
               </p>
-              <p className="font-heading font-bold text-bark-800 mt-1">{tip.title}</p>
-              <p className="text-sm text-bark-500 mt-1 leading-relaxed">{tip.content}</p>
+              <p className="font-heading font-bold text-bark-800 mt-1">{getLocalizedField(tip.title)}</p>
+              <p className="text-sm text-bark-500 mt-1 leading-relaxed">{getLocalizedField(tip.content)}</p>
             </div>
           </div>
         </div>
@@ -229,16 +244,16 @@ export function DashboardPage() {
                 <p className="text-xs text-forest-600 font-semibold uppercase tracking-wide">
                   {t('dashboard.next_vaccine')}
                 </p>
-                <p className="font-heading font-bold text-bark-800 mt-0.5">{nextVaccine.name}</p>
+                <p className="font-heading font-bold text-bark-800 mt-0.5">{getLocalizedField(nextVaccine.name)}</p>
                 {vaccineTiming && (
                   <div className="mt-1.5 flex items-center gap-2 flex-wrap">
                     {vaccineTiming.days > 0 ? (
                       <span className="text-sm font-semibold text-terra-500">
-                        Dans {vaccineTiming.days} jour{vaccineTiming.days > 1 ? 's' : ''}
+                        {t('dashboard.vaccine_days_remaining', { count: vaccineTiming.days })}
                       </span>
                     ) : (
                       <span className="text-sm font-semibold text-terra-500">
-                        En retard
+                        {t('dashboard.vaccine_overdue')}
                       </span>
                     )}
                     <span className="text-bark-300">&middot;</span>
@@ -247,7 +262,7 @@ export function DashboardPage() {
                     </span>
                   </div>
                 )}
-                <p className="text-xs text-bark-400 mt-0.5">{nextVaccine.diseases}</p>
+                <p className="text-xs text-bark-400 mt-0.5">{getLocalizedField(nextVaccine.diseases)}</p>
               </div>
               <ChevronRight className="w-5 h-5 text-bark-300 mt-1" />
             </div>
@@ -306,9 +321,9 @@ export function DashboardPage() {
             <Pill className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] uppercase tracking-[0.15em] text-red-700 font-semibold">Ma trousse</p>
-            <p className="font-heading font-bold text-bark-800 mt-0.5 text-sm">Dose · Fièvre · Selles</p>
-            <p className="text-xs text-bark-500 mt-0.5">Calcul dose, guide fièvre, analyse selles</p>
+            <p className="text-[11px] uppercase tracking-[0.15em] text-red-700 font-semibold">{t('dashboard.care_kit_title')}</p>
+            <p className="font-heading font-bold text-bark-800 mt-0.5 text-sm">{t('dashboard.care_kit_desc')}</p>
+            <p className="text-xs text-bark-500 mt-0.5">{t('dashboard.care_kit_hint')}</p>
           </div>
           <ChevronRight className="w-4 h-4 text-red-400 flex-shrink-0" />
         </button>
@@ -328,10 +343,10 @@ export function DashboardPage() {
                   {t('dashboard.suggestion_of_day')}
                 </p>
                 <p className="font-heading font-bold text-bark-800 mt-0.5">
-                  Suggestion : {suggestedRecipe.title} ({ageMonths} mois+)
+                  {t('dashboard.recipe_suggestion_template', { title: getLocalizedField(suggestedRecipe.title), months: ageMonths })}
                 </p>
                 <p className="text-sm text-bark-500 mt-0.5">
-                  pour ses {ageMonths} mois &middot; {suggestedRecipe.time} min &middot; {suggestedRecipe.kcal} kcal
+                  {t('dashboard.recipe_suggestion_meta', { months: ageMonths, time: suggestedRecipe.time, kcal: suggestedRecipe.kcal })}
                 </p>
               </div>
               <ChevronRight className="w-5 h-5 text-bark-300 mt-1" />
@@ -348,7 +363,7 @@ export function DashboardPage() {
                 onClick={() => navigate('/journal')}
                 className="text-xs text-forest-600 font-semibold"
               >
-                Voir tout
+                {t('common.see_all')}
               </button>
             </div>
             <div className="space-y-3">
@@ -393,7 +408,7 @@ export function DashboardPage() {
         transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 22 }}
         whileTap={{ scale: 0.92 }}
         className="fixed bottom-24 right-5 z-30 flex items-center gap-2 pr-5 pl-3.5 py-3 rounded-full bg-red-500 text-white shadow-[0_12px_30px_-8px_rgba(239,68,68,0.55)] print:hidden"
-        aria-label="Mode urgence"
+        aria-label={t('dashboard.emergency_aria')}
       >
         <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
           <AlertTriangle className="w-4 h-4" />
@@ -445,7 +460,7 @@ export function DashboardPage() {
                   ))}
                 </div>
                 <a
-                  href="tel:15"
+                  href={`tel:${emergencyNumber}`}
                   className="w-full py-4 rounded-full bg-terra-500 text-white font-heading font-bold text-lg flex items-center justify-center gap-2"
                 >
                   <Phone className="w-5 h-5" /> {t('emergency.call_samu')}

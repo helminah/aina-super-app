@@ -1,36 +1,96 @@
 import { useState, useMemo } from 'react';
 import { useBaby } from '@/contexts/BabyContext';
 import { recipes } from '@/data/recipes';
+import type { AiRecipeEntry } from '@/types/child';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, ChevronRight, Plus, Trash2, Share2, Clock, Flame, Apple } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles } from 'lucide-react';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
+import { AIRecipeGenerator } from '@/components/nutrition/AIRecipeGenerator';
 import { useTranslation } from 'react-i18next';
+import { tl } from '@/lib/i18n-data';
+
+// Shape affichable commune entre recettes statiques et AI.
+type DisplayRecipe = {
+  id: number;
+  title: string;
+  emoji: string;
+  time: number;
+  kcal?: number;
+  age: number;
+  category?: string;
+  iron?: boolean;
+  protein?: boolean;
+  isAi: boolean;
+};
+
+function ageFromRange(ageRange: string, fallback: number): number {
+  const m = ageRange.match(/\d+/);
+  return m ? Number(m[0]) : fallback;
+}
+
+function aiToDisplay(a: AiRecipeEntry): DisplayRecipe {
+  return {
+    id: a.id,
+    title: a.title,
+    emoji: a.emoji || '✨',
+    time: a.prepMinutes,
+    kcal: a.kcal,
+    age: ageFromRange(a.ageRange, a.babyAgeMonths || 6),
+    category: a.category,
+    iron: false,
+    protein: false,
+    isAi: true,
+  };
+}
+
+function staticToDisplay(r: typeof recipes[0]): DisplayRecipe {
+  return {
+    id: r.id,
+    title: tl(r.title),
+    emoji: r.emoji,
+    time: r.time,
+    kcal: r.kcal,
+    age: r.age,
+    category: r.category,
+    iron: r.iron,
+    protein: r.protein,
+    isAi: false,
+  };
+}
 
 type NutritionView = 'recipes' | 'foods' | 'favorites' | 'planner' | 'shopping';
 
-const AGES = [6, 7, 8, 9, 10, 11, 12];
-const CATEGORIES = [
-  { id: 'dejeuner', label: 'Déjeuner', emoji: '🍽️' },
-  { id: 'gouter', label: 'Goûter', emoji: '🍪' },
-  { id: 'dessert', label: 'Dessert', emoji: '🍨' },
-];
-const DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-const MEALS = [
-  { id: 'petit_dejeuner', label: 'Petit-déj' },
-  { id: 'dejeuner', label: 'Déjeuner' },
-  { id: 'gouter', label: 'Goûter' },
-  { id: 'diner', label: 'Dîner' },
-];
+const AGES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+const CATEGORY_IDS = [
+  { id: 'petit-dejeuner', emoji: '🌅' },
+  { id: 'dejeuner', emoji: '🍽️' },
+  { id: 'gouter', emoji: '🍪' },
+  { id: 'diner', emoji: '🌙' },
+  { id: 'dessert', emoji: '🍨' },
+] as const;
+const DAY_IDS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
+const MEAL_IDS = ['petit_dejeuner', 'dejeuner', 'gouter', 'diner'] as const;
 
 const AGE_COLORS: Record<number, string> = {
-  6: '#3c6931', 7: '#42A5F5', 8: '#FF9800', 9: '#E91E63',
-  10: '#9C27B0', 11: '#00897B', 12: '#D32F2F',
+  6:  '#6B9E78', // sage green
+  7:  '#7BA7BC', // slate blue
+  8:  '#C4856A', // warm terracotta
+  9:  '#9B7BB5', // dusty lavender
+  10: '#5B98A8', // teal
+  11: '#B07B9E', // dusty mauve
+  12: '#7A9E7E', // muted sage
+  13: '#C48A5A', // warm sienna
+  14: '#6B8BB5', // periwinkle
+  15: '#8BA860', // olive green
+  16: '#A07BAF', // soft violet
+  17: '#5B8E9E', // ocean blue
+  18: '#B08860', // warm camel
 };
 
 export function NutritionPage() {
   const { t } = useTranslation();
-  const { isFavorite, toggleFavorite, favorites, mealPlan, setMealSlot, clearMealPlan, shoppingChecked, toggleShoppingItem, clearShoppingChecked } = useBaby();
+  const { isFavorite, toggleFavorite, favorites, mealPlan, setMealSlot, clearMealPlan, shoppingChecked, toggleShoppingItem, clearShoppingChecked, aiRecipes, removeAiRecipe } = useBaby();
   const navigate = useNavigate();
   const [view, setView] = useState<NutritionView>('recipes');
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,78 +98,136 @@ export function NutritionPage() {
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [pickerSlot, setPickerSlot] = useState<string | null>(null);
-  const [planDay, setPlanDay] = useState(DAYS[0]);
+  const [planDay, setPlanDay] = useState<typeof DAY_IDS[number]>(DAY_IDS[0]);
+
+  // Merge AI + static recipes dans la grille (AI d'abord — plus frais).
+  const allRecipes: DisplayRecipe[] = useMemo(() => {
+    const aiDisplay = aiRecipes.map(aiToDisplay);
+    const staticDisplay = recipes.map(staticToDisplay);
+    return [...aiDisplay, ...staticDisplay];
+  }, [aiRecipes]);
+
+  // Lookup unifié pour planner et shopping.
+  const findRecipeForMealPlan = (id: number): DisplayRecipe | null => {
+    const ai = aiRecipes.find(a => a.id === id);
+    if (ai) return aiToDisplay(ai);
+    const s = recipes.find(r => r.id === id);
+    if (s) return staticToDisplay(s);
+    return null;
+  };
 
   // Filtered recipes
   const filteredRecipes = useMemo(() => {
-    let result = recipes;
+    let result = allRecipes;
     if (filterAge) result = result.filter(r => r.age === filterAge);
     if (filterCategory) result = result.filter(r => r.category === filterCategory);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(r => r.title.toLowerCase().includes(q) || r.ingredients.some(i => i.name.toLowerCase().includes(q)));
+      result = result.filter(r => {
+        if (r.title.toLowerCase().includes(q)) return true;
+        if (!r.isAi) {
+          const staticR = recipes.find(x => x.id === r.id);
+          if (staticR?.ingredients.some(i => tl(i.name).toLowerCase().includes(q))) return true;
+        } else {
+          const aiR = aiRecipes.find(x => x.id === r.id);
+          if (aiR?.ingredients.some(i => i.name.toLowerCase().includes(q))) return true;
+        }
+        return false;
+      });
     }
     return result;
-  }, [filterAge, filterCategory, searchQuery]);
+  }, [allRecipes, filterAge, filterCategory, searchQuery, aiRecipes]);
 
-  const favoriteRecipes = recipes.filter(r => favorites.includes(r.id));
+  const favoriteRecipes = useMemo(() => {
+    const staticFavs = recipes.filter(r => favorites.includes(r.id)).map(staticToDisplay);
+    const aiFavs = aiRecipes.filter(a => favorites.includes(a.id)).map(aiToDisplay);
+    return [...aiFavs, ...staticFavs];
+  }, [favorites, aiRecipes]);
 
-  // Shopping list generation
+  // Shopping list generation (statique + AI)
   const shoppingList = useMemo(() => {
     const ingredientMap = new Map<string, { qty: string; emoji: string; count: number }>();
     Object.values(mealPlan).forEach(recipeId => {
       if (recipeId === undefined) return;
-      const recipe = recipes.find(r => r.id === recipeId);
-      if (!recipe) return;
-      recipe.ingredients.forEach(ing => {
-        const existing = ingredientMap.get(ing.name);
-        if (existing) {
-          existing.count += 1;
-        } else {
-          ingredientMap.set(ing.name, { qty: ing.qty, emoji: ing.emoji, count: 1 });
-        }
-      });
+      const staticR = recipes.find(r => r.id === recipeId);
+      if (staticR) {
+        staticR.ingredients.forEach(ing => {
+          const localName = tl(ing.name);
+          const existing = ingredientMap.get(localName);
+          if (existing) existing.count += 1;
+          else ingredientMap.set(localName, { qty: ing.qty, emoji: ing.emoji, count: 1 });
+        });
+        return;
+      }
+      const aiR = aiRecipes.find(r => r.id === recipeId);
+      if (aiR) {
+        aiR.ingredients.forEach(ing => {
+          const existing = ingredientMap.get(ing.name);
+          if (existing) existing.count += 1;
+          else ingredientMap.set(ing.name, { qty: ing.qty, emoji: '✨', count: 1 });
+        });
+      }
     });
     return Array.from(ingredientMap.entries()).map(([name, data]) => ({
       name,
       qty: data.count > 1 ? `${data.qty} x${data.count}` : data.qty,
       emoji: data.emoji,
     }));
-  }, [mealPlan]);
+  }, [mealPlan, aiRecipes]);
 
-  const RecipeCard = ({ recipe }: { recipe: typeof recipes[0] }) => (
-    <button
-      onClick={() => pickerSlot ? selectRecipeForSlot(recipe.id) : navigate(`/recipe/${recipe.id}`)}
-      className="bg-ivory-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all active:scale-[0.98] text-left w-full"
-    >
-      <div
-        className="w-full aspect-[4/3] flex items-center justify-center text-5xl"
-        style={{ background: `linear-gradient(135deg, ${AGE_COLORS[recipe.age]}15, ${AGE_COLORS[recipe.age]}08)` }}
-      >
-        {recipe.emoji}
-      </div>
-      <div className="p-3">
-        <p className="font-heading font-bold text-sm text-bark-800 leading-tight line-clamp-2">{recipe.title}</p>
-        <div className="flex items-center gap-2 mt-1.5 text-xs text-bark-500">
-          <span className="flex items-center gap-0.5"><Clock className="w-3 h-3" />{recipe.time}min</span>
-          <span className="flex items-center gap-0.5"><Flame className="w-3 h-3" />{recipe.kcal}kcal</span>
-        </div>
-        <div className="flex items-center gap-1.5 mt-1.5">
-          <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold text-white" style={{ backgroundColor: AGE_COLORS[recipe.age] }}>{recipe.age}m</span>
-          {recipe.iron && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-terra-50 text-terra-500 font-medium">Fer</span>}
-          {recipe.protein && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-500 font-medium">Protéines</span>}
-        </div>
-      </div>
-      {!pickerSlot && (
-        <button
-          onClick={e => { e.stopPropagation(); toggleFavorite(recipe.id); }}
-          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
+  const RecipeCard = ({ recipe }: { recipe: DisplayRecipe }) => {
+    const activate = () => {
+      if (pickerSlot) { selectRecipeForSlot(recipe.id); return; }
+      if (recipe.isAi) return; // pas de page détail pour AI — navigation désactivée
+      navigate(`/recipe/${recipe.id}`);
+    };
+    return (
+      <div className="relative bg-ivory-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all active:scale-[0.98] cursor-pointer">
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={activate}
+          onKeyDown={e => e.key === 'Enter' && activate()}
+          className="text-left w-full"
         >
-          <Heart className={`w-4 h-4 ${isFavorite(recipe.id) ? 'fill-red-400 text-red-400' : 'text-bark-400'}`} />
-        </button>
-      )}
-    </button>
-  );
+          <div
+            className="w-full aspect-[4/3] flex items-center justify-center text-5xl"
+            style={{ background: `linear-gradient(135deg, ${AGE_COLORS[recipe.age] ?? '#888'}15, ${AGE_COLORS[recipe.age] ?? '#888'}08)` }}
+          >
+            {recipe.emoji}
+          </div>
+          <div className="p-3">
+            <p className="font-heading font-bold text-sm text-bark-800 leading-tight line-clamp-2">{recipe.title}</p>
+            <div className="flex items-center gap-2 mt-1.5 text-xs text-bark-500">
+              <span className="flex items-center gap-0.5"><Clock className="w-3 h-3" />{recipe.time}min</span>
+              {typeof recipe.kcal === 'number' && (
+                <span className="flex items-center gap-0.5"><Flame className="w-3 h-3" />{recipe.kcal}kcal</span>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 mt-1.5">
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold text-white" style={{ backgroundColor: AGE_COLORS[recipe.age] ?? '#888' }}>{recipe.age}m</span>
+              {recipe.iron && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-terra-50 text-terra-500 font-medium">{t('nutrition.badge_iron')}</span>}
+              {recipe.protein && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-500 font-medium">{t('nutrition.badge_protein')}</span>}
+              {recipe.isAi && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold flex items-center gap-0.5">
+                  <Sparkles className="w-2.5 h-2.5" /> {t('nutrition.badge_ai')}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        {!pickerSlot && (
+          <button
+            aria-label={isFavorite(recipe.id) ? t('nutrition.remove_favorite') : t('nutrition.add_favorite')}
+            onClick={e => { e.stopPropagation(); toggleFavorite(recipe.id); }}
+            className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
+          >
+            <Heart className={`w-4 h-4 ${isFavorite(recipe.id) ? 'fill-red-400 text-red-400' : 'text-bark-400'}`} />
+          </button>
+        )}
+      </div>
+    );
+  };
 
   const selectRecipeForSlot = (recipeId: number) => {
     if (pickerSlot) {
@@ -140,11 +258,11 @@ export function NutritionPage() {
       {/* Sub-navigation glass */}
       <div className="flex gap-2 mb-5 p-1.5 glass-card rounded-2xl overflow-x-auto no-scrollbar">
         {([
-          { id: 'recipes' as const, label: 'Recettes', icon: Search },
-          { id: 'foods' as const, label: 'Aliments', icon: Apple },
-          { id: 'favorites' as const, label: 'Favoris', icon: Heart },
-          { id: 'planner' as const, label: 'Menu', icon: CalendarDays },
-          { id: 'shopping' as const, label: 'Courses', icon: ShoppingCart },
+          { id: 'recipes' as const, labelKey: 'nutrition.tabs.recipes', icon: Search },
+          { id: 'foods' as const, labelKey: 'nutrition.tabs.foods', icon: Apple },
+          { id: 'favorites' as const, labelKey: 'nutrition.tabs.favorites', icon: Heart },
+          { id: 'planner' as const, labelKey: 'nutrition.tabs.planner', icon: CalendarDays },
+          { id: 'shopping' as const, labelKey: 'nutrition.tabs.shopping', icon: ShoppingCart },
         ]).map(tab => {
           const Icon = tab.icon;
           return (
@@ -155,7 +273,7 @@ export function NutritionPage() {
                 view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'
               }`}
             >
-              <Icon className="w-3.5 h-3.5" /> {tab.label}
+              <Icon className="w-3.5 h-3.5" /> {t(tab.labelKey)}
             </button>
           );
         })}
@@ -174,7 +292,7 @@ export function NutritionPage() {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Rechercher une recette..."
+              placeholder={t('nutrition.search_placeholder')}
               className="w-full pl-10 pr-12 py-3 rounded-full bg-ivory-50 text-bark-800 focus:outline-none focus:ring-2 focus:ring-forest-300"
             />
             <button onClick={() => setShowFilters(!showFilters)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center">
@@ -186,7 +304,7 @@ export function NutritionPage() {
           {showFilters && (
             <div className="mb-4 bg-ivory-50 rounded-2xl p-4 space-y-3">
               <div>
-                <p className="text-xs font-semibold text-bark-600 mb-2">Âge</p>
+                <p className="text-xs font-semibold text-bark-600 mb-2">{t('nutrition.filter_age')}</p>
                 <div className="flex gap-2 flex-wrap">
                   {AGES.map(age => (
                     <button key={age} onClick={() => setFilterAge(filterAge === age ? null : age)}
@@ -198,12 +316,12 @@ export function NutritionPage() {
                 </div>
               </div>
               <div>
-                <p className="text-xs font-semibold text-bark-600 mb-2">Type de repas</p>
+                <p className="text-xs font-semibold text-bark-600 mb-2">{t('nutrition.filter_meal_type')}</p>
                 <div className="flex gap-2">
-                  {CATEGORIES.map(cat => (
+                  {CATEGORY_IDS.map(cat => (
                     <button key={cat.id} onClick={() => setFilterCategory(filterCategory === cat.id ? null : cat.id)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${filterCategory === cat.id ? 'bg-forest-600 text-white' : 'bg-ivory-100 text-bark-500'}`}>
-                      {cat.emoji} {cat.label}
+                      {cat.emoji} {t(`nutrition.categories.${cat.id}`)}
                     </button>
                   ))}
                 </div>
@@ -220,26 +338,67 @@ export function NutritionPage() {
             ))}
           </div>
           {filteredRecipes.length === 0 && (
-            <p className="text-center text-bark-500 py-10">Aucune recette trouvée</p>
+            <p className="text-center text-bark-500 py-10">{t('nutrition.no_recipes')}</p>
           )}
+
+          {!pickerSlot && <AIRecipeGenerator />}
         </div>
       )}
 
       {/* FAVORITES VIEW */}
       {view === 'favorites' && !pickerSlot && (
-        <div>
-          {favoriteRecipes.length === 0 ? (
+        <div className="space-y-6">
+          {favoriteRecipes.length === 0 && aiRecipes.length === 0 ? (
             <div className="text-center py-16">
               <Heart className="w-12 h-12 text-ivory-400 mx-auto mb-3" />
-              <p className="text-bark-500 font-medium">Aucun favori pour le moment</p>
-              <p className="text-sm text-bark-400 mt-1">Appuyez sur le coeur pour sauvegarder vos recettes préférées.</p>
+              <p className="text-bark-500 font-medium">{t('nutrition.no_favorites')}</p>
+              <p className="text-sm text-bark-400 mt-1">{t('nutrition.no_favorites_hint')}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {favoriteRecipes.map(r => (
-                <div key={r.id} className="relative"><RecipeCard recipe={r} /></div>
-              ))}
-            </div>
+            <>
+              {favoriteRecipes.length > 0 && (
+                <div className="grid grid-cols-2 gap-3">
+                  {favoriteRecipes.map(r => (
+                    <div key={r.id} className="relative"><RecipeCard recipe={r} /></div>
+                  ))}
+                </div>
+              )}
+
+              {/* Toutes les recettes IA sauvegardées (même non-favorites) */}
+              {aiRecipes.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="w-4 h-4 text-amber-500" />
+                    <p className="text-xs font-semibold text-bark-600 uppercase tracking-[0.15em]">{t('nutrition.all_ai_recipes')}</p>
+                  </div>
+                  <div className="space-y-3">
+                    {aiRecipes.map(r => (
+                      <div key={r.id} className="bg-ivory-50 rounded-2xl p-4 flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center flex-shrink-0 text-xl">
+                          {r.emoji || '✨'}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-heading font-bold text-sm text-bark-800 leading-tight">{r.title}</p>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-bark-500">
+                            <span className="flex items-center gap-0.5"><Clock className="w-3 h-3" />{r.prepMinutes}min</span>
+                            <span>{r.texture}</span>
+                            <span>{r.ageRange}</span>
+                          </div>
+                          <p className="text-xs text-bark-400 mt-1 line-clamp-2">{r.nutritionNotes}</p>
+                        </div>
+                        <button
+                          aria-label={t('nutrition.delete_aria')}
+                          onClick={() => removeAiRecipe(r.id)}
+                          className="w-7 h-7 rounded-full bg-ivory-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-bark-400" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -249,29 +408,37 @@ export function NutritionPage() {
         <div>
           {/* Day selector */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar mb-4 pb-1">
-            {DAYS.map(day => (
-              <button key={day} onClick={() => setPlanDay(day)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${planDay === day ? 'bg-bark-800 text-white' : 'bg-ivory-50 text-bark-500'}`}>
-                {day.slice(0, 3)}
-              </button>
-            ))}
+            {DAY_IDS.map(day => {
+              const dayLabel = t(`journal.days.${day}`);
+              return (
+                <button key={day} onClick={() => setPlanDay(day)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${planDay === day ? 'bg-bark-800 text-white' : 'bg-ivory-50 text-bark-500'}`}>
+                  {dayLabel.slice(0, 3)}
+                </button>
+              );
+            })}
           </div>
 
           {/* Meal slots */}
           <div className="space-y-3">
-            {MEALS.map(meal => {
-              const key = `${planDay}_${meal.id}`;
+            {MEAL_IDS.map(mealId => {
+              const key = `${planDay}_${mealId}`;
               const recipeId = mealPlan[key];
-              const recipe = recipeId !== undefined ? recipes.find(r => r.id === recipeId) : null;
+              const recipe = recipeId !== undefined ? findRecipeForMealPlan(recipeId) : null;
               return (
-                <div key={meal.id} className="bg-ivory-50 rounded-2xl p-4">
-                  <p className="text-xs font-semibold text-bark-600 mb-2">{meal.label}</p>
+                <div key={mealId} className="bg-ivory-50 rounded-2xl p-4">
+                  <p className="text-xs font-semibold text-bark-600 mb-2">{t(`nutrition.meals.${mealId}`)}</p>
                   {recipe ? (
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{recipe.emoji}</span>
                       <div className="flex-1">
-                        <p className="font-heading font-bold text-sm text-bark-800">{recipe.title}</p>
-                        <p className="text-xs text-bark-500">{recipe.time}min &middot; {recipe.kcal}kcal</p>
+                        <p className="font-heading font-bold text-sm text-bark-800 flex items-center gap-1.5">
+                          {recipe.title}
+                          {recipe.isAi && <Sparkles className="w-3 h-3 text-amber-500" />}
+                        </p>
+                        <p className="text-xs text-bark-500">
+                          {recipe.time}min{typeof recipe.kcal === 'number' ? ` · ${recipe.kcal}kcal` : ''}
+                        </p>
                       </div>
                       <button onClick={() => setMealSlot(key, undefined)} className="w-8 h-8 rounded-full bg-ivory-100 flex items-center justify-center">
                         <Trash2 className="w-4 h-4 text-bark-400" />
@@ -280,7 +447,7 @@ export function NutritionPage() {
                   ) : (
                     <button onClick={() => { setPickerSlot(key); setView('recipes'); }}
                       className="w-full py-3 rounded-xl border-2 border-dashed border-ivory-400 text-ivory-500 text-sm font-medium flex items-center justify-center gap-1">
-                      <Plus className="w-4 h-4" /> Choisir une recette
+                      <Plus className="w-4 h-4" /> {t('nutrition.choose_recipe')}
                     </button>
                   )}
                 </div>
@@ -290,9 +457,9 @@ export function NutritionPage() {
 
           <div className="flex gap-3 mt-5">
             <button onClick={() => { setView('shopping'); }} className="flex-1 py-3 rounded-full bg-forest-600 text-white font-bold flex items-center justify-center gap-2">
-              <ShoppingCart className="w-4 h-4" /> Liste de courses
+              <ShoppingCart className="w-4 h-4" /> {t('nutrition.shopping_list')}
             </button>
-            <button onClick={clearMealPlan} className="px-4 py-3 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm">Effacer</button>
+            <button onClick={clearMealPlan} className="px-4 py-3 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm">{t('nutrition.clear')}</button>
           </div>
         </div>
       )}
@@ -303,8 +470,8 @@ export function NutritionPage() {
           {shoppingList.length === 0 ? (
             <div className="text-center py-16">
               <ShoppingCart className="w-12 h-12 text-ivory-400 mx-auto mb-3" />
-              <p className="text-bark-500 font-medium">Liste vide</p>
-              <p className="text-sm text-bark-400 mt-1">Planifiez vos repas pour générer la liste de courses.</p>
+              <p className="text-bark-500 font-medium">{t('nutrition.empty_shopping')}</p>
+              <p className="text-sm text-bark-400 mt-1">{t('nutrition.empty_shopping_hint')}</p>
             </div>
           ) : (
             <>
@@ -327,7 +494,7 @@ export function NutritionPage() {
                 ))}
               </div>
               <div className="flex gap-3 mt-5">
-                <button onClick={clearShoppingChecked} className="flex-1 py-3 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm">Tout décocher</button>
+                <button onClick={clearShoppingChecked} className="flex-1 py-3 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm">{t('nutrition.uncheck_all')}</button>
               </div>
             </>
           )}
@@ -337,7 +504,7 @@ export function NutritionPage() {
       {/* Picker mode banner */}
       {pickerSlot && (
         <div className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-bark-800 text-white px-5 py-3 rounded-full shadow-xl flex items-center gap-3 z-40">
-          <span className="text-sm">Choisissez une recette</span>
+          <span className="text-sm">{t('nutrition.picker_prompt')}</span>
           <button onClick={() => setPickerSlot(null)} className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center"><X className="w-3 h-3" /></button>
         </div>
       )}

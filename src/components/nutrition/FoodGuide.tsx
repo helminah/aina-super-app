@@ -5,6 +5,8 @@ import { foodGuide, foodAgeGroups, categoryLabels, type FoodItem, type FoodCateg
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { COUNTRY_BY_CODE } from '@/data/countries';
+import { getLocalizedField } from '@/lib/i18n-data';
+import { useTranslation } from 'react-i18next';
 import { ConservationGuide } from './ConservationGuide';
 import { AIRecipeGenerator } from './AIRecipeGenerator';
 
@@ -15,6 +17,7 @@ import { AIRecipeGenerator } from './AIRecipeGenerator';
  */
 export function FoodGuide() {
   const { profile } = useBaby();
+  const { t } = useTranslation(); // triggers re-render on language change so getLocalizedField() refreshes
   const ageMonths = profile ? getAgeInMonths(profile.birthDate) : 6;
 
   // Groupe par défaut = celui qui correspond à l'âge du bébé
@@ -57,13 +60,13 @@ export function FoodGuide() {
           const isActive = g.label === selected.label;
           return (
             <button
-              key={g.label}
+              key={g.label.fr}
               onClick={() => setSelected(g)}
               className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                 isActive ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'bg-ivory-100 text-bark-500'
               }`}
             >
-              {g.emoji} {g.label}
+              {g.emoji} {getLocalizedField(g.label)}
             </button>
           );
         })}
@@ -74,9 +77,9 @@ export function FoodGuide() {
         <div className="flex items-start gap-3">
           <div className="text-3xl">{selected.emoji}</div>
           <div className="flex-1">
-            <p className="text-[11px] uppercase tracking-[0.15em] text-amber-700 font-semibold">{selected.label}</p>
-            <p className="font-heading font-bold text-bark-800 mt-0.5">{selected.description}</p>
-            <p className="text-xs text-bark-500 mt-1">{foods.length} aliments introduits dans cette tranche</p>
+            <p className="text-[11px] uppercase tracking-[0.15em] text-amber-700 font-semibold">{getLocalizedField(selected.label)}</p>
+            <p className="font-heading font-bold text-bark-800 mt-0.5">{getLocalizedField(selected.description)}</p>
+            <p className="text-xs text-bark-500 mt-1">{t('nutrition.foods.foods_in_range', { count: foods.length })}</p>
           </div>
         </div>
       </div>
@@ -85,7 +88,7 @@ export function FoodGuide() {
       {[...byCategory.entries()].map(([cat, list]) => (
         <div key={cat}>
           <p className="text-[11px] uppercase tracking-[0.15em] text-bark-400 font-semibold mb-2 px-1">
-            {categoryLabels[cat].emoji} {categoryLabels[cat].label} · {list.length}
+            {categoryLabels[cat].emoji} {getLocalizedField(categoryLabels[cat].label)} · {list.length}
           </p>
           <div className="grid grid-cols-2 gap-2">
             {list.map(f => (
@@ -96,17 +99,17 @@ export function FoodGuide() {
               >
                 <span className="text-3xl flex-shrink-0">{f.emoji}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-bark-800 truncate">{f.name}</p>
-                  <p className="text-[11px] text-bark-400 mt-0.5">dès {f.minMonths} mois</p>
+                  <p className="text-sm font-semibold text-bark-800 truncate">{getLocalizedField(f.name)}</p>
+                  <p className="text-[11px] text-bark-400 mt-0.5">{t('nutrition.foods.from_months', { months: f.minMonths })}</p>
                   <div className="flex gap-1 mt-1 flex-wrap">
                     {isNew(f.minMonths) && (
                       <span className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold">
-                        nouveau
+                        {t('nutrition.foods.new_badge')}
                       </span>
                     )}
                     {f.isAllergen && (
                       <span className="inline-flex items-center gap-0.5 text-[10px] text-red-600 font-medium">
-                        <AlertCircle className="w-3 h-3" /> allergène
+                        <AlertCircle className="w-3 h-3" /> {t('nutrition.foods.allergen')}
                       </span>
                     )}
                   </div>
@@ -140,8 +143,8 @@ export function FoodGuide() {
                   <div className="flex items-center gap-3">
                     <span className="text-5xl">{detail.emoji}</span>
                     <div>
-                      <h2 className="font-heading text-xl font-bold text-bark-800">{detail.name}</h2>
-                      <p className="text-xs text-amber-600 font-semibold mt-0.5">dès {detail.minMonths} mois</p>
+                      <h2 className="font-heading text-xl font-bold text-bark-800">{getLocalizedField(detail.name)}</h2>
+                      <p className="text-xs text-amber-600 font-semibold mt-0.5">{t('nutrition.foods.from_months', { months: detail.minMonths })}</p>
                     </div>
                   </div>
                   <button
@@ -154,26 +157,26 @@ export function FoodGuide() {
 
                 {/* Texture */}
                 <div className="bg-ivory-100 rounded-2xl p-4 mb-3">
-                  <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold">Texture</p>
-                  <p className="text-sm text-bark-700 mt-1">{detail.texture}</p>
+                  <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold">{t('nutrition.foods.detail_texture')}</p>
+                  <p className="text-sm text-bark-700 mt-1">{getLocalizedField(detail.texture)}</p>
                 </div>
 
                 {/* Tips */}
                 <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 mb-3">
-                  <p className="text-[11px] uppercase tracking-[0.15em] text-amber-700 font-semibold">Conseil</p>
-                  <p className="text-sm text-bark-700 mt-1 leading-relaxed">{detail.tips}</p>
+                  <p className="text-[11px] uppercase tracking-[0.15em] text-amber-700 font-semibold">{t('nutrition.foods.detail_tips')}</p>
+                  <p className="text-sm text-bark-700 mt-1 leading-relaxed">{getLocalizedField(detail.tips)}</p>
                 </div>
 
                 {/* Local context */}
                 {detail.localContext && (
                   <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 mb-3">
                     <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">
-                      Contexte local
+                      {t('nutrition.foods.detail_local')}
                     </p>
                     <p className="text-sm text-bark-700 mt-1 leading-relaxed">
                       {isAfrica && detail.localContext.africa
-                        ? detail.localContext.africa
-                        : detail.localContext.france ?? detail.localContext.africa}
+                        ? getLocalizedField(detail.localContext.africa)
+                        : getLocalizedField(detail.localContext.france ?? detail.localContext.africa!)}
                     </p>
                   </div>
                 )}
@@ -183,9 +186,9 @@ export function FoodGuide() {
                   <div className="bg-red-50 border border-red-100 rounded-2xl p-4 flex gap-3">
                     <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-semibold text-red-700">Allergène</p>
+                      <p className="text-sm font-semibold text-red-700">{t('nutrition.foods.allergen_title')}</p>
                       {detail.allergenInfo && (
-                        <p className="text-xs text-red-600 mt-1 leading-relaxed">{detail.allergenInfo}</p>
+                        <p className="text-xs text-red-600 mt-1 leading-relaxed">{getLocalizedField(detail.allergenInfo)}</p>
                       )}
                     </div>
                   </div>
@@ -195,8 +198,7 @@ export function FoodGuide() {
                 <div className="mt-5 pt-5 border-t border-ivory-300 flex gap-3">
                   <Info className="w-4 h-4 text-bark-400 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-bark-500 leading-relaxed">
-                    Conservez les purées maison 48h max au frigo (contenant hermétique) ou 1 mois au congélateur.
-                    Réchauffez uniquement la portion à consommer, jamais deux fois.
+                    {t('nutrition.foods.detail_conservation_note')}
                   </p>
                 </div>
               </div>

@@ -3,15 +3,15 @@ import { useBaby } from '@/contexts/BabyContext';
 import { vaccines as allVaccines } from '@/data/vaccines';
 import { milestones } from '@/data/milestones';
 import { getAgeText, getAgeInMonths } from '@/lib/age-utils';
+import { getLocalizedField, translateAgeRange } from '@/lib/i18n-data';
+import { COUNTRY_BY_CODE } from '@/data/countries';
 import { ArrowLeft, Printer } from 'lucide-react';
-
-const countryLabels: Record<string, string> = {
-  senegal: 'Sénégal',
-  france: 'France',
-  madagascar: 'Madagascar',
-};
+import { useTranslation } from 'react-i18next';
 
 export function HealthReportPage() {
+  const { t, i18n } = useTranslation();
+  const dateLocaleMap: Record<string, string> = { fr: 'fr-FR', en: 'en-US', mg: 'mg-MG', wo: 'fr-SN' };
+  const dateLocale = dateLocaleMap[i18n.language.split('-')[0]] || 'fr-FR';
   const navigate = useNavigate();
   const {
     profile,
@@ -55,13 +55,13 @@ export function HealthReportPage() {
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-bark-600 font-semibold text-sm"
         >
-          <ArrowLeft className="w-4 h-4" /> Retour
+          <ArrowLeft className="w-4 h-4" /> {t('common.back')}
         </button>
         <button
           onClick={() => window.print()}
           className="flex items-center gap-2 px-4 py-2.5 rounded-full btn-gradient text-white font-semibold text-sm"
         >
-          <Printer className="w-4 h-4" /> Imprimer
+          <Printer className="w-4 h-4" /> {t('health_report.print')}
         </button>
       </div>
 
@@ -69,38 +69,38 @@ export function HealthReportPage() {
       <div className="max-w-2xl mx-auto px-8 py-10 print:px-6 print:py-8">
         {/* Header */}
         <div className="border-b-2 border-black pb-6 mb-8">
-          <h1 className="text-3xl font-bold text-black tracking-tight">Carnet de Santé</h1>
-          <p className="text-gray-500 text-sm mt-1">Généré le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+          <h1 className="text-3xl font-bold text-black tracking-tight">{t('health_report.record_title')}</h1>
+          <p className="text-gray-500 text-sm mt-1">{t('health_report.generated_on', { date: new Date().toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }) })}</p>
         </div>
 
         {/* Profile */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-black mb-4 uppercase tracking-wide text-sm border-b border-gray-200 pb-2">
-            Informations du bébé
+            {t('health_report.section_baby_info')}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Prénom</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{t('health_report.field_first_name')}</p>
               <p className="font-semibold text-black text-lg">{profile.name}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Âge</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{t('health_report.field_age')}</p>
               <p className="font-semibold text-black text-lg">{getAgeText(profile.birthDate)}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Date de naissance</p>
-              <p className="font-semibold text-black">{new Date(profile.birthDate).toLocaleDateString('fr-FR')}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{t('health_report.field_birth_date')}</p>
+              <p className="font-semibold text-black">{new Date(profile.birthDate).toLocaleDateString(dateLocale)}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Sexe</p>
-              <p className="font-semibold text-black">{profile.sex === 'boy' ? 'Garçon' : 'Fille'}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{t('health_report.field_sex')}</p>
+              <p className="font-semibold text-black">{profile.sex === 'boy' ? t('common.boy') : t('common.girl')}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Pays</p>
-              <p className="font-semibold text-black">{countryLabels[profile.country] || profile.country}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{t('health_report.field_country')}</p>
+              <p className="font-semibold text-black">{COUNTRY_BY_CODE[profile.country]?.label || profile.country}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Poids naissance</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{t('health_report.field_birth_weight')}</p>
               <p className="font-semibold text-black">{profile.birthWeight} kg</p>
             </div>
           </div>
@@ -109,34 +109,34 @@ export function HealthReportPage() {
         {/* Latest measurements */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-black mb-4 uppercase tracking-wide text-sm border-b border-gray-200 pb-2">
-            Dernières mesures
+            {t('health_report.section_latest_measures')}
           </h2>
           <div className="grid grid-cols-3 gap-4">
             <div className="border border-gray-200 rounded-xl p-4 text-center">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Poids</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">{t('health_report.measure_weight')}</p>
               <p className="text-2xl font-bold text-black">
                 {latestWeight ? `${latestWeight.weight} kg` : `${profile.birthWeight} kg`}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {latestWeight ? new Date(latestWeight.date).toLocaleDateString('fr-FR') : 'naissance'}
+                {latestWeight ? new Date(latestWeight.date).toLocaleDateString(dateLocale) : t('health_report.birth_short')}
               </p>
             </div>
             <div className="border border-gray-200 rounded-xl p-4 text-center">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Taille</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">{t('health_report.measure_height')}</p>
               <p className="text-2xl font-bold text-black">
                 {latestHeight ? `${latestHeight.height} cm` : `${profile.birthHeight} cm`}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {latestHeight ? new Date(latestHeight.date).toLocaleDateString('fr-FR') : 'naissance'}
+                {latestHeight ? new Date(latestHeight.date).toLocaleDateString(dateLocale) : t('health_report.birth_short')}
               </p>
             </div>
             <div className="border border-gray-200 rounded-xl p-4 text-center">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Périmètre crânien</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">{t('health_report.measure_hc')}</p>
               <p className="text-2xl font-bold text-black">
                 {latestHc ? `${latestHc.circumference} cm` : '—'}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {latestHc ? new Date(latestHc.date).toLocaleDateString('fr-FR') : 'non renseigné'}
+                {latestHc ? new Date(latestHc.date).toLocaleDateString(dateLocale) : t('health_report.not_set')}
               </p>
             </div>
           </div>
@@ -145,32 +145,32 @@ export function HealthReportPage() {
         {/* Vaccines */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-black mb-4 uppercase tracking-wide text-sm border-b border-gray-200 pb-2">
-            Vaccins
+            {t('health_report.section_vaccines')}
           </h2>
           <div className="grid grid-cols-3 gap-3 mb-4 text-center">
             <div className="bg-gray-50 rounded-xl p-3">
               <p className="text-2xl font-bold text-black">{doneVaccines.length}</p>
-              <p className="text-xs text-gray-500">Effectués</p>
+              <p className="text-xs text-gray-500">{t('health_report.vaccines_done')}</p>
             </div>
             <div className="bg-gray-50 rounded-xl p-3">
               <p className="text-2xl font-bold text-black">{overdueVaccines.length}</p>
-              <p className="text-xs text-gray-500">En retard</p>
+              <p className="text-xs text-gray-500">{t('health_report.vaccines_overdue')}</p>
             </div>
             <div className="bg-gray-50 rounded-xl p-3">
               <p className="text-2xl font-bold text-black">{upcomingVaccines.length}</p>
-              <p className="text-xs text-gray-500">À venir</p>
+              <p className="text-xs text-gray-500">{t('health_report.vaccines_upcoming')}</p>
             </div>
           </div>
 
           {overdueVaccines.length > 0 && (
             <div className="mb-4">
-              <p className="text-sm font-semibold text-black mb-2">Vaccins en retard :</p>
+              <p className="text-sm font-semibold text-black mb-2">{t('health_report.overdue_heading')}</p>
               <div className="space-y-1">
                 {overdueVaccines.map(v => (
                   <div key={v.id} className="flex items-center gap-3 py-1.5 border-b border-gray-100">
                     <span className="w-2 h-2 rounded-full bg-black flex-shrink-0" />
-                    <span className="text-sm text-black font-medium">{v.name}</span>
-                    <span className="text-xs text-gray-400 ml-auto">{v.ageLabel}</span>
+                    <span className="text-sm text-black font-medium">{getLocalizedField(v.name)}</span>
+                    <span className="text-xs text-gray-400 ml-auto">{getLocalizedField(v.ageLabel)}</span>
                   </div>
                 ))}
               </div>
@@ -179,13 +179,13 @@ export function HealthReportPage() {
 
           {doneVaccines.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-black mb-2">Vaccins effectués :</p>
+              <p className="text-sm font-semibold text-black mb-2">{t('health_report.done_heading')}</p>
               <div className="space-y-1">
                 {doneVaccines.map(v => (
                   <div key={v.id} className="flex items-center gap-3 py-1.5 border-b border-gray-100">
                     <span className="text-sm">✓</span>
-                    <span className="text-sm text-black">{v.name}</span>
-                    <span className="text-xs text-gray-400 ml-auto">{v.ageLabel}</span>
+                    <span className="text-sm text-black">{getLocalizedField(v.name)}</span>
+                    <span className="text-xs text-gray-400 ml-auto">{getLocalizedField(v.ageLabel)}</span>
                   </div>
                 ))}
               </div>
@@ -196,17 +196,17 @@ export function HealthReportPage() {
         {/* Milestones */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-black mb-4 uppercase tracking-wide text-sm border-b border-gray-200 pb-2">
-            Développement — {currentAgeRange}
+            {t('health_report.section_development', { range: translateAgeRange(currentAgeRange) })}
           </h2>
           <div className="space-y-2">
             {currentMilestones.map(m => (
               <div key={m.id} className="flex items-start gap-3 py-1.5">
                 <span className="text-sm mt-0.5">{m.domainEmoji}</span>
-                <span className="text-sm text-black">{m.description}</span>
+                <span className="text-sm text-black">{getLocalizedField(m.description)}</span>
               </div>
             ))}
             {currentMilestones.length === 0 && (
-              <p className="text-sm text-gray-500">Aucun milestone disponible pour cet âge.</p>
+              <p className="text-sm text-gray-500">{t('health_report.no_milestones')}</p>
             )}
           </div>
         </section>
@@ -214,7 +214,7 @@ export function HealthReportPage() {
         {/* Footer */}
         <div className="border-t border-gray-200 pt-6 text-center">
           <p className="text-xs text-gray-400">
-            Carnet généré par AINA — Suivi pédiatrique par Dr Helminah Randriamananoro
+            {t('health_report.footer')}
           </p>
         </div>
       </div>

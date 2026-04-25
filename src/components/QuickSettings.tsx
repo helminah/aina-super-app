@@ -54,7 +54,7 @@ export function QuickSettings() {
             border: '1px solid rgba(255,255,255,0.35)',
             boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
           }}
-          aria-label="Language"
+          aria-label={t('profile.language')}
         >
           <span className="text-xl drop-shadow-sm">{currentLang.flag}</span>
         </button>
@@ -107,7 +107,7 @@ export function QuickSettings() {
             border: '1px solid rgba(255,255,255,0.35)',
             boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
           }}
-          aria-label="Theme"
+          aria-label={t('profile.theme')}
         >
           <ThemeIconEl className={`w-5 h-5 ${resolved === 'dark' ? 'text-white' : 'text-bark-700'} drop-shadow-sm`} />
         </button>

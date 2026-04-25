@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import type { ChildProfile, WeightEntry, HeightEntry, HeadCircEntry, VaccineRecord, DailyLogEntry, MilestoneRecord, ToothRecord, DoseRecord, Appointment, MealPlan } from '@/types/child';
+import type { ChildProfile, WeightEntry, HeightEntry, HeadCircEntry, VaccineRecord, DailyLogEntry, MilestoneRecord, ToothRecord, DoseRecord, Appointment, MealPlan, AiRecipeEntry } from '@/types/child';
 import { vaccines as allVaccines } from '@/data/vaccines';
 import { safeGet, safeSet } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
+import { getLocalizedField } from '@/lib/i18n-data';
 
 interface BabyContextType {
   // Multi-baby management
@@ -63,6 +64,13 @@ interface BabyContextType {
   shoppingChecked: string[];
   toggleShoppingItem: (item: string) => void;
   clearShoppingChecked: () => void;
+
+  aiRecipes: AiRecipeEntry[];
+  addAiRecipe: (r: Omit<AiRecipeEntry, 'id' | 'savedAt'>) => void;
+  removeAiRecipe: (id: number) => void;
+
+  loadBabyData: (id: string) => void;
+  reinitialize: () => void;
 
   checkVaccineReminders: () => { vaccineName: string; dueDate: Date; status: 'overdue' | 'soon' }[];
 }
@@ -143,6 +151,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   const [mealPlan, setMealPlan] = useState<MealPlan>(() => safeGet(bk(bid, 'mealplan'), {}));
   const [favorites, setFavorites] = useState<number[]>(() => safeGet(bk(bid, 'favorites'), []));
   const [shoppingChecked, setShoppingChecked] = useState<string[]>(() => safeGet(bk(bid, 'shopping-checked'), []));
+  const [aiRecipes, setAiRecipes] = useState<AiRecipeEntry[]>(() => safeGet(bk(bid, 'ai-recipes'), []));
 
   // Persist global state
   useEffect(() => { safeSet('aina-babies', babies); }, [babies]);
@@ -161,6 +170,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'mealplan'), mealPlan); }, [mealPlan, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'favorites'), favorites); }, [favorites, activeBabyId]);
   useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'shopping-checked'), shoppingChecked); }, [shoppingChecked, activeBabyId]);
+  useEffect(() => { if (activeBabyId) safeSet(bk(activeBabyId, 'ai-recipes'), aiRecipes); }, [aiRecipes, activeBabyId]);
 
   // Load baby data when switching
   const loadBabyData = useCallback((id: string) => {
@@ -176,6 +186,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
     setMealPlan(safeGet(bk(id, 'mealplan'), {}));
     setFavorites(safeGet(bk(id, 'favorites'), []));
     setShoppingChecked(safeGet(bk(id, 'shopping-checked'), []));
+    setAiRecipes(safeGet(bk(id, 'ai-recipes'), []));
   }, []);
 
   const switchBaby = (id: string) => {
@@ -186,9 +197,12 @@ export function BabyProvider({ children }: { children: ReactNode }) {
 
   const addBaby = (p: ChildProfile) => {
     setBabies(prev => {
-      // Prevent duplicates
       if (prev.some(b => b.id === p.id)) return prev;
-      return [...prev, p];
+      const next = [...prev, p];
+      // Persist synchronously before loadBabyData reads from localStorage.
+      // setBabies is async so seedWeight would find no baby without this.
+      safeSet('aina-babies', next);
+      return next;
     });
     setActiveBabyId(p.id);
     loadBabyData(p.id);
@@ -301,6 +315,20 @@ export function BabyProvider({ children }: { children: ReactNode }) {
   };
   const clearShoppingChecked = () => setShoppingChecked([]);
 
+  const addAiRecipe = (r: Omit<AiRecipeEntry, 'id' | 'savedAt'>) => {
+    const entry: AiRecipeEntry = { ...r, id: Date.now(), savedAt: new Date().toISOString() };
+    setAiRecipes(prev => [entry, ...prev]);
+  };
+  const removeAiRecipe = (id: number) => setAiRecipes(prev => prev.filter(r => r.id !== id));
+
+  const reinitialize = useCallback(() => {
+    const loadedBabies = safeGet<ChildProfile[]>('aina-babies', []);
+    const loadedActiveBabyId = safeGet<string | null>('aina-active-baby', null);
+    setBabies(loadedBabies);
+    setActiveBabyId(loadedActiveBabyId);
+    if (loadedActiveBabyId) loadBabyData(loadedActiveBabyId);
+  }, [loadBabyData]);
+
   const checkVaccineReminders = (): { vaccineName: string; dueDate: Date; status: 'overdue' | 'soon' }[] => {
     if (!profile) return [];
     const countryVaccines = allVaccines.filter(v => v.country.includes(profile.country));
@@ -314,8 +342,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
         const dueDate = new Date(birthDate);
         dueDate.setMonth(dueDate.getMonth() + v.ageMonths);
         const diff = dueDate.getTime() - now.getTime();
-        if (diff < 0) return { vaccineName: v.name, dueDate, status: 'overdue' as const };
-        if (diff <= sevenDaysMs) return { vaccineName: v.name, dueDate, status: 'soon' as const };
+        if (diff < 0) return { vaccineName: getLocalizedField(v.name), dueDate, status: 'overdue' as const };
+        if (diff <= sevenDaysMs) return { vaccineName: getLocalizedField(v.name), dueDate, status: 'soon' as const };
         return null;
       })
       .filter((r): r is { vaccineName: string; dueDate: Date; status: 'overdue' | 'soon' } => r !== null);
@@ -337,6 +365,8 @@ export function BabyProvider({ children }: { children: ReactNode }) {
       mealPlan, setMealSlot, clearMealPlan,
       favorites, toggleFavorite, isFavorite,
       shoppingChecked, toggleShoppingItem, clearShoppingChecked,
+      aiRecipes, addAiRecipe, removeAiRecipe,
+      loadBabyData, reinitialize,
       checkVaccineReminders,
     }}>
       {children}

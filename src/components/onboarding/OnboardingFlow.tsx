@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { vaccines } from '@/data/vaccines';
-import { COUNTRIES, REGION_LABELS, REGION_ORDER } from '@/data/countries';
+import { COUNTRIES, REGION_ORDER } from '@/data/countries';
 import { getAgeInMonths } from '@/lib/age-utils';
+import { getLocalizedField } from '@/lib/i18n-data';
 import { generateId } from '@/lib/utils';
 import type { Country, Sex, ChildProfile } from '@/types/child';
 import { Baby, Calendar, Ruler, ShieldCheck, ArrowRight, ArrowLeft, Sparkles, Search, Check } from 'lucide-react';
@@ -16,6 +18,7 @@ const slideVariants = {
 };
 
 export function OnboardingFlow() {
+  const { t } = useTranslation();
   const { setProfile, toggleVaccine } = useBaby();
   const [step, setStep] = useState(1);
   const [dir, setDir] = useState(1);
@@ -73,13 +76,16 @@ export function OnboardingFlow() {
 
   const vaccineGroups = () => {
     const applicable = applicableVaccines();
-    const groups: { ageLabel: string; ageMonths: number; label: string; vaccineIds: string[] }[] = [];
+    const groups: { ageKey: string; ageMonths: number; label: string; vaccineIds: string[] }[] = [];
     const seen = new Set<string>();
     for (const v of applicable) {
-      if (!seen.has(v.ageLabel)) {
-        seen.add(v.ageLabel);
-        const groupLabel = v.ageMonths === 0 ? 'Vaccins de naissance' : `Vaccins de ${v.ageLabel}`;
-        groups.push({ ageLabel: v.ageLabel, ageMonths: v.ageMonths, label: groupLabel, vaccineIds: applicable.filter(vv => vv.ageLabel === v.ageLabel).map(vv => vv.id) });
+      const ageKey = v.ageLabel.fr;
+      if (!seen.has(ageKey)) {
+        seen.add(ageKey);
+        const groupLabel = v.ageMonths === 0
+          ? t('onboarding.birth_vaccines')
+          : t('onboarding.age_vaccines', { age: getLocalizedField(v.ageLabel) });
+        groups.push({ ageKey, ageMonths: v.ageMonths, label: groupLabel, vaccineIds: applicable.filter(vv => vv.ageLabel.fr === ageKey).map(vv => vv.id) });
       }
     }
     return groups;
@@ -114,7 +120,7 @@ export function OnboardingFlow() {
             </div>
           ))}
         </div>
-        <p className="text-xs text-bark-400 mt-2 font-body">Étape {step} sur {totalSteps}</p>
+        <p className="text-xs text-bark-400 mt-2 font-body">{t('onboarding.step_of', { current: step, total: totalSteps })}</p>
       </div>
 
       {/* Content */}
@@ -136,14 +142,14 @@ export function OnboardingFlow() {
                   <Baby className="w-8 h-8 text-forest-500" />
                 </div>
                 <div className="text-center">
-                  <h1 className="font-heading text-2xl font-bold text-bark-800">Bienvenue dans AINA</h1>
-                  <p className="text-bark-500 mt-2">Quel est le doux prénom de votre bébé ?</p>
+                  <h1 className="font-heading text-2xl font-bold text-bark-800">{t('onboarding.welcome_title')}</h1>
+                  <p className="text-bark-500 mt-2">{t('onboarding.welcome_subtitle')}</p>
                 </div>
                 <input
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder="Prénom de bébé"
+                  placeholder={t('onboarding.name_placeholder')}
                   className="w-full px-5 py-4 rounded-2xl bg-ivory-50 text-bark-800 font-medium text-lg placeholder:text-ivory-500 focus:outline-none focus:ring-2 focus:ring-forest-300 transition-all"
                   autoFocus
                 />
@@ -156,8 +162,8 @@ export function OnboardingFlow() {
                   <Calendar className="w-8 h-8 text-forest-500" />
                 </div>
                 <div className="text-center">
-                  <h1 className="font-heading text-2xl font-bold text-bark-800">Quand est-ce que {name} a pointé le bout de son nez ?</h1>
-                  <p className="text-bark-500 mt-2">Et est-ce un petit garçon ou une petite fille ?</p>
+                  <h1 className="font-heading text-2xl font-bold text-bark-800">{t('onboarding.birth_date_title', { name })}</h1>
+                  <p className="text-bark-500 mt-2">{t('onboarding.birth_date_subtitle')}</p>
                 </div>
                 <input
                   type="date"
@@ -167,10 +173,10 @@ export function OnboardingFlow() {
                   className="w-full px-5 py-4 rounded-2xl bg-ivory-50 text-bark-800 font-medium focus:outline-none focus:ring-2 focus:ring-forest-300"
                 />
                 <div className="flex gap-4">
-                  {([['boy', '\u{1F466}', 'Garçon'], ['girl', '\u{1F467}', 'Fille']] as const).map(([val, emoji, label]) => (
+                  {([['boy', '\u{1F466}', t('common.boy')], ['girl', '\u{1F467}', t('common.girl')]] as const).map(([val, emoji, label]) => (
                     <button
                       key={val}
-                      onClick={() => setSex(val)}
+                      onClick={() => setSex(val as Sex)}
                       className={`flex-1 py-4 rounded-2xl font-heading font-semibold text-lg transition-all ${
                         sex === val
                           ? 'bg-forest-600 text-white shadow-lg shadow-forest-600/25'
@@ -190,35 +196,43 @@ export function OnboardingFlow() {
                   <Ruler className="w-8 h-8 text-forest-500" />
                 </div>
                 <div className="text-center">
-                  <h1 className="font-heading text-2xl font-bold text-bark-800">Mensurations à la naissance</h1>
-                  <p className="text-bark-500 mt-2">Nous en avons besoin pour suivre sa croissance.</p>
+                  <h1 className="font-heading text-2xl font-bold text-bark-800">{t('onboarding.measurements_title')}</h1>
+                  <p className="text-bark-500 mt-2">{t('onboarding.measurements_subtitle')}</p>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-bark-600 mb-1 block">Poids (kg)</label>
+                    <label className="text-sm font-medium text-bark-600 mb-1 block">{t('onboarding.weight_kg')}</label>
                     <input
                       type="number"
+                      inputMode="decimal"
                       step="0.01"
                       min="0.5"
                       max="6"
                       value={birthWeight}
                       onChange={e => setBirthWeight(e.target.value)}
-                      placeholder="ex: 3.25"
+                      placeholder={t('onboarding.weight_example')}
                       className="w-full px-5 py-4 rounded-2xl bg-ivory-50 text-bark-800 font-medium focus:outline-none focus:ring-2 focus:ring-forest-300"
                     />
+                    {birthWeight && (parseFloat(birthWeight) < 0.5 || parseFloat(birthWeight) > 6) && (
+                      <p className="text-xs text-red-500 mt-1 px-1">{t('onboarding.weight_range_error')}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-bark-600 mb-1 block">Taille (cm)</label>
+                    <label className="text-sm font-medium text-bark-600 mb-1 block">{t('onboarding.height_cm')}</label>
                     <input
                       type="number"
+                      inputMode="decimal"
                       step="0.1"
                       min="30"
-                      max="60"
+                      max="65"
                       value={birthHeight}
                       onChange={e => setBirthHeight(e.target.value)}
-                      placeholder="ex: 50"
+                      placeholder={t('onboarding.height_example')}
                       className="w-full px-5 py-4 rounded-2xl bg-ivory-50 text-bark-800 font-medium focus:outline-none focus:ring-2 focus:ring-forest-300"
                     />
+                    {birthHeight && (parseFloat(birthHeight) < 30 || parseFloat(birthHeight) > 65) && (
+                      <p className="text-xs text-red-500 mt-1 px-1">{t('onboarding.height_range_error')}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -238,18 +252,18 @@ export function OnboardingFlow() {
                   <ShieldCheck className="w-8 h-8 text-forest-500" />
                 </div>
                 <div className="text-center">
-                  <h1 className="font-heading text-2xl font-bold text-bark-800">Vaccins déjà reçus</h1>
-                  <p className="text-bark-500 mt-2">Cochez les vaccins que {name} a déjà reçus pour un suivi sur-mesure.</p>
+                  <h1 className="font-heading text-2xl font-bold text-bark-800">{t('onboarding.vaccines_title')}</h1>
+                  <p className="text-bark-500 mt-2">{t('onboarding.vaccines_subtitle', { name })}</p>
                 </div>
                 <div className="space-y-2">
                   {vaccineGroups().length === 0 ? (
-                    <p className="text-center text-bark-500 py-8">{name} est encore tout petit(e), aucun vaccin n'est attendu pour le moment.</p>
+                    <p className="text-center text-bark-500 py-8">{t('onboarding.vaccines_too_young', { name })}</p>
                   ) : (
                     vaccineGroups().map(group => {
                       const allSelected = group.vaccineIds.every(id => selectedVaccines.includes(id));
                       return (
                         <button
-                          key={group.ageLabel}
+                          key={group.ageKey}
                           onClick={() => toggleVaccineGroup(group.vaccineIds)}
                           className={`w-full p-4 rounded-2xl flex items-center gap-3 text-left transition-all ${
                             allSelected
@@ -266,7 +280,7 @@ export function OnboardingFlow() {
                           </div>
                           <div>
                             <p className="font-medium text-bark-800">{group.label}</p>
-                            <p className="text-xs text-bark-500">{group.vaccineIds.length} vaccin{group.vaccineIds.length > 1 ? 's' : ''}</p>
+                            <p className="text-xs text-bark-500">{t('onboarding.vaccine_count', { count: group.vaccineIds.length })}</p>
                           </div>
                         </button>
                       );
@@ -296,9 +310,9 @@ export function OnboardingFlow() {
           }`}
         >
           {step === totalSteps ? (
-            <>Commencer <Sparkles className="w-5 h-5" /></>
+            <>{t('onboarding.start')} <Sparkles className="w-5 h-5" /></>
           ) : (
-            <>Continuer <ArrowRight className="w-5 h-5" /></>
+            <>{t('onboarding.continue')} <ArrowRight className="w-5 h-5" /></>
           )}
         </button>
       </div>
@@ -317,6 +331,7 @@ interface CountryPickerProps {
 }
 
 function CountryPicker({ name, country, onPick }: CountryPickerProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -344,10 +359,10 @@ function CountryPicker({ name, country, onPick }: CountryPickerProps) {
       </div>
       <div className="text-center mt-4">
         <h1 className="font-heading text-2xl font-bold text-bark-800">
-          Où grandit {name || 'bébé'} ?
+          {t('onboarding.country_title', { name: name || t('onboarding.baby_fallback') })}
         </h1>
         <p className="text-bark-500 mt-1 text-sm">
-          Le calendrier vaccinal sera adapté au PEV du pays.
+          {t('onboarding.country_subtitle')}
         </p>
       </div>
 
@@ -358,7 +373,7 @@ function CountryPicker({ name, country, onPick }: CountryPickerProps) {
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          placeholder="Rechercher un pays…"
+          placeholder={t('onboarding.country_search')}
           className="w-full glass-card pl-11 pr-4 py-3.5 rounded-2xl text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
         />
       </div>
@@ -371,7 +386,7 @@ function CountryPicker({ name, country, onPick }: CountryPickerProps) {
           return (
             <div key={region} className="mb-5">
               <p className="text-[11px] uppercase tracking-[0.18em] text-bark-400 font-semibold mb-2 px-1">
-                {REGION_LABELS[region]}
+                {t(`onboarding.regions.${region}`)}
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {countries.map(c => {
@@ -402,7 +417,7 @@ function CountryPicker({ name, country, onPick }: CountryPickerProps) {
         })}
         {filtered.length === 0 && (
           <p className="text-center text-bark-400 text-sm py-8">
-            Aucun pays trouvé pour « {query} ».
+            {t('onboarding.country_no_results', { query })}
           </p>
         )}
       </div>

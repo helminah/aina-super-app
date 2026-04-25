@@ -1,17 +1,28 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
+import { Capacitor } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
+import { App, type URLOpenListenerEvent } from '@capacitor/app';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
+const isNative = Capacitor.isNativePlatform();
+const NATIVE_REDIRECT = 'com.aina.superapp://login-callback';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
   isConfigured: boolean;
+  isGuest: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  devBypass: () => void;
+  continueAsGuest: () => void;
 }
+
+const GUEST_USER_ID = 'guest-user';
+const GUEST_FLAG = 'aina-guest-mode';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -25,21 +36,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Mode invité (fonctionne toujours, même avec Supabase configuré).
+    // Aucune donnée cloud, tout reste en localStorage.
+    if (localStorage.getItem(GUEST_FLAG) === '1') {
+      setUser({
+        id: GUEST_USER_ID,
+        email: 'invité@aina.local',
+        app_metadata: {},
+        user_metadata: { guest: true },
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+      } as unknown as User);
+      setLoading(false);
+      return;
+    }
+
     if (!isSupabaseConfigured) {
-      // Dev sans Supabase → user local persistant pour prévisualiser l'app.
-      if (import.meta.env.DEV) {
-        const devFlag = localStorage.getItem('aina-dev-bypass');
-        if (devFlag === '1') {
-          setUser({
-            id: 'dev-local-user',
-            email: 'dev@aina.local',
-            app_metadata: {},
-            user_metadata: {},
-            aud: 'authenticated',
-            created_at: new Date().toISOString(),
-          } as unknown as User);
-        }
-      }
       setLoading(false);
       return;
     }
@@ -58,7 +70,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(session?.user ?? null);
     });
 
-    return () => subscription.unsubscribe();
+    // Native : intercepte le retour OAuth (com.aina.superapp://login-callback?code=…)
+    // et échange le code contre une session avant de fermer l'in-app browser.
+    let removeUrlListener: (() => void) | undefined;
+    if (isNative) {
+      const handle = App.addListener('appUrlOpen', async (event: URLOpenListenerEvent) => {
+        try {
+          const url = new URL(event.url);
+          const code = url.searchParams.get('code');
+          if (!code) return;
+          await supabase.auth.exchangeCodeForSession(code);
+        } finally {
+          try { await Browser.close(); } catch { /* deja fermé */ }
+        }
+      });
+      removeUrlListener = () => { handle.then(h => h.remove()); };
+    }
+
+    return () => {
+      subscription.unsubscribe();
+      removeUrlListener?.();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
@@ -73,7 +105,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   };
 
+  const signInWithGoogle = async () => {
+    if (!isSupabaseConfigured) return { error: NOT_CONFIGURED_ERROR };
+
+    if (isNative) {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: NATIVE_REDIRECT, skipBrowserRedirect: true },
+      });
+      if (error) return { error };
+      if (data?.url) await Browser.open({ url: data.url, windowName: '_self' });
+      return { error: null };
+    }
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    return { error };
+  };
+
+  const isGuest = user?.id === GUEST_USER_ID;
+
   const signOut = async () => {
+    if (isGuest) {
+      localStorage.removeItem(GUEST_FLAG);
+      setUser(null);
+      setSession(null);
+      return;
+    }
     if (!isSupabaseConfigured) {
       setUser(null);
       setSession(null);
@@ -82,25 +142,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
-  // Dev-only : débloquer la navigation sans Supabase pour prévisualiser l'app.
-  // N'a d'effet qu'en dev et quand Supabase n'est pas configuré.
-  const devBypass = () => {
-    if (import.meta.env.PROD || isSupabaseConfigured) return;
-    localStorage.setItem('aina-dev-bypass', '1');
-    const fakeUser = {
-      id: 'dev-local-user',
-      email: 'dev@aina.local',
+  // Mode invité universel — donne accès à l'app sans compte.
+  // Toutes les données restent locales (aucun push Supabase).
+  const continueAsGuest = () => {
+    localStorage.setItem(GUEST_FLAG, '1');
+    setUser({
+      id: GUEST_USER_ID,
+      email: 'invité@aina.local',
       app_metadata: {},
-      user_metadata: {},
+      user_metadata: { guest: true },
       aud: 'authenticated',
       created_at: new Date().toISOString(),
-    } as unknown as User;
-    setUser(fakeUser);
+    } as unknown as User);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, isConfigured: isSupabaseConfigured, signIn, signUp, signOut, devBypass }}
+      value={{ user, session, loading, isConfigured: isSupabaseConfigured, isGuest, signIn, signUp, signInWithGoogle, signOut, continueAsGuest }}
     >
       {children}
     </AuthContext.Provider>

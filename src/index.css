@@ -8,17 +8,17 @@
    * la casse, alias sémantiques ajoutés (primary/surface/ink).
    * ========================================================= */
 
-  /* FOREST → Rose vif (primary) */
-  --color-forest-50: #fff0f6;
-  --color-forest-100: #ffd6ea;
-  --color-forest-200: #ffadd5;
-  --color-forest-300: #ff80bf;
-  --color-forest-400: #ff4da6;
-  --color-forest-500: #ff2d78;
-  --color-forest-600: #e6005e;
-  --color-forest-700: #b30049;
-  --color-forest-800: #800034;
-  --color-forest-900: #4d001f;
+  /* FOREST → Dusty Rose (primary) — international wellness standard */
+  --color-forest-50: #fef2f4;
+  --color-forest-100: #fde0e6;
+  --color-forest-200: #fac5cf;
+  --color-forest-300: #f49aab;
+  --color-forest-400: #ec6f87;
+  --color-forest-500: #d4637a;
+  --color-forest-600: #b84e64;
+  --color-forest-700: #9a3f53;
+  --color-forest-800: #6e2c3a;
+  --color-forest-900: #431a23;
 
   /* IVORY → Blanc rosé chaud (surfaces) */
   --color-ivory-50: #ffffff;
@@ -29,15 +29,15 @@
   --color-ivory-500: #f7c8dd;
   --color-ivory-600: #f0a8c6;
 
-  /* TERRA → Corail/Saumon (secondary) */
-  --color-terra-50: #fff5f0;
-  --color-terra-100: #ffe6d9;
-  --color-terra-200: #ffcdb3;
-  --color-terra-300: #ffa87a;
-  --color-terra-400: #ff8050;
-  --color-terra-500: #ff6030;
-  --color-terra-600: #e84015;
-  --color-terra-700: #c0320a;
+  /* TERRA → Terracotta doux (secondary) — muted sienna, not alarm coral */
+  --color-terra-50: #fdf5f0;
+  --color-terra-100: #fae6d9;
+  --color-terra-200: #f5cdb3;
+  --color-terra-300: #eca882;
+  --color-terra-400: #e08a5e;
+  --color-terra-500: #d4703a;
+  --color-terra-600: #b85c2e;
+  --color-terra-700: #964a24;
 
   /* AMBER → Or doux (tertiary accent, warmth) */
   --color-amber-50: #fffaf0;
@@ -102,10 +102,16 @@
   --color-ink: var(--color-bark-800);
   --color-ink-muted: var(--color-bark-500);
 
-  /* Typography — Fraunces variable (SOFT + WONK) pour chaleur maternelle 2026 */
+  /* Typography — 2026 editorial stack
+   *  • wordmark : Instrument Serif (tall contrast, razor-thin — marque)
+   *  • display  : Fraunces variable SOFT+WONK (chaleur, hero)
+   *  • heading  : Plus Jakarta Sans (UI labels, cards)
+   *  • body     : Be Vietnam Pro (lecture)
+   */
+  --font-wordmark: 'Instrument Serif', 'Fraunces', 'Georgia', serif;
+  --font-display: 'Fraunces', 'Georgia', serif;
   --font-heading: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Be Vietnam Pro', sans-serif;
-  --font-display: 'Fraunces', 'Georgia', serif;
 
   /* Radii (squircles-ready via border-radius, iOS-like) */
   --radius-card: 2rem;
@@ -113,11 +119,11 @@
   --radius-sheet: 1.75rem;
   --radius-chip: 0.875rem;
 
-  /* Elevation — ambient pink warm shadows */
-  --shadow-e1: 0 1px 2px rgba(255, 45, 120, 0.04), 0 2px 8px rgba(255, 45, 120, 0.04);
-  --shadow-e2: 0 6px 20px rgba(255, 45, 120, 0.08), 0 2px 6px rgba(255, 45, 120, 0.04);
-  --shadow-e3: 0 20px 40px rgba(255, 45, 120, 0.1), 0 8px 18px rgba(255, 45, 120, 0.06);
-  --shadow-brand: 0 20px 45px -12px rgba(230, 0, 94, 0.35);
+  /* Elevation — warm neutral shadows (not alarming pink) */
+  --shadow-e1: 0 1px 2px rgba(110, 44, 58, 0.06), 0 2px 8px rgba(110, 44, 58, 0.05);
+  --shadow-e2: 0 6px 20px rgba(110, 44, 58, 0.10), 0 2px 6px rgba(110, 44, 58, 0.06);
+  --shadow-e3: 0 20px 40px rgba(110, 44, 58, 0.12), 0 8px 18px rgba(110, 44, 58, 0.08);
+  --shadow-brand: 0 20px 45px -12px rgba(184, 78, 100, 0.30);
 }
 
 body {
@@ -136,12 +142,12 @@ body {
  * telles quelles — elles doivent rester punchy en mode sombre.
  * ========================================================= */
 html.dark {
-  --color-ivory-50:  #2a1424;
-  --color-ivory-100: #1f0f1b;
-  --color-ivory-200: #2f1a29;
-  --color-ivory-300: #3a2233;
-  --color-ivory-400: #4a2d40;
-  --color-ivory-500: #5c384e;
+  --color-ivory-50:  #231318;
+  --color-ivory-100: #1a0e12;
+  --color-ivory-200: #2b1920;
+  --color-ivory-300: #38222c;
+  --color-ivory-400: #4a2d38;
+  --color-ivory-500: #5c3848;
 
   --color-bark-50:  #fff0f6;
   --color-bark-100: #ffd6ea;
@@ -170,15 +176,17 @@ html.dark .glass-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 10px 30px -8px rgba(0, 0, 0, 0.3);
 }
-html.dark .glass-card-rose  { background: linear-gradient(135deg, rgba(255, 45, 120, 0.15), rgba(47, 26, 41, 0.65)); }
+html.dark .glass-card-rose  { background: linear-gradient(135deg, rgba(212, 99, 122, 0.15), rgba(43, 25, 32, 0.65)); }
 html.dark .glass-card-green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(47, 26, 41, 0.65)); }
 html.dark .glass-card-sky   { background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(47, 26, 41, 0.65)); }
 html.dark .glass-card-violet{ background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(47, 26, 41, 0.65)); }
 html.dark .glass-card-amber { background: linear-gradient(135deg, rgba(248, 138, 31, 0.15), rgba(47, 26, 41, 0.65)); }
 
-/* Surfaces blanches → neutres foncées en dark */
+/* Surfaces blanches → neutres foncées en dark, avec bordure subtile pour
+   les détacher des surfaces environnantes (toggles, pills, cards). */
 html.dark .bg-white {
   background-color: #2f1a29;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 /* Les .elev-* (ombres ambiantes) sont trop visibles en dark, on les atténue */
@@ -190,13 +198,28 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
+/* Wordmark 2026 — Instrument Serif, contraste éditorial, tracking tight.
+   Utilisé pour AINA sur splash/auth (remplace les caps tracked wide ~2022). */
+.font-wordmark {
+  font-family: var(--font-wordmark);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'ss01', 'liga', 'dlig';
+}
+.font-wordmark-italic {
+  font-family: var(--font-wordmark);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
 /* Display family — Fraunces variable. Axes personnalisés pour un serif
    chaud et organique (pas les styles "formels" par défaut). */
 .font-display {
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .font-display-intimate {
@@ -297,26 +320,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .mesh-amber {
-  background-color: #e84015;
+  background-color: #C4623E;
   background-image:
-    radial-gradient(at 12% 20%, #c0320a 0px, transparent 55%),
-    radial-gradient(at 82% 12%, #f88a1f 0px, transparent 55%),
-    radial-gradient(at 72% 84%, #ffa641 0px, transparent 50%),
-    radial-gradient(at 8% 82%, #b92d0a 0px, transparent 50%);
+    radial-gradient(at 12% 20%, #a84e2e 0px, transparent 55%),
+    radial-gradient(at 82% 12%, #e8965a 0px, transparent 55%),
+    radial-gradient(at 72% 84%, #f4b570 0px, transparent 50%),
+    radial-gradient(at 8% 82%, #964a24 0px, transparent 50%);
 }
 
 .btn-gradient {
-  background: linear-gradient(135deg, #FF2D78, #FF7F5E, #FFA641);
+  background: linear-gradient(135deg, #D4637A, #E07B56, #E8A060);
 }
 
-/* Mesh gradient brand — plus riche que le linear pour les héros */
+/* Mesh gradient brand — dusty rose → warm amber, not neon */
 .brand-mesh {
-  background-color: #FF2D78;
+  background-color: #B84E64;
   background-image:
-    radial-gradient(at 14% 18%, #FF2D78 0px, transparent 55%),
-    radial-gradient(at 82% 12%, #FFA641 0px, transparent 55%),
-    radial-gradient(at 72% 84%, #FF6030 0px, transparent 50%),
-    radial-gradient(at 8% 82%, #E6005E 0px, transparent 50%);
+    radial-gradient(at 14% 18%, #B84E64 0px, transparent 55%),
+    radial-gradient(at 82% 12%, #E8A060 0px, transparent 55%),
+    radial-gradient(at 72% 84%, #D4703A 0px, transparent 50%),
+    radial-gradient(at 8% 82%, #9A3F53 0px, transparent 50%);
 }
 
 .brand-mesh-soft {
@@ -367,7 +390,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .ambient-shadow {
-  box-shadow: 0 20px 40px rgba(255, 45, 120, 0.08);
+  box-shadow: 0 20px 40px rgba(110, 44, 58, 0.08);
 }
 
 @keyframes fadeInUp {
@@ -382,8 +405,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* "Souffle de vie" — respiration organique pour le logo splash */
 @keyframes breathe {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 10px 30px rgba(230, 0, 94, 0.25)); }
-  50% { transform: scale(1.04); filter: drop-shadow(0 20px 50px rgba(230, 0, 94, 0.4)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 10px 30px rgba(184, 78, 100, 0.20)); }
+  50% { transform: scale(1.04); filter: drop-shadow(0 20px 50px rgba(184, 78, 100, 0.32)); }
 }
 
 .animate-breathe {

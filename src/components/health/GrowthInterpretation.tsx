@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   getPercentileData,
   getGrowthZone,
@@ -22,11 +23,12 @@ interface Props {
  * vs courbes OMS. Vise à informer sans alarmer inutilement.
  */
 export function GrowthInterpretation({ metric, sex, childName, childData }: Props) {
+  const { t } = useTranslation();
   if (childData.length === 0) {
     return (
       <div className="rounded-2xl border border-ivory-300 bg-ivory-50 p-4">
         <p className="text-sm text-bark-500">
-          Aucune mesure enregistrée pour le moment. Ajoutez un relevé pour voir l'interprétation.
+          {t('health.growth.no_data')}
         </p>
       </div>
     );
@@ -42,35 +44,36 @@ export function GrowthInterpretation({ metric, sex, childName, childData }: Prop
   const zone: GrowthZone = hasCurveBreak ? 'curve-break' : getGrowthZone(latest.value, nearestPoint);
   const pBand = findNearestPercentile(latest.value, nearestPoint);
   const info = metricInfo[metric];
+  const metricLower = t(`growth_interpretation.metric_${metric}`);
 
   const pBandLabel: Record<typeof pBand, string> = {
-    p3:  '~3ème percentile',
-    p15: '~15ème percentile',
-    p50: 'médiane',
-    p85: '~85ème percentile',
-    p97: '~97ème percentile',
+    p3:  t('growth_interpretation.percentile_3'),
+    p15: t('growth_interpretation.percentile_15'),
+    p50: t('growth_interpretation.percentile_50'),
+    p85: t('growth_interpretation.percentile_85'),
+    p97: t('growth_interpretation.percentile_97'),
   };
 
   const zoneContent: Record<GrowthZone, { emoji: string; title: string; tone: 'ok' | 'watch' | 'alert'; message: string }> = {
     normal: {
-      emoji: '🌱', title: 'Croissance harmonieuse', tone: 'ok',
-      message: `Le ${info.lower} de ${childName} suit une belle courbe dans la moyenne des enfants de son âge. Continuez ainsi !`,
+      emoji: '🌱', title: t('growth_interpretation.normal_title'), tone: 'ok',
+      message: t('growth_interpretation.normal_message', { name: childName, metric: metricLower }),
     },
     watch: {
-      emoji: '🟡', title: 'À surveiller', tone: 'watch',
-      message: `${childName} est un peu au-dessus ou en dessous de la moyenne, mais reste dans les limites normales. On garde l'œil ouvert au prochain rendez-vous.`,
+      emoji: '🟡', title: t('growth_interpretation.watch_title'), tone: 'watch',
+      message: t('growth_interpretation.watch_message', { name: childName }),
     },
     'alert-low': {
-      emoji: '🟠', title: 'Échange avec le pédiatre conseillé', tone: 'alert',
-      message: `Le ${info.lower} est sous le 3ème percentile. Rien d'alarmant en soi, mais un avis du pédiatre permettra d'évaluer la courbe globale.`,
+      emoji: '🟠', title: t('growth_interpretation.alert_title'), tone: 'alert',
+      message: t('growth_interpretation.alert_low_message', { metric: metricLower }),
     },
     'alert-high': {
-      emoji: '🟠', title: 'Échange avec le pédiatre conseillé', tone: 'alert',
-      message: `Le ${info.lower} est au-dessus du 97ème percentile. Un point avec votre pédiatre aidera à contextualiser.`,
+      emoji: '🟠', title: t('growth_interpretation.alert_title'), tone: 'alert',
+      message: t('growth_interpretation.alert_high_message', { metric: metricLower }),
     },
     'curve-break': {
-      emoji: '🚨', title: 'Changement important détecté', tone: 'alert',
-      message: `La courbe de ${childName} a franchi plusieurs bandes entre deux relevés. Il est prudent d'en parler rapidement au pédiatre.`,
+      emoji: '🚨', title: t('growth_interpretation.curve_break_title'), tone: 'alert',
+      message: t('growth_interpretation.curve_break_message', { name: childName }),
     },
   };
 

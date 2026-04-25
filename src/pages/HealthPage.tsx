@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { vaccines as allVaccines } from '@/data/vaccines';
 import { milestones } from '@/data/milestones';
+import { getLocalizedField, translateAgeRange } from '@/lib/i18n-data';
 import { weightBoys, weightGirls, heightBoys, heightGirls, hcBoys, hcGirls } from '@/data/oms-growth';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,10 +29,14 @@ type HealthTab = typeof healthTabs[number]['id'];
 
 const growthMetrics = ['weight', 'height', 'hc'] as const;
 type GrowthMetric = typeof growthMetrics[number];
-const metricLabels: Record<GrowthMetric, string> = { weight: 'Poids (kg)', height: 'Taille (cm)', hc: 'PC (cm)' };
 
 export function HealthPage() {
   const { t } = useTranslation();
+  const metricLabels: Record<GrowthMetric, string> = {
+    weight: t('health.growth.weight'),
+    height: t('health.growth.height'),
+    hc: t('health.growth.hc'),
+  };
   const { profile, isVaccineDone, toggleVaccine, weightEntries, heightEntries, hcEntries, addWeight, addHeight, addHc, isMilestoneDone, toggleMilestone } = useBaby();
   const [activeTab, setActiveTab] = useState<HealthTab>('vaccines');
   const [metric, setMetric] = useState<GrowthMetric>('weight');
@@ -41,20 +46,28 @@ export function HealthPage() {
   const [selectedAgeRange, setSelectedAgeRange] = useState('');
   const [vaccineDetail, setVaccineDetail] = useState<Vaccine | null>(null);
 
+  // Chart data — computed BEFORE any early-return to respect Rules of Hooks.
+  const chartData = useMemo(() => {
+    if (!profile) return [];
+    const isBoy = profile.sex === 'boy';
+    const oms =
+      metric === 'weight' ? (isBoy ? weightBoys : weightGirls) :
+      metric === 'height' ? (isBoy ? heightBoys : heightGirls) :
+      (isBoy ? hcBoys : hcGirls);
+    const entries =
+      metric === 'weight' ? weightEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.weight })) :
+      metric === 'height' ? heightEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.height })) :
+      hcEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.circumference }));
+    return oms.map(p => {
+      const child = entries.find(e => Math.abs(e.month - p.month) < 0.5);
+      return { ...p, childValue: child?.value };
+    });
+  }, [metric, weightEntries, heightEntries, hcEntries, profile]);
+
   if (!profile) return null;
 
   const ageMonths = getAgeInMonths(profile.birthDate);
   const countryVaccines = allVaccines.filter(v => v.country.includes(profile.country)).sort((a, b) => a.ageMonths - b.ageMonths);
-
-  // Growth chart data
-  const getOmsData = () => {
-    const isBoy = profile.sex === 'boy';
-    switch (metric) {
-      case 'weight': return isBoy ? weightBoys : weightGirls;
-      case 'height': return isBoy ? heightBoys : heightGirls;
-      case 'hc': return isBoy ? hcBoys : hcGirls;
-    }
-  };
 
   const getEntries = () => {
     switch (metric) {
@@ -63,15 +76,6 @@ export function HealthPage() {
       case 'hc': return hcEntries.map(e => ({ month: monthDiff(profile.birthDate, e.date), value: e.circumference }));
     }
   };
-
-  const chartData = useMemo(() => {
-    const oms = getOmsData();
-    const entries = getEntries();
-    return oms.map(p => {
-      const child = entries.find(e => Math.abs(e.month - p.month) < 0.5);
-      return { ...p, childValue: child?.value };
-    });
-  }, [metric, weightEntries, heightEntries, hcEntries, profile]);
 
   const handleAddMeasure = () => {
     const val = parseFloat(measureValue);
@@ -83,7 +87,7 @@ export function HealthPage() {
     }
     setShowAddMeasure(false);
     setMeasureValue('');
-    toast.success('Mesure enregistrée ✓');
+    toast.success(t('health.growth.measure_saved'));
   };
 
   // Milestones
@@ -148,7 +152,7 @@ export function HealthPage() {
           {/* Progress */}
           <div className="glass-card-green rounded-2xl p-4 mb-2">
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-bark-600 font-medium">Progression</span>
+              <span className="text-bark-600 font-medium">{t('health.vaccines.progress')}</span>
               <span className="text-emerald-600 font-bold">{countryVaccines.filter(v => isVaccineDone(v.id)).length}/{countryVaccines.length}</span>
             </div>
             <div className="h-2 bg-white/60 rounded-full overflow-hidden">
@@ -158,21 +162,22 @@ export function HealthPage() {
 
           {/* Timeline grouped by month */}
           {(() => {
-            const groups: { ageLabel: string; ageMonths: number; vaccines: typeof countryVaccines }[] = [];
+            const groups: { ageKey: string; ageMonths: number; vaccines: typeof countryVaccines }[] = [];
             const seen = new Set<string>();
             for (const v of countryVaccines) {
-              if (!seen.has(v.ageLabel)) {
-                seen.add(v.ageLabel);
-                groups.push({ ageLabel: v.ageLabel, ageMonths: v.ageMonths, vaccines: countryVaccines.filter(vv => vv.ageLabel === v.ageLabel) });
+              const key = v.ageLabel.fr;
+              if (!seen.has(key)) {
+                seen.add(key);
+                groups.push({ ageKey: key, ageMonths: v.ageMonths, vaccines: countryVaccines.filter(vv => vv.ageLabel.fr === key) });
               }
             }
             return groups.map(group => {
               const groupDone = group.vaccines.every(v => isVaccineDone(v.id));
               const groupOverdue = !groupDone && group.vaccines.some(v => !isVaccineDone(v.id) && v.ageMonths < ageMonths);
               const doneCount = group.vaccines.filter(v => isVaccineDone(v.id)).length;
-              const groupHeader = group.ageMonths === 0 ? 'Naissance' : group.ageLabel;
+              const groupHeader = group.ageMonths === 0 ? t('health.vaccines.birth') : getLocalizedField(group.vaccines[0].ageLabel);
               return (
-                <div key={group.ageLabel} className="mt-4">
+                <div key={group.ageKey} className="mt-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                       groupDone ? 'bg-forest-600' : groupOverdue ? 'bg-red-100' : 'bg-ivory-200'
@@ -183,8 +188,8 @@ export function HealthPage() {
                       <span className="font-heading font-bold text-bark-800">{groupHeader}</span>
                       <span className="text-xs text-bark-500 ml-2">{doneCount}/{group.vaccines.length}</span>
                     </div>
-                    {groupOverdue && <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">En retard</span>}
-                    {groupDone && <span className="text-xs bg-forest-100 text-forest-600 px-2 py-0.5 rounded-full font-medium">Fait</span>}
+                    {groupOverdue && <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">{t('common.overdue')}</span>}
+                    {groupDone && <span className="text-xs bg-forest-100 text-forest-600 px-2 py-0.5 rounded-full font-medium">{t('common.done')}</span>}
                   </div>
                   <div className="ml-4 border-l-2 border-ivory-300 pl-4 space-y-2">
                     {group.vaccines.map(v => {
@@ -207,14 +212,14 @@ export function HealthPage() {
                               {done && <Check className="w-3 h-3 text-white" />}
                             </div>
                             <div className="text-left flex-1 min-w-0">
-                              <p className={`text-sm font-semibold ${done ? 'text-emerald-700' : overdue ? 'text-red-700' : 'text-bark-700'}`}>{v.name}</p>
-                              <p className="text-xs text-bark-400 truncate">{v.diseases}</p>
+                              <p className={`text-sm font-semibold ${done ? 'text-emerald-700' : overdue ? 'text-red-700' : 'text-bark-700'}`}>{getLocalizedField(v.name)}</p>
+                              <p className="text-xs text-bark-400 truncate">{getLocalizedField(v.diseases)}</p>
                             </div>
                           </button>
                           <button
                             onClick={(e) => { e.stopPropagation(); setVaccineDetail(v); }}
                             className="p-3 pr-3.5 text-bark-400 hover:text-emerald-600 transition-colors"
-                            aria-label="Infos détaillées"
+                            aria-label={t('health.vaccines.details_aria')}
                           >
                             <InfoIcon className="w-4 h-4" />
                           </button>
@@ -262,7 +267,7 @@ export function HealthPage() {
             <ResponsiveContainer width="100%" height={220}>
               <ComposedChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e9e8e0" />
-                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#76786b' }} label={{ value: 'Mois', position: 'bottom', fontSize: 10 }} />
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#76786b' }} label={{ value: t('health.growth.chart_month'), position: 'bottom', fontSize: 10 }} />
                 <YAxis tick={{ fontSize: 10, fill: '#76786b' }} />
                 <Tooltip contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
                 <Area dataKey="p97" stroke="none" fill="#d4e4cd" />
@@ -275,7 +280,7 @@ export function HealthPage() {
               </ComposedChart>
             </ResponsiveContainer>
             <div className="flex items-center gap-4 mt-2 text-xs">
-              <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-forest-300" /> Normes OMS</div>
+              <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-forest-300" /> {t('health.growth.legend_oms')}</div>
               <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-terra-400" /> {profile.name}</div>
             </div>
           </div>
@@ -285,7 +290,7 @@ export function HealthPage() {
             onClick={() => setShowAddMeasure(true)}
             className="w-full py-3 rounded-2xl bg-forest-600 text-white font-heading font-bold flex items-center justify-center gap-2 mb-4"
           >
-            <Plus className="w-5 h-5" /> Ajouter une mesure
+            <Plus className="w-5 h-5" /> {t('health.growth.add_measure')}
           </button>
 
           {/* Measurement history */}
@@ -307,19 +312,19 @@ export function HealthPage() {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center" onClick={() => setShowAddMeasure(false)}>
                 <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 25 }} className="w-full max-w-[480px] bg-white rounded-t-3xl p-6" onClick={e => e.stopPropagation()}>
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-heading text-lg font-bold">Nouvelle mesure</h3>
+                    <h3 className="font-heading text-lg font-bold">{t('health.growth.new_measure')}</h3>
                     <button onClick={() => setShowAddMeasure(false)} className="w-8 h-8 rounded-full bg-ivory-100 flex items-center justify-center"><X className="w-4 h-4" /></button>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm text-bark-600 font-medium block mb-1">Date</label>
+                      <label className="text-sm text-bark-600 font-medium block mb-1">{t('health.growth.date_label')}</label>
                       <input type="date" value={measureDate} onChange={e => setMeasureDate(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-ivory-200 focus:outline-none focus:ring-2 focus:ring-forest-300" />
                     </div>
                     <div>
                       <label className="text-sm text-bark-600 font-medium block mb-1">{metricLabels[metric]}</label>
-                      <input type="number" step="0.01" value={measureValue} onChange={e => setMeasureValue(e.target.value)} placeholder={metric === 'weight' ? 'ex: 6.5' : 'ex: 65'} className="w-full px-4 py-3 rounded-xl bg-ivory-200 focus:outline-none focus:ring-2 focus:ring-forest-300" />
+                      <input type="number" step="0.01" value={measureValue} onChange={e => setMeasureValue(e.target.value)} placeholder={metric === 'weight' ? t('health.growth.weight_example') : t('health.growth.height_example')} className="w-full px-4 py-3 rounded-xl bg-ivory-200 focus:outline-none focus:ring-2 focus:ring-forest-300" />
                     </div>
-                    <button onClick={handleAddMeasure} className="w-full py-3 rounded-full bg-forest-600 text-white font-bold">Enregistrer</button>
+                    <button onClick={handleAddMeasure} className="w-full py-3 rounded-full bg-forest-600 text-white font-bold">{t('common.save')}</button>
                   </div>
                 </motion.div>
               </motion.div>
@@ -346,7 +351,7 @@ export function HealthPage() {
                     : 'bg-ivory-50 text-bark-500'
                 }`}
               >
-                {range}
+                {translateAgeRange(range)}
               </button>
             ))}
           </div>
@@ -354,7 +359,7 @@ export function HealthPage() {
           {/* Progress */}
           <div className="bg-ivory-50 rounded-2xl p-4 mb-4">
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-bark-600 font-medium">Progrès ({currentAgeRange})</span>
+              <span className="text-bark-600 font-medium">{t('health.development.progress_label', { range: translateAgeRange(currentAgeRange) })}</span>
               <span className="text-forest-500 font-bold">{milestoneProgress}%</span>
             </div>
             <div className="h-2 bg-ivory-300 rounded-full overflow-hidden">
@@ -369,7 +374,7 @@ export function HealthPage() {
               const first = domainMilestones[0];
               return (
                 <div key={domain} className="bg-ivory-50 rounded-2xl p-4">
-                  <h3 className="font-heading font-bold text-bark-800 mb-3">{first.domainEmoji} {first.domainLabel}</h3>
+                  <h3 className="font-heading font-bold text-bark-800 mb-3">{first.domainEmoji} {getLocalizedField(first.domainLabel)}</h3>
                   <div className="space-y-2">
                     {domainMilestones.map(m => {
                       const done = isMilestoneDone(m.id);
@@ -384,7 +389,7 @@ export function HealthPage() {
                           }`}>
                             {done && <Check className="w-3.5 h-3.5 text-white" />}
                           </div>
-                          <span className={`text-sm ${done ? 'text-forest-600 line-through' : 'text-bark-700'}`}>{m.description}</span>
+                          <span className={`text-sm ${done ? 'text-forest-600 line-through' : 'text-bark-700'}`}>{getLocalizedField(m.description)}</span>
                         </button>
                       );
                     })}

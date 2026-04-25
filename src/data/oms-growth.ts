@@ -134,10 +134,10 @@ export function getPercentileData(metric: GrowthMetric, sex: Sex): GrowthPoint[]
   return dataMap[metric][sex];
 }
 
-export const metricInfo: Record<GrowthMetric, { label: string; lower: string; unit: string }> = {
-  weight: { label: 'Poids',  lower: 'poids',           unit: 'kg' },
-  height: { label: 'Taille', lower: 'taille',          unit: 'cm' },
-  hc:     { label: 'PC',     lower: 'périmètre crânien', unit: 'cm' },
+export const metricInfo: Record<GrowthMetric, { unit: string }> = {
+  weight: { unit: 'kg' },
+  height: { unit: 'cm' },
+  hc:     { unit: 'cm' },
 };
 
 export function getGrowthZone(value: number, p: GrowthPoint): GrowthZone {

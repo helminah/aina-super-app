@@ -7,11 +7,12 @@
 
 export const DR_HELMINAH_LINKS = {
   website:   'https://drhelminah.com',
-  instagram: '', // ex. 'https://instagram.com/handle'
-  tiktok:    '',
-  facebook:  '',
-  youtube:   '',
-  linkedin:  '',
+  instagram: 'https://www.instagram.com/dr.helminah/',
+  tiktok:    'https://www.tiktok.com/@dr.helminah',
+  youtube:   'https://www.youtube.com/@drhelminah',
+  linkedin:  'https://linkedin.com/in/helminah-rm',
+  email:     'mailto:helminahpro@gmail.com',
+  calendly:  'https://calendly.com/helminahmalalaniaina/appel-decouverte-avec-helminah',
 } as const;
 
 export type DrHelminahLinkKey = keyof typeof DR_HELMINAH_LINKS;

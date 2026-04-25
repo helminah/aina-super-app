@@ -17,7 +17,7 @@ export function CarePage() {
 
   if (!profile) return null;
 
-  const latestWeight = weightEntries.at(-1)?.weight ?? profile.birthWeight;
+  const latestWeight = weightEntries.at(-1)?.weight ?? profile.birthWeight ?? 5;
 
   return (
     <div className="pb-24 safe-top min-h-full bg-ivory-100">
@@ -88,7 +88,8 @@ export function CarePage() {
 // ────────────────────────────────────────────────────────────
 
 function DoseCalculator({ weight }: { weight: number }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const timeLocale = i18n.language.startsWith('en') ? 'en-US' : 'fr-FR';
   const { doseRecords, addDose, removeDose } = useBaby();
   const [medication, setMedication] = useState<'paracetamol' | 'ibuprofen'>('paracetamol');
   const [form, setForm] = useState<MedicationForm>(MEDICATION_FORMS.paracetamol[0]);
@@ -133,7 +134,7 @@ function DoseCalculator({ weight }: { weight: number }) {
                 medication === m ? 'bg-red-500 text-white shadow-md' : 'bg-white text-bark-600'
               }`}
             >
-              {m === 'paracetamol' ? 'Paracétamol' : 'Ibuprofène'}
+              {m === 'paracetamol' ? t('care_dose.paracetamol') : t('care_dose.ibuprofen')}
             </button>
           ))}
         </div>
@@ -215,22 +216,28 @@ function DoseCalculator({ weight }: { weight: number }) {
             {recent.map(d => {
               const date = new Date(d.givenAt);
               const ago = Math.round((Date.now() - date.getTime()) / 60000);
-              const agoLabel = ago < 60 ? `il y a ${ago} min` : `il y a ${Math.round(ago / 60)}h${ago % 60 > 0 ? ` ${ago % 60}min` : ''}`;
+              const hours = Math.floor(ago / 60);
+              const leftoverMin = ago % 60;
+              const agoLabel = ago < 60
+                ? t('care_dose.ago_minutes', { minutes: ago })
+                : leftoverMin > 0
+                  ? t('care_dose.ago_hours_minutes', { hours, minutes: leftoverMin })
+                  : t('care_dose.ago_hours', { hours });
               return (
                 <div key={d.id} className="flex items-center gap-3 py-2 border-b border-ivory-200 last:border-0">
                   <span className="text-xl">{d.medication === 'paracetamol' ? '💊' : '💉'}</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-bark-800 capitalize">
-                      {d.medication === 'paracetamol' ? 'Paracétamol' : 'Ibuprofène'} {d.doseMg} mg
+                      {d.medication === 'paracetamol' ? t('care_dose.paracetamol') : t('care_dose.ibuprofen')} {d.doseMg} mg
                     </p>
                     <p className="text-xs text-bark-400">
-                      {date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} · {agoLabel}
+                      {date.toLocaleTimeString(timeLocale, { hour: '2-digit', minute: '2-digit' })} · {agoLabel}
                     </p>
                   </div>
                   <button
                     onClick={() => removeDose(d.id)}
                     className="text-bark-300 hover:text-red-500 text-xs"
-                    aria-label="Supprimer"
+                    aria-label={t('common.delete')}
                   >
                     ✕
                   </button>

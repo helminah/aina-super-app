@@ -32,7 +32,7 @@ async function fileToCompressedDataUrl(file: File, maxSize = 400): Promise<strin
   canvas.width = w;
   canvas.height = h;
   const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Canvas 2D non disponible');
+  if (!ctx) throw new Error('Canvas 2D not available');
   ctx.drawImage(bitmap, 0, 0, w, h);
   return canvas.toDataURL('image/webp', 0.85);
 }
@@ -67,7 +67,7 @@ export function ProfilePage() {
       birthHeight: parseFloat(editHeight) || profile.birthHeight,
     });
     setEditing(false);
-    toast.success('Profil mis à jour ✓');
+    toast.success(t('profile.profile_updated'));
   };
 
   const handleAddBaby = () => {
@@ -86,7 +86,7 @@ export function ProfilePage() {
     addBaby(baby);
     setShowAddBaby(false);
     resetNewBabyForm();
-    toast.success('Bébé ajouté ! 🍼');
+    toast.success(t('profile_form.baby_added'));
   };
 
   const resetNewBabyForm = () => {
@@ -171,7 +171,7 @@ export function ProfilePage() {
       {/* Baby card */}
       <div className="bg-ivory-50 rounded-2xl p-5 mb-5 shadow-sm">
         <div className="flex items-center gap-4 mb-4">
-          <label className="relative cursor-pointer group flex-shrink-0" aria-label="Changer la photo">
+          <label className="relative cursor-pointer group flex-shrink-0" aria-label={t('profile_form.change_photo')}>
             <BabyAvatar baby={profile} size="md" />
             <span className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-violet-500 text-white flex items-center justify-center elev-2 group-hover:scale-110 transition-transform">
               <Camera className="w-3.5 h-3.5" />
@@ -186,9 +186,9 @@ export function ProfilePage() {
                 try {
                   const dataUrl = await fileToCompressedDataUrl(file);
                   updateProfile({ photoDataUrl: dataUrl });
-                  toast.success('Photo mise à jour 📸');
+                  toast.success(t('profile_form.photo_updated'));
                 } catch {
-                  toast.error('Impossible de charger l\'image');
+                  toast.error(t('profile_form.photo_error'));
                 }
               }}
             />
@@ -201,7 +201,7 @@ export function ProfilePage() {
                 onClick={() => updateProfile({ photoDataUrl: undefined })}
                 className="text-[10px] text-bark-400 underline mt-1"
               >
-                Retirer la photo
+                {t('profile_form.remove_photo')}
               </button>
             )}
           </div>
@@ -211,43 +211,43 @@ export function ProfilePage() {
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-sm">
               <Calendar className="w-4 h-4 text-bark-400" />
-              <span className="text-bark-600">Né(e) le {new Date(profile.birthDate).toLocaleDateString('fr-FR')}</span>
+              <span className="text-bark-600">{t('profile.born_on')} {new Date(profile.birthDate).toLocaleDateString(i18n.language.startsWith('en') ? 'en-US' : 'fr-FR')}</span>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Weight className="w-4 h-4 text-bark-400" />
-              <span className="text-bark-600">Poids de naissance : {profile.birthWeight} kg</span>
+              <span className="text-bark-600">{t('profile.birth_weight')} : {profile.birthWeight} kg</span>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Ruler className="w-4 h-4 text-bark-400" />
-              <span className="text-bark-600">Taille de naissance : {profile.birthHeight} cm</span>
+              <span className="text-bark-600">{t('profile.birth_height')} : {profile.birthHeight} cm</span>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <MapPin className="w-4 h-4 text-bark-400" />
               <span className="text-bark-600">{countryFlag(profile.country)} {countryLabel(profile.country)}</span>
             </div>
             <button onClick={() => { setEditing(true); setEditName(profile.name); setEditWeight(String(profile.birthWeight)); setEditHeight(String(profile.birthHeight)); }} className="w-full mt-3 py-2.5 rounded-xl bg-forest-100 text-forest-600 text-sm font-semibold">
-              Modifier
+              {t('profile_form.modify')}
             </button>
           </div>
         ) : (
           <div className="space-y-3">
             <div>
-              <label className="text-xs text-bark-600 font-medium">Prénom</label>
+              <label className="text-xs text-bark-600 font-medium">{t('profile_form.first_name')}</label>
               <input value={editName} onChange={e => setEditName(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-ivory-200 mt-1 focus:outline-none focus:ring-2 focus:ring-forest-300" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-bark-600 font-medium">Poids naissance (kg)</label>
+                <label className="text-xs text-bark-600 font-medium">{t('profile_form.birth_weight_kg')}</label>
                 <input type="number" step="0.01" value={editWeight} onChange={e => setEditWeight(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-ivory-200 mt-1 focus:outline-none focus:ring-2 focus:ring-forest-300" />
               </div>
               <div>
-                <label className="text-xs text-bark-600 font-medium">Taille naissance (cm)</label>
+                <label className="text-xs text-bark-600 font-medium">{t('profile_form.birth_height_cm')}</label>
                 <input type="number" step="0.1" value={editHeight} onChange={e => setEditHeight(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-ivory-200 mt-1 focus:outline-none focus:ring-2 focus:ring-forest-300" />
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={handleSave} className="flex-1 py-2.5 rounded-xl bg-forest-600 text-white font-semibold text-sm">Enregistrer</button>
-              <button onClick={() => setEditing(false)} className="px-4 py-2.5 rounded-xl bg-ivory-100 text-bark-500 text-sm">Annuler</button>
+              <button onClick={handleSave} className="flex-1 py-2.5 rounded-xl bg-forest-600 text-white font-semibold text-sm">{t('common.save')}</button>
+              <button onClick={() => setEditing(false)} className="px-4 py-2.5 rounded-xl bg-ivory-100 text-bark-500 text-sm">{t('common.cancel')}</button>
             </div>
           </div>
         )}
@@ -258,7 +258,7 @@ export function ProfilePage() {
         onClick={() => { resetNewBabyForm(); setShowAddBaby(true); }}
         className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-forest-50 border-2 border-dashed border-forest-200 text-forest-600 font-semibold text-sm mb-5 hover:bg-forest-100 transition-colors"
       >
-        <UserPlus className="w-5 h-5" /> Ajouter un bébé
+        <UserPlus className="w-5 h-5" /> {t('profile.add_baby')}
       </button>
 
       {/* Settings */}
@@ -345,18 +345,18 @@ export function ProfilePage() {
 
       {/* Danger zone */}
       <button onClick={() => setShowConfirm(true)} className="w-full py-3 rounded-2xl bg-red-50 text-red-500 font-semibold text-sm flex items-center justify-center gap-2">
-        <Trash2 className="w-4 h-4" /> Supprimer {profile.name}
+        <Trash2 className="w-4 h-4" /> {t('profile_form.delete_name', { name: profile.name })}
       </button>
 
       {/* Confirm delete modal */}
       {showConfirm && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-6" onClick={() => setShowConfirm(false)}>
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
-            <h3 className="font-heading font-bold text-lg text-bark-800 mb-2">Confirmer la suppression</h3>
-            <p className="text-sm text-bark-500 mb-5">Toutes les données de {profile.name} seront définitivement supprimées.</p>
+            <h3 className="font-heading font-bold text-lg text-bark-800 mb-2">{t('profile_form.confirm_delete_title')}</h3>
+            <p className="text-sm text-bark-500 mb-5">{t('profile_form.confirm_delete_body', { name: profile.name })}</p>
             <div className="flex gap-3">
-              <button onClick={() => setShowConfirm(false)} className="flex-1 py-2.5 rounded-xl bg-ivory-100 text-bark-600 font-semibold text-sm">Annuler</button>
-              <button onClick={() => { clearProfile(); setShowConfirm(false); toast.success('Profil supprimé'); }} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm">Supprimer</button>
+              <button onClick={() => setShowConfirm(false)} className="flex-1 py-2.5 rounded-xl bg-ivory-100 text-bark-600 font-semibold text-sm">{t('common.cancel')}</button>
+              <button onClick={() => { clearProfile(); setShowConfirm(false); toast.success(t('profile_form.profile_deleted')); }} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm">{t('common.delete')}</button>
             </div>
           </div>
         </div>
@@ -383,7 +383,7 @@ export function ProfilePage() {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="font-heading text-xl font-bold text-bark-800">
-                    Ajouter un bébé
+                    {t('profile_form.new_baby_title')}
                   </h2>
                   <button
                     onClick={() => setShowAddBaby(false)}
@@ -396,20 +396,20 @@ export function ProfilePage() {
                 <div className="space-y-4">
                   {/* Name */}
                   <div>
-                    <label className="text-sm text-bark-600 font-medium">Prénom</label>
+                    <label className="text-sm text-bark-600 font-medium">{t('profile_form.first_name')}</label>
                     <input
                       value={newName}
                       onChange={e => setNewName(e.target.value)}
-                      placeholder="Prénom du bébé"
+                      placeholder={t('profile_form.baby_name_placeholder')}
                       className="w-full px-4 py-3 rounded-xl bg-ivory-200 mt-1 focus:outline-none focus:ring-2 focus:ring-forest-300"
                     />
                   </div>
 
                   {/* Sex */}
                   <div>
-                    <label className="text-sm text-bark-600 font-medium">Sexe</label>
+                    <label className="text-sm text-bark-600 font-medium">{t('profile_form.sex_label')}</label>
                     <div className="flex gap-3 mt-1">
-                      {([['girl', '👧 Fille'], ['boy', '👦 Garçon']] as [Sex, string][]).map(([val, label]) => (
+                      {([['girl', t('profile_form.sex_girl')], ['boy', t('profile_form.sex_boy')]] as [Sex, string][]).map(([val, label]) => (
                         <button
                           key={val}
                           onClick={() => setNewSex(val)}
@@ -423,7 +423,7 @@ export function ProfilePage() {
 
                   {/* Birth date */}
                   <div>
-                    <label className="text-sm text-bark-600 font-medium">Date de naissance</label>
+                    <label className="text-sm text-bark-600 font-medium">{t('profile_form.birth_date_label')}</label>
                     <input
                       type="date"
                       value={newBirthDate}
@@ -436,7 +436,7 @@ export function ProfilePage() {
                   {/* Weight & Height */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-sm text-bark-600 font-medium">Poids (kg)</label>
+                      <label className="text-sm text-bark-600 font-medium">{t('onboarding.weight_kg')}</label>
                       <input
                         type="number"
                         step="0.01"
@@ -447,7 +447,7 @@ export function ProfilePage() {
                       />
                     </div>
                     <div>
-                      <label className="text-sm text-bark-600 font-medium">Taille (cm)</label>
+                      <label className="text-sm text-bark-600 font-medium">{t('onboarding.height_cm')}</label>
                       <input
                         type="number"
                         step="0.1"
@@ -461,13 +461,13 @@ export function ProfilePage() {
 
                   {/* Country */}
                   <div>
-                    <label className="text-sm text-bark-600 font-medium">Pays (calendrier vaccinal)</label>
+                    <label className="text-sm text-bark-600 font-medium">{t('profile.country_vaccine')}</label>
                     <select
                       value={newCountry}
                       onChange={e => setNewCountry(e.target.value as Country)}
                       className="w-full mt-1 py-3 px-4 rounded-xl bg-ivory-200 text-bark-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-forest-300"
                     >
-                      <option value="">— Choisir un pays —</option>
+                      <option value="">{t('profile_form.choose_country')}</option>
                       {COUNTRIES.map(c => (
                         <option key={c.code} value={c.code}>{c.flag} {c.label}</option>
                       ))}
@@ -480,7 +480,7 @@ export function ProfilePage() {
                     disabled={!newName.trim() || !newBirthDate || !newWeight || !newHeight}
                     className="w-full py-3.5 rounded-full btn-gradient text-white font-heading font-bold text-base flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed mt-2"
                   >
-                    <Check className="w-5 h-5" /> Ajouter {newName.trim() || 'bébé'}
+                    <Check className="w-5 h-5" /> {t('profile_form.add_baby_cta', { name: newName.trim() || t('onboarding.baby_fallback') })}
                   </button>
                 </div>
               </div>

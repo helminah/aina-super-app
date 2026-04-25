@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { analyzeRedFlags, AnthropicApiError, type RedFlagAnalysis, type RedFlagLevel } from '@/lib/anthropic';
@@ -13,6 +14,7 @@ import { analyzeRedFlags, AnthropicApiError, type RedFlagAnalysis, type RedFlagL
  * (« Autre détail ») pour affiner l'analyse sans refaire tout.
  */
 export function AIRedFlagChecker() {
+  const { t } = useTranslation();
   const { profile } = useBaby();
   const [symptoms, setSymptoms] = useState('');
   const [result, setResult] = useState<RedFlagAnalysis | null>(null);
@@ -32,7 +34,7 @@ export function AIRedFlagChecker() {
       setResult(r);
       setAdditional('');
     } catch (e) {
-      setError(e instanceof AnthropicApiError ? e.message : 'Erreur inattendue');
+      setError(e instanceof AnthropicApiError ? e.message : t('red_flag_checker.unexpected_error'));
     } finally {
       setLoading(false);
     }
@@ -47,7 +49,7 @@ export function AIRedFlagChecker() {
 
   const handleAddDetail = () => {
     // Fusionne l'observation initiale + nouveau détail → relance l'analyse
-    const combined = `${symptoms}\n\nPrécision supplémentaire : ${additional.trim()}`;
+    const combined = `${symptoms}\n\n${t('red_flag_checker.precision_prefix')} : ${additional.trim()}`;
     setSymptoms(combined);
     void handleAnalyze(combined);
   };
@@ -66,14 +68,14 @@ export function AIRedFlagChecker() {
           <div className="flex items-center gap-2">
             <Stethoscope className="w-4 h-4 text-white" />
             <p className="text-[11px] uppercase tracking-[0.2em] text-white/90 font-semibold">
-              Quand consulter ?
+              {t('red_flag_checker.header_kicker')}
             </p>
           </div>
           <p className="font-heading font-bold text-white text-lg mt-1">
-            Signes d'alerte chez {profile.name}
+            {t('red_flag_checker.header_title', { name: profile.name })}
           </p>
           <p className="text-white/85 text-xs mt-0.5">
-            Décrivez ce que vous observez, pas de diagnostic — juste un guide d'orientation.
+            {t('red_flag_checker.header_subtitle')}
           </p>
         </motion.div>
       </div>
@@ -84,17 +86,17 @@ export function AIRedFlagChecker() {
           <>
             <div>
               <label className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold block mb-2">
-                Ce que vous observez
+                {t('red_flag_checker.observation_label')}
               </label>
               <textarea
                 value={symptoms}
                 onChange={e => setSymptoms(e.target.value)}
-                placeholder="Ex. Fièvre à 38,5 depuis ce matin, bébé refuse le biberon, pleurs inhabituels…"
+                placeholder={t('red_flag_checker.observation_placeholder')}
                 rows={4}
                 className="w-full px-4 py-3 rounded-xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-red-300 text-sm resize-none"
               />
               <p className="text-[10px] text-bark-400 mt-1">
-                Plus c'est précis (durée, température, comportement), mieux l'IA oriente.
+                {t('red_flag_checker.observation_hint')}
               </p>
             </div>
 
@@ -105,11 +107,11 @@ export function AIRedFlagChecker() {
             >
               {loading ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin" /> Analyse…
+                  <RefreshCw className="w-4 h-4 animate-spin" /> {t('red_flag_checker.analyzing')}
                 </>
               ) : (
                 <>
-                  <ShieldAlert className="w-4 h-4" /> Analyser
+                  <ShieldAlert className="w-4 h-4" /> {t('red_flag_checker.analyze')}
                 </>
               )}
             </button>
@@ -139,28 +141,28 @@ export function AIRedFlagChecker() {
                   href="tel:15"
                   className="w-full py-3 rounded-full bg-red-500 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-red-500/40"
                 >
-                  <Phone className="w-4 h-4" /> Appeler le SAMU (15 / 1515 / 117)
+                  <Phone className="w-4 h-4" /> {t('red_flag_checker.call_samu')}
                 </a>
               )}
 
               {/* Follow-up — ajouter un détail sans repartir de zéro */}
               <div className="rounded-xl bg-ivory-100 p-3">
                 <label className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold block mb-2">
-                  Ajouter un détail ?
+                  {t('red_flag_checker.add_detail_label')}
                 </label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={additional}
                     onChange={e => setAdditional(e.target.value)}
-                    placeholder="Ex. depuis 2 jours, vomissements…"
+                    placeholder={t('red_flag_checker.add_detail_placeholder')}
                     className="flex-1 px-3 py-2.5 rounded-xl bg-white text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-red-300 text-sm"
                   />
                   <button
                     onClick={handleAddDetail}
                     disabled={loading || additional.trim().length < 3}
                     className="px-4 rounded-xl bg-red-500 text-white disabled:opacity-40 transition-all active:scale-[0.98]"
-                    aria-label="Envoyer le détail"
+                    aria-label={t('red_flag_checker.send_detail')}
                   >
                     {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                   </button>
@@ -171,13 +173,13 @@ export function AIRedFlagChecker() {
                 onClick={handleReset}
                 className="w-full py-2.5 rounded-full bg-ivory-200 text-bark-600 font-semibold text-xs hover:bg-ivory-300 transition-colors"
               >
-                Nouvelle analyse
+                {t('red_flag_checker.new_analysis')}
               </button>
 
               {/* Disclaimer médical */}
               <div className="mt-4 pt-4 border-t border-ivory-300">
                 <p className="text-[11px] text-bark-500 italic text-center leading-relaxed">
-                  ⚕️ Cette information ne remplace pas l'avis de votre pédiatre.
+                  {t('red_flag_checker.disclaimer')}
                 </p>
               </div>
             </motion.div>
@@ -189,6 +191,7 @@ export function AIRedFlagChecker() {
 }
 
 function ResultCard({ level, message }: { level: RedFlagLevel; message: string }) {
+  const { t } = useTranslation();
   const config: Record<RedFlagLevel, {
     bg: string;
     border: string;
@@ -196,9 +199,9 @@ function ResultCard({ level, message }: { level: RedFlagLevel; message: string }
     emoji: string;
     label: string;
   }> = {
-    green:  { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-800', emoji: '🟢', label: 'À surveiller' },
-    yellow: { bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-800',   emoji: '🟡', label: 'Consulter dans 24h' },
-    red:    { bg: 'bg-red-50',     border: 'border-red-300',     text: 'text-red-800',     emoji: '🔴', label: 'Urgence immédiate' },
+    green:  { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-800', emoji: '🟢', label: t('red_flag_checker.level_green') },
+    yellow: { bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-800',   emoji: '🟡', label: t('red_flag_checker.level_yellow') },
+    red:    { bg: 'bg-red-50',     border: 'border-red-300',     text: 'text-red-800',     emoji: '🔴', label: t('red_flag_checker.level_red') },
   };
   const c = config[level];
 

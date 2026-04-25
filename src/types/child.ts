@@ -61,9 +61,13 @@ export interface Appointment {
   note?: string;
 }
 
+// Champ optionnellement multilingue (rétro-compat : string simple = FR uniquement).
+// Utiliser tl()/getLocalizedField() du helper @/lib/i18n-data pour lire.
+export type I18nString = string | { fr: string; en?: string; mg?: string; wo?: string };
+
 export interface Recipe {
   id: number;
-  title: string;
+  title: I18nString;
   age: number;
   time: number;
   kcal: number;
@@ -73,10 +77,10 @@ export interface Recipe {
   allergens: string[];
   iron: boolean;
   protein: boolean;
-  ingredients: { name: string; qty: string; emoji: string }[];
-  steps: { t: string; d: string; min: number }[];
-  why: string;
-  conseil: string;
+  ingredients: { name: I18nString; qty: string; emoji: string }[];
+  steps: { t: I18nString; d: I18nString; min: number }[];
+  why: I18nString;
+  conseil: I18nString;
   nutrition: {
     energie: string;
     proteines: string;
@@ -89,4 +93,23 @@ export interface Recipe {
 
 export interface MealPlan {
   [key: string]: number | undefined; // "Monday_dejeuner" -> recipeId
+}
+
+export interface AiRecipeEntry {
+  id: number;        // unique, basé sur Date.now()
+  savedAt: string;   // ISO timestamp
+  babyAgeMonths: number;
+  country: string;
+  title: string;
+  ingredients: { name: string; qty: string; notes?: string }[];
+  steps: string[];
+  nutritionNotes: string;
+  texture: string;
+  ageRange: string;
+  prepMinutes: number;
+  // Champs pour affichage dans la grille principale (peuvent être absents
+  // pour les entrées sauvegardées avant l'ajout de ces champs).
+  emoji?: string;
+  category?: string;     // 'petit-dejeuner' | 'dejeuner' | 'gouter' | 'diner' | 'dessert'
+  kcal?: number;
 }

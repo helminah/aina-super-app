@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Globe, ExternalLink, Instagram, Facebook, Youtube, Linkedin, Music2 } from 'lucide-react';
+import { ArrowLeft, Globe, ExternalLink, Instagram, Youtube, Linkedin, Music2 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DR_HELMINAH_LINKS, type DrHelminahLinkKey } from '@/config/drhelminah';
@@ -10,10 +10,11 @@ import { DR_HELMINAH_LINKS, type DrHelminahLinkKey } from '@/config/drhelminah';
  * Les liens vides (chaîne "") sont masqués automatiquement.
  */
 
-const LINK_META: Record<Exclude<DrHelminahLinkKey, 'website'>, { Icon: LucideIcon; gradient: string }> = {
+type SocialKey = Exclude<DrHelminahLinkKey, 'website' | 'email' | 'calendly'>;
+
+const LINK_META: Record<SocialKey, { Icon: LucideIcon; gradient: string }> = {
   instagram: { Icon: Instagram, gradient: 'from-rose-500 via-fuchsia-500 to-orange-400' },
   tiktok:    { Icon: Music2,    gradient: 'from-bark-800 via-sky-400 to-rose-400' },
-  facebook:  { Icon: Facebook,  gradient: 'from-sky-600 to-sky-400' },
   youtube:   { Icon: Youtube,   gradient: 'from-red-600 to-red-500' },
   linkedin:  { Icon: Linkedin,  gradient: 'from-sky-700 to-sky-500' },
 };
@@ -32,7 +33,7 @@ export function AboutPage() {
         <button
           onClick={() => navigate(-1)}
           className="absolute top-5 left-5 w-9 h-9 rounded-full bg-white/20 backdrop-blur flex items-center justify-center"
-          aria-label="Back"
+          aria-label={t('common.back')}
         >
           <ArrowLeft className="w-4 h-4 text-white" />
         </button>

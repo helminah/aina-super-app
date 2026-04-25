@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Heart, Sparkles, X, Info, BookOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Vaccine } from '@/data/vaccines';
+import { getLocalizedField } from '@/lib/i18n-data';
 
 /** Retrouve la clé racine i18n d'un vaccin.id (penta-1 → penta, hexa-3 → hexa, etc.) */
 function vaccineRootKey(vaccineId: string): string {
@@ -53,30 +54,20 @@ export function VaccineEducationCard() {
             className="overflow-hidden"
           >
             <div className="mt-4 space-y-3 text-sm leading-relaxed text-bark-700">
-              <p>
-                Le corps de votre bébé a une <strong>armée de défense naturelle</strong> : son système immunitaire.
-                Mais cette armée a besoin <strong>d'apprendre à reconnaître les ennemis</strong>.
-              </p>
+              <p dangerouslySetInnerHTML={{ __html: t('health.vaccines.how_body_defense_html') }} />
 
               <div className="flex items-start gap-3 rounded-xl bg-white/70 p-3">
                 <Heart className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
-                <p>
-                  Le vaccin montre au corps une <strong>version inoffensive</strong> du microbe. Le jour où le vrai
-                  microbe arrive, les défenses sont déjà prêtes.
-                </p>
+                <p dangerouslySetInnerHTML={{ __html: t('health.vaccines.how_vaccine_role_html') }} />
               </div>
 
               <div className="flex items-start gap-3 rounded-xl bg-white/70 p-3">
                 <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-                <p>
-                  Vacciner bébé, c'est aussi <strong>protéger les autres</strong> : personnes fragiles, futures grandes
-                  sœurs et grands frères, femmes enceintes, seniors.
-                </p>
+                <p dangerouslySetInnerHTML={{ __html: t('health.vaccines.how_herd_immunity_html') }} />
               </div>
 
               <p className="text-xs text-bark-500 italic">
-                Les effets secondaires (fièvre légère, rougeur) sont temporaires et bénins. Toujours rares par rapport
-                aux maladies évitées.
+                {t('health.vaccines.how_side_effects_note')}
               </p>
             </div>
           </motion.div>
@@ -133,9 +124,9 @@ function VaccineDetailContent({ vaccine, onClose }: { vaccine: Vaccine; onClose:
     <div className="p-6">
       <div className="flex items-start justify-between mb-5">
         <div className="flex-1 pr-3">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-600 font-semibold">{vaccine.ageLabel}</p>
-          <h2 className="font-heading text-xl font-bold text-bark-800 mt-0.5">{vaccine.name}</h2>
-          <p className="text-xs text-bark-500 mt-1">{t('health.vaccines.detail_disease')} : {vaccine.diseases}</p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-600 font-semibold">{getLocalizedField(vaccine.ageLabel)}</p>
+          <h2 className="font-heading text-xl font-bold text-bark-800 mt-0.5">{getLocalizedField(vaccine.name)}</h2>
+          <p className="text-xs text-bark-500 mt-1">{t('health.vaccines.detail_disease')} : {getLocalizedField(vaccine.diseases)}</p>
         </div>
         <button
           onClick={onClose}

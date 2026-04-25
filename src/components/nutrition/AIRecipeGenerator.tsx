@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Clock, Flame, ChefHat, CalendarRange, RefreshCw, AlertCircle } from 'lucide-react';
+import { Sparkles, Clock, Flame, ChefHat, CalendarRange, RefreshCw, AlertCircle, BookmarkPlus, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
+import { toast } from 'sonner';
 import {
   generateRecipe,
   generateWeeklyMealPlan,
@@ -21,7 +22,7 @@ type ViewMode = 'recipe' | 'plan' | null;
  * - Affichage structuré avec le design system AINA (glassmorphism + amber/orange)
  */
 export function AIRecipeGenerator() {
-  const { profile } = useBaby();
+  const { profile, addAiRecipe } = useBaby();
   const { t } = useTranslation();
 
   const [ingredients, setIngredients] = useState('');
@@ -29,6 +30,7 @@ export function AIRecipeGenerator() {
   const [error, setError] = useState<string | null>(null);
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [plan, setPlan] = useState<WeeklyMealPlan | null>(null);
+  const [savedRecipeId, setSavedRecipeId] = useState<number | null>(null);
 
   if (!profile) return null;
   const ageMonths = getAgeInMonths(profile.birthDate);
@@ -36,10 +38,34 @@ export function AIRecipeGenerator() {
   const parseIngredients = (raw: string): string[] =>
     raw.split(/[,\n;]/).map(s => s.trim()).filter(Boolean);
 
+  const handleSaveRecipe = () => {
+    if (!recipe || !profile) return;
+    const ageMonthsNow = getAgeInMonths(profile.birthDate);
+    addAiRecipe({
+      babyAgeMonths: ageMonthsNow,
+      country: profile.country,
+      title: recipe.title,
+      ingredients: recipe.ingredients,
+      steps: recipe.steps,
+      nutritionNotes: recipe.nutritionNotes,
+      texture: recipe.texture,
+      ageRange: recipe.ageRange,
+      prepMinutes: recipe.prepMinutes,
+      emoji: recipe.emoji,
+      category: recipe.category,
+      kcal: recipe.kcal,
+    });
+    // Find the newly added entry (the one just pushed to aiRecipes)
+    // We mark it as saved via a timestamp approximation
+    setSavedRecipeId(Date.now());
+    toast.success(t('ai_recipe.recipe_saved'), { description: t('ai_recipe.recipe_saved_desc') });
+  };
+
   const handleRecipe = async () => {
     setError(null);
     setRecipe(null);
     setPlan(null);
+    setSavedRecipeId(null);
     setLoading('recipe');
     try {
       const r = await generateRecipe({
@@ -49,7 +75,7 @@ export function AIRecipeGenerator() {
       });
       setRecipe(r);
     } catch (e) {
-      setError(e instanceof AnthropicApiError ? e.message : 'Erreur inattendue');
+      setError(e instanceof AnthropicApiError ? e.message : t('ai_recipe.unexpected_error'));
     } finally {
       setLoading(null);
     }
@@ -59,6 +85,7 @@ export function AIRecipeGenerator() {
     setError(null);
     setRecipe(null);
     setPlan(null);
+    setSavedRecipeId(null);
     setLoading('plan');
     try {
       const p = await generateWeeklyMealPlan({
@@ -68,7 +95,7 @@ export function AIRecipeGenerator() {
       });
       setPlan(p);
     } catch (e) {
-      setError(e instanceof AnthropicApiError ? e.message : 'Erreur inattendue');
+      setError(e instanceof AnthropicApiError ? e.message : t('ai_recipe.unexpected_error'));
     } finally {
       setLoading(null);
     }
@@ -86,14 +113,14 @@ export function AIRecipeGenerator() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-white" />
             <p className="text-[11px] uppercase tracking-[0.2em] text-white/90 font-semibold">
-              Assistant nutrition
+              {t('ai_recipe.kicker')}
             </p>
           </div>
           <p className="font-heading font-bold text-white text-lg mt-1">
-            Recette personnalisée pour {profile.name}
+            {t('ai_recipe.header_title', { name: profile.name })}
           </p>
           <p className="text-white/85 text-xs mt-0.5">
-            {ageMonths} mois · adapté au PEV {profile.country}
+            {t('ai_recipe.header_subtitle', { months: ageMonths, country: profile.country })}
           </p>
         </motion.div>
       </div>
@@ -102,16 +129,16 @@ export function AIRecipeGenerator() {
       <div className="bg-white p-5 space-y-3">
         <div>
           <label className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold block mb-2">
-            Quels ingrédients as-tu ?
+            {t('ai_recipe.ingredients_label')}
           </label>
           <textarea
             value={ingredients}
             onChange={e => setIngredients(e.target.value)}
-            placeholder="mil, mangue, lait, patate douce, carotte…"
+            placeholder={t('ai_recipe.ingredients_placeholder')}
             rows={2}
             className="w-full px-4 py-3 rounded-xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-amber-300 text-sm resize-none"
           />
-          <p className="text-[10px] text-bark-400 mt-1">Séparés par virgule — ou laisse vide pour suggestion libre.</p>
+          <p className="text-[10px] text-bark-400 mt-1">{t('ai_recipe.ingredients_hint')}</p>
         </div>
 
         <div className="flex gap-2">
@@ -122,11 +149,11 @@ export function AIRecipeGenerator() {
           >
             {loading === 'recipe' ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin" /> Génération…
+                <RefreshCw className="w-4 h-4 animate-spin" /> {t('ai_recipe.generating')}
               </>
             ) : (
               <>
-                <ChefHat className="w-4 h-4" /> Recette
+                <ChefHat className="w-4 h-4" /> {t('ai_recipe.recipe_btn')}
               </>
             )}
           </button>
@@ -137,11 +164,11 @@ export function AIRecipeGenerator() {
           >
             {loading === 'plan' ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin" /> Plan…
+                <RefreshCw className="w-4 h-4 animate-spin" /> {t('ai_recipe.planning')}
               </>
             ) : (
               <>
-                <CalendarRange className="w-4 h-4" /> Plan semaine
+                <CalendarRange className="w-4 h-4" /> {t('ai_recipe.plan_btn')}
               </>
             )}
           </button>
@@ -203,7 +230,7 @@ export function AIRecipeGenerator() {
               </div>
 
               <div>
-                <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">Ingrédients</p>
+                <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">{t('ai_recipe.ingredients_title')}</p>
                 <ul className="space-y-1">
                   {recipe.ingredients.map((ing, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-bark-700">
@@ -217,7 +244,7 @@ export function AIRecipeGenerator() {
               </div>
 
               <div>
-                <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">Préparation</p>
+                <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">{t('ai_recipe.preparation_title')}</p>
                 <ol className="space-y-2">
                   {recipe.steps.map((step, i) => (
                     <li key={i} className="flex gap-3 text-sm text-bark-700">
@@ -231,9 +258,21 @@ export function AIRecipeGenerator() {
               </div>
 
               <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-amber-50 border border-emerald-100 p-3">
-                <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">Apports</p>
+                <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">{t('ai_recipe.nutrition_title')}</p>
                 <p className="text-sm text-bark-700 mt-1 leading-relaxed">{recipe.nutritionNotes}</p>
               </div>
+
+              <button
+                onClick={handleSaveRecipe}
+                disabled={!!savedRecipeId}
+                className="w-full py-3 rounded-full border border-amber-300 text-amber-700 font-heading font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70"
+              >
+                {savedRecipeId ? (
+                  <><Check className="w-4 h-4 text-emerald-500" /> {t('ai_recipe.saved')}</>
+                ) : (
+                  <><BookmarkPlus className="w-4 h-4" /> {t('ai_recipe.save_recipe')}</>
+                )}
+              </button>
             </motion.div>
           )}
 
@@ -246,7 +285,7 @@ export function AIRecipeGenerator() {
               className="pt-3 space-y-2"
             >
               <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-2">
-                Plan sur 7 jours
+                {t('ai_recipe.plan_title')}
               </p>
               {plan.days.map((d, i) => (
                 <motion.div
@@ -258,10 +297,10 @@ export function AIRecipeGenerator() {
                 >
                   <p className="font-heading font-bold text-bark-800 text-sm">{d.day}</p>
                   <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-bark-600">
-                    <div><span className="text-amber-600 font-semibold">Petit-déj</span><br />{d.breakfast}</div>
-                    <div><span className="text-amber-600 font-semibold">Déjeuner</span><br />{d.lunch}</div>
-                    <div><span className="text-amber-600 font-semibold">Goûter</span><br />{d.snack}</div>
-                    <div><span className="text-amber-600 font-semibold">Dîner</span><br />{d.dinner}</div>
+                    <div><span className="text-amber-600 font-semibold">{t('ai_recipe.breakfast')}</span><br />{d.breakfast}</div>
+                    <div><span className="text-amber-600 font-semibold">{t('ai_recipe.lunch')}</span><br />{d.lunch}</div>
+                    <div><span className="text-amber-600 font-semibold">{t('ai_recipe.snack')}</span><br />{d.snack}</div>
+                    <div><span className="text-amber-600 font-semibold">{t('ai_recipe.dinner')}</span><br />{d.dinner}</div>
                   </div>
                 </motion.div>
               ))}

@@ -22,6 +22,9 @@ export interface Recipe {
   texture: string;
   ageRange: string;
   prepMinutes: number;
+  emoji?: string;
+  category?: string;
+  kcal?: number;
 }
 
 export interface WeeklyMealPlan {

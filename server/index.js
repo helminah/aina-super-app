@@ -10,7 +10,7 @@
  *   POST /api/nutrition  { action: 'recipe' | 'weekly-plan', ... } → JSON structuré
  *   POST /api/redflag    { symptoms, babyAgeMonths } → { level, message, disclaimer }
  *
- * Modèle : claude-haiku-4-5 (rapide, adapté aux réponses courtes structurées).
+ * Modèle : claude-opus-4-7 (hackathon Anthropic Opus 4.7).
  * Prompt caching : system prompt + contexte food-guide sont marqués
  *   cache_control: ephemeral → tarif divisé par ~10 sur les hits (5 min TTL).
  */
@@ -24,7 +24,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { FOOD_GUIDE_CONTEXT } from './food-guide-context.js';
 
 const PORT = Number(process.env.PORT) || 3001;
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = 'claude-opus-4-7';
 
 const apiKey = process.env.ANTHROPIC_API_KEY;
 if (!apiKey) {
@@ -113,11 +113,10 @@ function extractJson(text) {
 }
 
 /** Appel Claude avec prompt caching sur le system prompt. */
-async function callClaude({ system, userMessage, maxTokens = 2048, temperature = 0.7 }) {
+async function callClaude({ system, userMessage, maxTokens = 2048 }) {
   const resp = await anthropic.messages.create({
     model: MODEL,
     max_tokens: maxTokens,
-    temperature,
     // Caching du system prompt (stable → permet cache hit sur les appels suivants).
     system: [
       { type: 'text', text: system, cache_control: { type: 'ephemeral' } },
@@ -163,6 +162,9 @@ Ingrédients disponibles : ${ingredients.length ? ingredients.join(', ') : 'libr
 Génère UNE recette adaptée. Réponds UNIQUEMENT en JSON selon ce schéma exact :
 {
   "title": "Nom évocateur (FR)",
+  "emoji": "un seul emoji représentatif du plat (ex: 🍠, 🥣, 🍲, 🥕, 🍌)",
+  "category": "petit-dejeuner | dejeuner | gouter | diner | dessert",
+  "kcal": 85,
   "ingredients": [ { "name": "...", "qty": "...", "notes": "optionnel" } ],
   "steps": [ "étape 1", "étape 2", "..." ],
   "nutritionNotes": "ce que cette recette apporte (fer, vitamines, protéines...)",
@@ -198,7 +200,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
       system: NUTRITION_SYSTEM,
       userMessage,
       maxTokens: action === 'weekly-plan' ? 2048 : 1200,
-      temperature: 0.8,
     });
 
     const data = extractJson(text);
@@ -243,7 +244,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
       system: REDFLAG_SYSTEM,
       userMessage,
       maxTokens: 600,
-      temperature: 0.2, // faible pour la cohérence médicale
     });
 
     const data = extractJson(text);
@@ -304,7 +304,6 @@ app.post('/api/chat', async (req, res) => {
     const resp = await anthropic.messages.create({
       model: MODEL,
       max_tokens: 800,
-      temperature: 0.6,
       system: [
         { type: 'text', text: CHAT_SYSTEM, cache_control: { type: 'ephemeral' } },
       ],

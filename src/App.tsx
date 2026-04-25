@@ -18,6 +18,7 @@ import { RecipeDetailPage } from '@/pages/RecipeDetailPage';
 import { DoctorPage } from '@/pages/DoctorPage';
 import { CarePage } from '@/pages/CarePage';
 import { AboutPage } from '@/pages/AboutPage';
+import { SupabaseSyncBridge } from '@/components/SupabaseSyncBridge';
 
 // Affiché une seule fois par session (cold open)
 const SPLASH_FLAG = 'aina-splash-shown';
@@ -68,6 +69,7 @@ export default function App() {
       <>
         <OnboardingFlow />
         <QuickSettings />
+        <SupabaseSyncBridge />
       </>
     );
   }
@@ -91,6 +93,7 @@ export default function App() {
       </Routes>
       <QuickSettings />
       <AIChatAssistant />
+      <SupabaseSyncBridge />
     </>
   );
 }

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { sendChatMessage, AnthropicApiError, type ChatMessage } from '@/lib/anthropic';
@@ -16,15 +17,16 @@ import { sendChatMessage, AnthropicApiError, type ChatMessage } from '@/lib/anth
 
 const MAX_TURNS = 10;
 
-const SUGGESTIONS = [
-  'Comment introduire le lait de vache ?',
-  'Mon bébé dort mal la nuit, des conseils ?',
-  'Quand consulter pour une fièvre ?',
-];
-
 export function AIChatAssistant() {
+  const { t } = useTranslation();
   const { profile } = useBaby();
   const [open, setOpen] = useState(false);
+
+  const suggestions = useMemo(() => [
+    t('chat.suggestion_cow_milk'),
+    t('chat.suggestion_sleep'),
+    t('chat.suggestion_fever'),
+  ], [t]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -57,7 +59,7 @@ export function AIChatAssistant() {
       });
       setMessages([...next, { role: 'assistant', content: reply }]);
     } catch (e) {
-      setError(e instanceof AnthropicApiError ? e.message : 'Erreur inattendue');
+      setError(e instanceof AnthropicApiError ? e.message : t('chat.unexpected_error'));
     } finally {
       setLoading(false);
     }
@@ -80,7 +82,7 @@ export function AIChatAssistant() {
           transition={{ delay: 0.6, type: 'spring', stiffness: 300, damping: 22 }}
           whileTap={{ scale: 0.92 }}
           className="fixed bottom-24 left-5 z-30 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-rose-500 text-white flex items-center justify-center shadow-[0_12px_28px_-8px_rgba(147,51,234,0.5)] print:hidden"
-          aria-label="AINA IA"
+          aria-label={t('chat.aina_ai')}
         >
           <MessageCircle className="w-6 h-6" strokeWidth={2} />
           <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white" />
@@ -116,15 +118,15 @@ export function AIChatAssistant() {
                     👩🏽‍⚕️
                   </div>
                   <div className="flex-1">
-                    <p className="font-heading font-bold text-white">AINA IA</p>
+                    <p className="font-heading font-bold text-white">{t('chat.aina_ai')}</p>
                     <p className="text-[11px] text-white/85 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> en ligne · réponses indicatives
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> {t('chat.online_status')}
                     </p>
                   </div>
                   <button
                     onClick={() => setOpen(false)}
                     className="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center"
-                    aria-label="Fermer"
+                    aria-label={t('common.close')}
                   >
                     <X className="w-4 h-4 text-white" />
                   </button>
@@ -137,19 +139,18 @@ export function AIChatAssistant() {
                   <div className="space-y-3">
                     <div className="bg-white rounded-2xl rounded-tl-sm p-4 elev-1 max-w-[85%]">
                       <p className="text-sm text-bark-700 leading-relaxed">
-                        Bonjour maman de <strong>{profile.name}</strong> 👋 Je suis AINA IA, l'assistante de l'app.
-                        Pose-moi tes questions sur la santé, le sommeil, l'alimentation ou le développement de bébé.
+                        {t('chat.welcome', { name: profile.name })}
                       </p>
                       <p className="text-[11px] text-bark-400 italic mt-2">
-                        ⚕️ Je ne remplace pas ton pédiatre — en cas de doute, consulte.
+                        {t('chat.welcome_disclaimer')}
                       </p>
                     </div>
                     <div className="pt-2">
                       <p className="text-[11px] uppercase tracking-[0.15em] text-bark-400 font-semibold mb-2 px-1">
-                        Quelques idées
+                        {t('chat.ideas')}
                       </p>
                       <div className="space-y-2">
-                        {SUGGESTIONS.map(s => (
+                        {suggestions.map(s => (
                           <button
                             key={s}
                             onClick={() => send(s)}
@@ -186,7 +187,7 @@ export function AIChatAssistant() {
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
                     <div className="bg-white text-bark-500 elev-1 rounded-2xl rounded-tl-sm px-4 py-3 text-sm flex items-center gap-2">
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>AINA IA réfléchit…</span>
+                      <span>{t('chat.thinking')}</span>
                     </div>
                   </motion.div>
                 )}
@@ -199,7 +200,7 @@ export function AIChatAssistant() {
 
                 {messages.filter(m => m.role === 'user').length >= MAX_TURNS && (
                   <div className="bg-amber-50 border border-amber-100 text-amber-700 rounded-2xl p-3 text-xs leading-relaxed text-center">
-                    Limite de 10 questions atteinte — nouvelle conversation ou reviens plus tard.
+                    {t('chat.limit_reached')}
                   </div>
                 )}
               </div>
@@ -216,7 +217,7 @@ export function AIChatAssistant() {
                         if (canSend) send(input);
                       }
                     }}
-                    placeholder="Pose ta question…"
+                    placeholder={t('chat.input_placeholder')}
                     rows={1}
                     className="flex-1 px-4 py-2.5 rounded-2xl bg-ivory-100 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-violet-300 text-sm resize-none max-h-24"
                   />
@@ -224,7 +225,7 @@ export function AIChatAssistant() {
                     onClick={() => send(input)}
                     disabled={!canSend}
                     className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-rose-500 text-white flex items-center justify-center disabled:opacity-40 transition-all active:scale-[0.92] flex-shrink-0"
-                    aria-label="Envoyer"
+                    aria-label={t('chat.send')}
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -234,7 +235,7 @@ export function AIChatAssistant() {
                     onClick={reset}
                     className="text-[11px] text-bark-400 mt-2 hover:text-bark-600 transition-colors"
                   >
-                    ↺ Nouvelle conversation
+                    {t('chat.new_conversation')}
                   </button>
                 )}
               </div>

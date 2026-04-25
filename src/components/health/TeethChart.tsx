@@ -5,6 +5,7 @@ import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { translateAgeRange } from '@/lib/i18n-data';
 
 /**
  * TeethChart v2 — vrais pictogrammes SVG par type de dent, frise chronologique
@@ -28,12 +29,6 @@ const typeColor: Record<ToothType, { stroke: string; fill: string; dim: string }
   incisor: { stroke: '#10b981', fill: '#fff',         dim: '#f1f5f0' },
   canine:  { stroke: '#0ea5e9', fill: '#fff',         dim: '#e6f4f8' },
   molar:   { stroke: '#9333ea', fill: '#fff',         dim: '#f0eaf6' },
-};
-
-const typeLabel: Record<ToothType, string> = {
-  incisor: 'Incisive',
-  canine:  'Canine',
-  molar:   'Molaire',
 };
 
 export function TeethChart() {
@@ -135,13 +130,13 @@ export function TeethChart() {
                   }`}
                 />
                 <div className="flex items-baseline justify-between">
-                  <p className={`text-sm font-semibold ${reached ? 'text-bark-800' : 'text-bark-400'}`}>{range}</p>
+                  <p className={`text-sm font-semibold ${reached ? 'text-bark-800' : 'text-bark-400'}`}>{translateAgeRange(range)}</p>
                   <p className={`text-[11px] ${passed && doneCount === teeth.length ? 'text-emerald-600' : 'text-bark-400'}`}>
                     {doneCount}/{teeth.length}
                   </p>
                 </div>
                 <p className="text-xs text-bark-500 mt-0.5">
-                  {teeth.length} {teeth.length === 1 ? 'dent' : 'dents'} · {teeth.map(t => typeLabel[getType(t)]).filter((v, i, a) => a.indexOf(v) === i).join(', ')}
+                  {t('health.teeth.count', { count: teeth.length })} · {teeth.map(tooth => t(`health.teeth.legend_${getType(tooth)}`)).filter((v, i, a) => a.indexOf(v) === i).join(', ')}
                 </p>
               </div>
             );

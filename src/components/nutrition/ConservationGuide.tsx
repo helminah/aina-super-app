@@ -22,7 +22,7 @@ export function ConservationGuide() {
           <Snowflake className="w-5 h-5 text-sky-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-sky-700 font-semibold">Guide</p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-sky-700 font-semibold">{t('nutrition.foods.guide_kicker')}</p>
           <p className="font-heading font-bold text-bark-800 mt-0.5">{t('nutrition.foods.conservation_title')}</p>
           <p className="text-xs text-bark-500 mt-0.5">{t('nutrition.foods.conservation_tagline')}</p>
         </div>
@@ -37,7 +37,7 @@ export function ConservationGuide() {
           <Droplets className="w-5 h-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">Guide</p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-emerald-700 font-semibold">{t('nutrition.foods.guide_kicker')}</p>
           <p className="font-heading font-bold text-bark-800 mt-0.5">{t('nutrition.foods.hygiene_title')}</p>
           <p className="text-xs text-bark-500 mt-0.5">{t('nutrition.foods.hygiene_tagline')}</p>
         </div>
