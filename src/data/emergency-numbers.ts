@@ -41,6 +41,9 @@ export const EMERGENCY_NUMBERS: Record<string, EmergencyInfo> = {
   'suisse':        { number: '144',  label: 'Ambulance' },
   'luxembourg':    { number: '112',  label: 'Urgences' },
   'monaco':        { number: '15',   label: 'SAMU' },
+  // Amérique du Nord
+  'united-states': { number: '911',  label: 'Emergency (911)' },
+  'canada':        { number: '911',  label: 'Emergency (911)' },
 };
 
 export const DEFAULT_EMERGENCY: EmergencyInfo = { number: '112', label: 'Urgences' };

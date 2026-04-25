@@ -464,7 +464,16 @@
     "badge_ai": "IA",
     "add_favorite": "Hanampy amin'ny ankafizina",
     "remove_favorite": "Esory amin'ny ankafizina",
-    "delete_aria": "Hamafa"
+    "delete_aria": "Hamafa",
+    "age_guard_food_title": "Ronono ihany",
+    "age_guard_food_body": "{{name}} dia {{months}} volana. Ny OMS dia manoro ny fanondranana ronono manontolo hatramin'ny 6 volana.",
+    "age_guard_food_unlock": "Ny recipe sy ny torolalana sakafo dia ho hita amin'ny 6 volana.",
+    "age_guard_food_rule1": "Tsy misy sakafo hafa",
+    "age_guard_food_rule2": "Tsy misy dite, rano voaroy na rano mamy",
+    "age_guard_food_rule3": "Ronono fotsiny (toromarika OMS)",
+    "age_guard_planner_title": "Planning amin'ny 4 volana",
+    "age_guard_planner_body": "{{name}} dia {{months}} volana. Ny planning sy ny lisitra fividianana dia mivoatra amin'ny 4 volana.",
+    "age_guard_planner_unlock": "Mbola {{remaining}} volana."
   },
   "recipe_detail": {
     "not_found": "Tsy hita ny nahandro",

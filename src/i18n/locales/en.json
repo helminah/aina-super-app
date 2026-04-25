@@ -464,7 +464,16 @@
     "badge_ai": "AI",
     "add_favorite": "Add to favorites",
     "remove_favorite": "Remove from favorites",
-    "delete_aria": "Delete"
+    "delete_aria": "Delete",
+    "age_guard_food_title": "Breast milk only",
+    "age_guard_food_body": "{{name}} is {{months}} month(s) old. WHO recommends exclusive breastfeeding or formula until 6 months. No solid food, no tea, no juice.",
+    "age_guard_food_unlock": "Recipes and food guide will be available at 6 months.",
+    "age_guard_food_rule1": "No solid food",
+    "age_guard_food_rule2": "No tea, juice or sweetened water",
+    "age_guard_food_rule3": "Breast milk or formula only (WHO recommendation)",
+    "age_guard_planner_title": "Meal planning available at 4 months",
+    "age_guard_planner_body": "{{name}} is {{months}} month(s) old. Meal planning and shopping list unlock at 4 months, when food introduction may begin with your pediatrician's guidance.",
+    "age_guard_planner_unlock": "{{remaining}} more month(s) before food introduction."
   },
   "recipe_detail": {
     "not_found": "Recipe not found",

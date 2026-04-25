@@ -464,7 +464,16 @@
     "badge_ai": "IA",
     "add_favorite": "Yokk ci bëgg",
     "remove_favorite": "Génnee ci bëgg",
-    "delete_aria": "Far"
+    "delete_aria": "Far",
+    "age_guard_food_title": "Meew rekk",
+    "age_guard_food_body": "{{name}} am na {{months}} weer. OMS def ne meew bu xeex rekk ba 6 weer. Lekk yokk amul yoon ba fi.",
+    "age_guard_food_unlock": "Recipe yi ak guide bi dafa jënd ci 6 weer.",
+    "age_guard_food_rule1": "Lekk yokk amul",
+    "age_guard_food_rule2": "Attaya, jus wala ndox jëm amul",
+    "age_guard_food_rule3": "Meew bu xeex rekk (OMS)",
+    "age_guard_planner_title": "Planning ci 4 weer",
+    "age_guard_planner_body": "{{name}} am na {{months}} weer. Planning ak liste courses bi yégél ci 4 weer.",
+    "age_guard_planner_unlock": "Amul tey {{remaining}} weer ci kanam."
   },
   "recipe_detail": {
     "not_found": "Recette bi gisuwu",

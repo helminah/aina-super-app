@@ -464,7 +464,16 @@
     "badge_ai": "IA",
     "add_favorite": "Ajouter aux favoris",
     "remove_favorite": "Retirer des favoris",
-    "delete_aria": "Supprimer"
+    "delete_aria": "Supprimer",
+    "age_guard_food_title": "Lait maternel uniquement",
+    "age_guard_food_body": "{{name}} a {{months}} mois. L'OMS recommande exclusivement le lait maternel ou le lait infantile jusqu'à 6 mois. Pas d'aliments solides, pas de thé, pas de jus.",
+    "age_guard_food_unlock": "Les recettes et le guide alimentaire seront disponibles à 6 mois.",
+    "age_guard_food_rule1": "Aucun aliment solide",
+    "age_guard_food_rule2": "Pas de thé, jus ou eau sucrée",
+    "age_guard_food_rule3": "Lait maternel ou infantile uniquement (recommandation OMS)",
+    "age_guard_planner_title": "Planning disponible à 4 mois",
+    "age_guard_planner_body": "{{name}} a {{months}} mois. Le planning repas et la liste de courses se déverrouillent à 4 mois, quand l'introduction alimentaire peut commencer selon le pédiatre.",
+    "age_guard_planner_unlock": "Encore {{remaining}} mois avant l'introduction alimentaire."
   },
   "recipe_detail": {
     "not_found": "Recette introuvable",

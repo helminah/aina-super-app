@@ -4,7 +4,7 @@ import { recipes } from '@/data/recipes';
 import type { AiRecipeEntry } from '@/types/child';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Copy } from 'lucide-react';
+import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
 import { AIRecipeGenerator } from '@/components/nutrition/AIRecipeGenerator';
@@ -298,12 +298,10 @@ export function NutritionPage() {
           { id: 'shopping' as const, labelKey: 'nutrition.tabs.shopping', icon: ShoppingCart },
         ]).map(tab => {
           const Icon = tab.icon;
-          const blocked = (tab.id === 'planner' || tab.id === 'shopping') && ageMonths < 4;
           return (
             <button
               key={tab.id}
               onClick={() => {
-                if (blocked) return;
                 setView(tab.id); setPickerSlot(null);
                 if (!seenTabs.current.has(tab.id) && tabHints[tab.id]) {
                   toast(tabHints[tab.id], { duration: 3000 });
@@ -311,9 +309,8 @@ export function NutritionPage() {
                   localStorage.setItem('aina_seen_tabs', JSON.stringify([...seenTabs.current]));
                 }
               }}
-              disabled={blocked}
               className={`flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex-1 justify-center ${
-                blocked ? 'text-bark-300 cursor-not-allowed' : view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'
+                view === tab.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' : 'text-bark-500'
               }`}
             >
               <Icon className="w-3.5 h-3.5" /> {t(tab.labelKey)}
@@ -326,14 +323,20 @@ export function NutritionPage() {
       {view === 'foods' && !pickerSlot && (
         ageMonths < 6 ? (
           <div className="rounded-2xl overflow-hidden elev-2">
-            <div className="bg-gradient-to-br from-sky-400 to-blue-500 px-5 pt-5 pb-5">
-              <div className="flex items-center gap-2 mb-2"><span className="text-2xl">🤱</span>
-                <p className="font-heading font-bold text-white text-base">{t('ai_recipe.milk_only_title')}</p>
+            <div className="bg-gradient-to-br from-sky-500 to-blue-600 px-5 pt-5 pb-5">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-3">
+                <span className="text-xl">🍼</span>
               </div>
-              <p className="text-white/90 text-sm leading-relaxed">{t('ai_recipe.milk_only_body')}</p>
+              <p className="font-heading font-bold text-white text-base mb-1">{t('nutrition.age_guard_food_title')}</p>
+              <p className="text-white/90 text-sm leading-relaxed">{t('nutrition.age_guard_food_body', { name: profile?.name, months: ageMonths, remaining: 6 - ageMonths })}</p>
             </div>
-            <div className="bg-white p-4 text-center">
-              <p className="text-xs text-bark-500">{profile?.name} a {ageMonths} mois — le guide alimentaire sera disponible à 6 mois.</p>
+            <div className="bg-white p-4 space-y-1.5">
+              {['age_guard_food_rule1','age_guard_food_rule2','age_guard_food_rule3'].map((k, i) => (
+                <p key={k} className={`text-xs flex items-center gap-2 ${i === 2 ? 'text-forest-600 font-semibold' : 'text-bark-500'}`}>
+                  <span>{i === 2 ? '✅' : '❌'}</span>{t(`nutrition.${k}`)}
+                </p>
+              ))}
+              <p className="text-[10px] text-bark-400 mt-2 italic">Source : Organisation Mondiale de la Santé (OMS)</p>
             </div>
           </div>
         ) : <FoodGuide />
@@ -345,22 +348,18 @@ export function NutritionPage() {
           {/* Surcouche lait maternel < 6 mois */}
           {ageMonths < 6 && !pickerSlot && !showRecipesAnyway ? (
             <div className="rounded-2xl overflow-hidden elev-2 mb-4">
-              <div className="bg-gradient-to-br from-sky-400 to-blue-500 px-5 pt-5 pb-5">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">🤱</span>
-                  <p className="font-heading font-bold text-white text-base">{t('ai_recipe.milk_only_title')}</p>
+              <div className="bg-gradient-to-br from-sky-500 to-blue-600 px-5 pt-5 pb-5">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-3">
+                  <span className="text-xl">🍼</span>
                 </div>
-                <p className="text-white/90 text-sm leading-relaxed">{t('ai_recipe.milk_only_body')}</p>
+                <p className="font-heading font-bold text-white text-base mb-1">{t('nutrition.age_guard_food_title')}</p>
+                <p className="text-white/90 text-sm leading-relaxed">{t('nutrition.age_guard_food_body', { name: profile?.name, months: ageMonths, remaining: 6 - ageMonths })}</p>
               </div>
               <div className="bg-white p-4 flex flex-col items-center gap-3">
-                <p className="text-xs text-bark-500 text-center">
-                  {t('ai_recipe.milk_only_months', { name: profile?.name, months: ageMonths, remaining: 6 - ageMonths })}
-                </p>
-                <button
-                  onClick={() => setShowRecipesAnyway(true)}
-                  className="w-full py-3 rounded-full bg-amber-500 text-white font-heading font-bold text-sm shadow-md shadow-amber-500/30"
-                >
-                  👀 {t('ai_recipe.milk_only_preview')}
+                <p className="text-[10px] text-bark-400 text-center italic">Source : OMS</p>
+                <button onClick={() => setShowRecipesAnyway(true)}
+                  className="w-full py-3 rounded-full bg-amber-500 text-white font-heading font-bold text-sm shadow-md shadow-amber-500/30">
+                  {t('ai_recipe.milk_only_preview')}
                 </button>
                 <button onClick={() => setShowRecipesAnyway(true)} className="text-xs text-bark-400 underline">
                   {t('ai_recipe.milk_only_anyway')}
@@ -535,20 +534,20 @@ export function NutritionPage() {
       {/* PLANNER & SHOPPING : bloqué < 4 mois avec message explicatif */}
       {(view === 'planner' || view === 'shopping') && ageMonths < 4 && !pickerSlot && (
         <div className="rounded-2xl overflow-hidden elev-2">
-          <div className="bg-gradient-to-br from-sky-400 to-blue-600 px-5 pt-5 pb-5">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">🤱</span>
-              <p className="font-heading font-bold text-white text-base">Lait maternel uniquement</p>
+          <div className="bg-gradient-to-br from-slate-500 to-slate-700 px-5 pt-5 pb-5">
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-3">
+              <Lock className="w-5 h-5 text-white" />
             </div>
-            <p className="text-white/90 text-sm leading-relaxed">
-              {profile?.name} a {ageMonths} mois. Avant 4 mois, l'OMS recommande exclusivement le lait maternel ou le lait infantile.
-            </p>
+            <p className="font-heading font-bold text-white text-base mb-1">{t('nutrition.age_guard_planner_title')}</p>
+            <p className="text-white/90 text-sm leading-relaxed">{t('nutrition.age_guard_planner_body', { name: profile?.name, months: ageMonths, remaining: 4 - ageMonths })}</p>
           </div>
-          <div className="bg-white p-4 space-y-2">
-            {['❌ Aucun aliment solide', '❌ Pas de thé, jus ou eau sucrée', '❌ Pas de bouillies ni céréales', '✅ Lait maternel ou infantile uniquement'].map(item => (
-              <p key={item} className={`text-xs ${item.startsWith('✅') ? 'text-forest-600 font-semibold' : 'text-bark-600'}`}>{item}</p>
+          <div className="bg-white p-4 space-y-1.5">
+            {['age_guard_food_rule1','age_guard_food_rule2','age_guard_food_rule3'].map((k, i) => (
+              <p key={k} className={`text-xs flex items-center gap-2 ${i === 2 ? 'text-forest-600 font-semibold' : 'text-bark-500'}`}>
+                <span>{i === 2 ? '✅' : '❌'}</span>{t(`nutrition.${k}`)}
+              </p>
             ))}
-            <p className="text-[10px] text-bark-400 mt-2 italic">Source : Organisation Mondiale de la Santé (OMS) — recommandation allaitement exclusif 0-6 mois</p>
+            <p className="text-[10px] text-bark-400 mt-2 italic">Source : Organisation Mondiale de la Santé (OMS)</p>
           </div>
         </div>
       )}

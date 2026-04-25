@@ -4,7 +4,7 @@
 // - european  : calendrier Hexavalent type Europe de l'Ouest + Québec
 // - maghreb   : Maroc / Algérie / Tunisie (mix PEV + européen)
 
-export type VaccineSchedule = 'pev-base' | 'european' | 'maghreb';
+export type VaccineSchedule = 'pev-base' | 'european' | 'maghreb' | 'cdc-usa';
 
 export interface CountryMeta {
   code: string;
@@ -58,6 +58,7 @@ export const COUNTRIES: CountryMeta[] = [
 
   // Amérique
   { code: 'canada',        label: 'Canada',         flag: '🇨🇦', schedule: 'european', region: 'amerique' },
+  { code: 'united-states', label: 'United States',  flag: '🇺🇸', schedule: 'cdc-usa',  region: 'amerique' },
   { code: 'haiti',         label: 'Haïti',          flag: '🇭🇹', schedule: 'pev-base', region: 'amerique' },
 ];
 
@@ -93,4 +94,5 @@ export const COUNTRIES_BY_SCHEDULE = {
   'pev-base': COUNTRIES.filter(c => c.schedule === 'pev-base').map(c => c.code),
   'european': COUNTRIES.filter(c => c.schedule === 'european').map(c => c.code),
   'maghreb':  COUNTRIES.filter(c => c.schedule === 'maghreb').map(c => c.code),
+  'cdc-usa':  COUNTRIES.filter(c => c.schedule === 'cdc-usa').map(c => c.code),
 } as const;
