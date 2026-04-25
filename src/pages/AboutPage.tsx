@@ -44,8 +44,8 @@ export function AboutPage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 hero-text mt-6 flex flex-col items-center text-center"
         >
-          <div className="w-24 h-24 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-5xl mb-4">
-            👩🏽‍⚕️
+          <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-white/40 shadow-xl mb-4">
+            <img src="/helminah.png" alt="Dr Helminah" className="w-full h-full object-cover object-top" />
           </div>
           <h1 className="font-display font-semibold text-white text-5xl leading-[0.95]">
             Dr Helminah
