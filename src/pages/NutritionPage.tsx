@@ -90,7 +90,8 @@ const AGE_COLORS: Record<number, string> = {
 
 export function NutritionPage() {
   const { t } = useTranslation();
-  const { isFavorite, toggleFavorite, favorites, mealPlan, setMealSlot, clearMealPlan, shoppingChecked, toggleShoppingItem, clearShoppingChecked, aiRecipes, removeAiRecipe } = useBaby();
+  const { isFavorite, toggleFavorite, favorites, mealPlan, setMealSlot, clearMealPlan, shoppingChecked, toggleShoppingItem, clearShoppingChecked, aiRecipes, removeAiRecipe, profile } = useBaby();
+  const ageMonths = profile ? Math.floor((Date.now() - new Date(profile.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44)) : 12;
   const navigate = useNavigate();
   const [view, setView] = useState<NutritionView>('recipes');
   const [searchQuery, setSearchQuery] = useState('');
@@ -285,6 +286,9 @@ export function NutritionPage() {
       {/* RECIPES VIEW */}
       {(view === 'recipes' || pickerSlot) && (
         <div>
+          {/* < 6 mois : lait maternel uniquement — AIRecipeGenerator gère tout */}
+          {ageMonths < 6 && !pickerSlot && <AIRecipeGenerator />}
+          {(ageMonths >= 6 || pickerSlot) && <div>
           {/* Search */}
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
@@ -342,6 +346,7 @@ export function NutritionPage() {
           )}
 
           {!pickerSlot && <AIRecipeGenerator />}
+          </div>}
         </div>
       )}
 
