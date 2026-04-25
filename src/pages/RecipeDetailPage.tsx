@@ -10,8 +10,8 @@ import { tl } from '@/lib/i18n-data';
 function LocalizedText({ value, className }: { value: string | { fr: string; en?: string; mg?: string; wo?: string }; className?: string }) {
   const { i18n } = useTranslation();
   const isPlainString = typeof value === 'string';
-  const hasTranslation = !isPlainString && (value as Record<string, string>)[i18n.language.slice(0, 2)];
-  const text = tl(value as Parameters<typeof tl>[0]);
+  const hasTranslation = !isPlainString && Boolean((value as Record<string, string>)[i18n.language.slice(0, 2)]);
+  const text = String(tl(value as Parameters<typeof tl>[0]) ?? '');
   return (
     <span className={className}>
       {text}
