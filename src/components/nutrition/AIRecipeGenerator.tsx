@@ -47,8 +47,8 @@ export function AIRecipeGenerator() {
           </div>
           <p className="text-white/90 text-sm leading-relaxed">{t('ai_recipe.milk_only_body')}</p>
         </div>
-        <div className="bg-white p-4 text-center space-y-3">
-          <p className="text-xs text-bark-500">
+        <div className="bg-white p-4 flex flex-col items-center gap-3">
+          <p className="text-xs text-bark-500 text-center">
             {t('ai_recipe.milk_only_months', { name: profile.name, months: ageMonths, remaining: 6 - ageMonths })}
           </p>
           <button
