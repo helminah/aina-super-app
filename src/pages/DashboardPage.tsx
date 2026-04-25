@@ -137,18 +137,13 @@ export function DashboardPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/profile')}
-              className="relative flex-shrink-0 group"
-              aria-label="Modifier la photo"
+              className="relative flex-shrink-0"
+              aria-label="Ajouter une photo"
             >
               <BabyAvatar baby={profile} size="sm" ring />
               {!profile.photoDataUrl && (
-                <div className="absolute inset-0 rounded-full bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center">
                   <Camera className="w-4 h-4 text-white" />
-                </div>
-              )}
-              {!profile.photoDataUrl && (
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow">
-                  <Camera className="w-2.5 h-2.5 text-bark-600" />
                 </div>
               )}
             </button>
