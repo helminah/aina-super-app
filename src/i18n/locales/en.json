@@ -473,7 +473,11 @@
     "age_guard_food_rule3": "Breast milk or formula only (WHO recommendation)",
     "age_guard_planner_title": "Meal planning available at 4 months",
     "age_guard_planner_body": "{{name}} is {{months}} month(s) old. Meal planning and shopping list unlock at 4 months, when food introduction may begin with your pediatrician's guidance.",
-    "age_guard_planner_unlock": "{{remaining}} more month(s) before food introduction."
+    "age_guard_planner_unlock": "{{remaining}} more month(s) before food introduction.",
+    "hint_foods": "🥕 Food guide — what to introduce and when, by your baby's age",
+    "hint_favorites": "❤️ Your favorite recipes and all your saved AI recipes",
+    "hint_planner": "📅 Plan your weekly meals, day by day",
+    "hint_shopping": "🛒 Your shopping list generated from the meal plan"
   },
   "recipe_detail": {
     "not_found": "Recipe not found",

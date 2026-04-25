@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { useGlassNotification } from '@/components/GlassNotification';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
 import { AIRecipeGenerator } from '@/components/nutrition/AIRecipeGenerator';
 import { useTranslation } from 'react-i18next';
@@ -104,11 +105,12 @@ export function NutritionPage() {
   const [showRecipesAnyway, setShowRecipesAnyway] = useState(false);
   const [showAutoFillDialog, setShowAutoFillDialog] = useState(false);
   const seenTabs = useRef<Set<string>>(new Set(JSON.parse(localStorage.getItem('aina_seen_tabs') || '[]')));
+  const { show: showGlass, node: glassNode } = useGlassNotification();
   const tabHints: Record<string, string> = {
-    foods: '🥕 Guide des aliments — quoi introduire et quand selon l\'âge',
-    favorites: '❤️ Tes recettes favorites et toutes tes recettes IA sauvegardées',
-    planner: '📅 Planifie les repas de la semaine jour par jour',
-    shopping: '🛒 Ta liste de courses générée depuis le planning',
+    foods:     t('nutrition.hint_foods'),
+    favorites: t('nutrition.hint_favorites'),
+    planner:   t('nutrition.hint_planner'),
+    shopping:  t('nutrition.hint_shopping'),
   };
   const [normalizedList, setNormalizedList] = useState<{name:string;qty:string;emoji:string}[]|null>(null);
   const [normalizingList, setNormalizingList] = useState(false);
@@ -304,7 +306,7 @@ export function NutritionPage() {
               onClick={() => {
                 setView(tab.id); setPickerSlot(null);
                 if (!seenTabs.current.has(tab.id) && tabHints[tab.id]) {
-                  toast(tabHints[tab.id], { duration: 3000 });
+                  showGlass(tabHints[tab.id]);
                   seenTabs.current.add(tab.id);
                   localStorage.setItem('aina_seen_tabs', JSON.stringify([...seenTabs.current]));
                 }
@@ -734,5 +736,6 @@ export function NutritionPage() {
       )}
       </div>
     </div>
+    {glassNode}
   );
 }

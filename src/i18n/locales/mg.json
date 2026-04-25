@@ -473,7 +473,11 @@
     "age_guard_food_rule3": "Ronono fotsiny (toromarika OMS)",
     "age_guard_planner_title": "Planning amin'ny 4 volana",
     "age_guard_planner_body": "{{name}} dia {{months}} volana. Ny planning sy ny lisitra fividianana dia mivoatra amin'ny 4 volana.",
-    "age_guard_planner_unlock": "Mbola {{remaining}} volana."
+    "age_guard_planner_unlock": "Mbola {{remaining}} volana.",
+    "hint_foods": "🥕 Torolalana sakafo — inona ny hampidirana sy oviana, arakaraka ny taona zazakely",
+    "hint_favorites": "❤️ Ny recipe tianao sy ny recipe IA rehetra voatahiry",
+    "hint_planner": "📅 Amboary ny sakafon'ny herinandro, andro isan'andro",
+    "hint_shopping": "🛒 Ny lisitrao fividianana voafarita avy amin'ny planning"
   },
   "recipe_detail": {
     "not_found": "Tsy hita ny nahandro",
