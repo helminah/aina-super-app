@@ -182,10 +182,24 @@ export function NutritionPage() {
     const n = name.toLowerCase().trim();
     return EXCLUDED_WORDS.some(w => n === w || n.startsWith(w + ' ') || n.includes(' ' + w));
   };
-  // Normalise le nom avant insertion — regroupe les variantes
+  // Normalise le nom avant insertion — regroupe les variantes d'un même ingrédient
+  const NORMALIZE_MAP: [RegExp, string][] = [
+    [/\b(œuf|oeuf)\b.*/i,          'Œuf'],
+    [/\bbanane\b.*/i,               'Banane'],
+    [/\bmangue\b.*/i,               'Mangue'],
+    [/\bpapaye\b.*/i,               'Papaye'],
+    [/\bcarotte\b.*/i,              'Carotte'],
+    [/\bcourgette\b.*/i,            'Courgette'],
+    [/\bépinards?\b.*/i,            'Épinards'],
+    [/\bpersil\b.*/i,               'Persil'],
+    [/\bpatate douce\b.*/i,         'Patate douce'],
+    [/\byaourt nature\b.*/i,        'Yaourt nature'],
+    [/\byaourt\b.*/i,               'Yaourt'],
+  ];
   const normalizeName = (name: string): string => {
-    const n = name.toLowerCase();
-    if (n.includes('oeuf') || n.includes('œuf')) return '🥚 Œuf';
+    for (const [re, normalized] of NORMALIZE_MAP) {
+      if (re.test(name)) return normalized;
+    }
     return name;
   };
 
