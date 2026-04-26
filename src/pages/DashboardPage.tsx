@@ -149,7 +149,7 @@ export function DashboardPage() {
             </button>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-white/80 font-medium tracking-wide">
-                {t('dashboard.hello_mom_of')}
+                {t('dashboard.hello_mom_of', { role: t(`onboarding.parent_role_hello_${profile.parentRole ?? 'maman'}`) })}
               </p>
               <p className="text-white/95 text-xs font-medium tracking-wide">{ageText}</p>
             </div>

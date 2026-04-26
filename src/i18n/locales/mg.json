@@ -91,7 +91,16 @@
       "maghreb": "Maghreb",
       "europe": "Eoropa",
       "amerique": "Amerika"
-    }
+    },
+    "parent_role_title": "Ary ianao, iza?",
+    "parent_role_subtitle": "Mba hanamarinana ny traikefany AINA",
+    "parent_maman": "Renin'",
+    "parent_papa": "Rain'",
+    "parent_other": "Hafa / Ray aman-dreny",
+    "hello_mom_of": "Manahoana, {{role}}",
+    "parent_role_hello_maman": "renin'",
+    "parent_role_hello_papa": "rain'",
+    "parent_role_hello_parent": "ray aman-drenin'"
   },
   "appointment": {
     "kicker": "Fotoam-pihaonana",
@@ -159,7 +168,7 @@
   "chat": {
     "aina_ai": "AINA IA",
     "online_status": "miasa · valiny ho an'ny fampahalalana",
-    "welcome": "Manao ahoana, renin'i {{name}} 👋 Izaho no AINA IA, ny mpanampy amin'ity app ity. Anontanio ahy momba ny fahasalamana, torimaso, sakafo na fitomboan'ny zaza.",
+    "welcome": "Manao ahoana, {{role}} dei {{name}} 👋 Izaho no AINA IA, ny mpanampy amin'ity app ity. Anontanio ahy momba ny fahasalamana, torimaso, sakafo na fitomboan'ny zaza.",
     "welcome_disclaimer": "⚕️ Tsy manolo ny mpitsabon'ny zanakao aho — raha misalasala, manontania mpitsabo.",
     "ideas": "Soso-kevitra vitsivitsy",
     "thinking": "Mieritreritra ny AINA IA…",

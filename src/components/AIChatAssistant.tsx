@@ -146,8 +146,8 @@ export function AIChatAssistant() {
                   animate={{ opacity: 1, y: 0 }}
                   className="relative z-10 hero-text flex items-center gap-3"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-2xl">
-                    👩🏽‍⚕️
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-violet-200 flex-shrink-0">
+                    <img src="/aina-ia.jpg" alt="AINA IA" className="w-full h-full object-cover object-top scale-110" />
                   </div>
                   <div className="flex-1">
                     <p className="font-heading font-bold text-white">{t('chat.aina_ai')}</p>
@@ -171,7 +171,7 @@ export function AIChatAssistant() {
                   <div className="space-y-3">
                     <div className="bg-white rounded-2xl rounded-tl-sm p-4 elev-1 max-w-[85%]">
                       <p className="text-sm text-bark-700 leading-relaxed">
-                        {t('chat.welcome', { name: profile.name })}
+                        {t('chat.welcome', { name: profile.name, role: t(`onboarding.parent_role_hello_${profile.parentRole ?? 'maman'}`) })}
                       </p>
                       <p className="text-[11px] text-bark-400 italic mt-2">
                         {t('chat.welcome_disclaimer')}

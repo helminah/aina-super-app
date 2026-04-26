@@ -91,7 +91,16 @@
       "maghreb": "Maghreb",
       "europe": "Europe",
       "amerique": "Amérique"
-    }
+    },
+    "parent_role_title": "Et vous, c'est qui ?",
+    "parent_role_subtitle": "Pour personnaliser l'expérience AINA",
+    "parent_maman": "Maman",
+    "parent_papa": "Papa",
+    "parent_other": "Autre / Co-parent",
+    "hello_mom_of": "Bonjour, {{role}} de",
+    "parent_role_hello_maman": "maman",
+    "parent_role_hello_papa": "papa",
+    "parent_role_hello_parent": "parent de"
   },
   "appointment": {
     "kicker": "Rendez-vous",
@@ -159,7 +168,7 @@
   "chat": {
     "aina_ai": "AINA IA",
     "online_status": "en ligne · réponses indicatives",
-    "welcome": "Bonjour maman de {{name}} 👋 Je suis AINA IA, l'assistante de l'app. Pose-moi tes questions sur la santé, le sommeil, l'alimentation ou le développement de bébé.",
+    "welcome": "Bonjour {{role}} de {{name}} 👋 Je suis AINA IA, l'assistante de l'app. Pose-moi tes questions sur la santé, le sommeil, l'alimentation ou le développement de bébé.",
     "welcome_disclaimer": "⚕️ Je ne remplace pas ton pédiatre — en cas de doute, consulte.",
     "ideas": "Quelques idées",
     "thinking": "AINA IA réfléchit…",

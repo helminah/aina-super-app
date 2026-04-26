@@ -2,6 +2,7 @@
 // (on a 25+ pays maintenant, pas viable en union).
 export type Country = string;
 export type Sex = 'boy' | 'girl';
+export type ParentRole = 'maman' | 'papa' | 'parent';
 
 export interface ChildProfile {
   id: string;
@@ -13,7 +14,8 @@ export interface ChildProfile {
   country: Country;
   completedVaccines: string[];
   createdAt: string;
-  photoDataUrl?: string;  // base64, optionnel
+  photoDataUrl?: string;
+  parentRole?: ParentRole;
 }
 
 export interface WeightEntry { date: string; weight: number; }

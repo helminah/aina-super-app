@@ -713,23 +713,51 @@ export function NutritionPage() {
             </div>
           ) : (
             <>
-              <div className="space-y-2">
-                {(normalizedList ?? shoppingList).map(item => (
-                  <button
-                    key={item.name}
-                    onClick={() => toggleShoppingItem(item.name)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${shoppingChecked.includes(item.name) ? 'bg-forest-50 opacity-60' : 'bg-ivory-50'}`}
-                  >
-                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${shoppingChecked.includes(item.name) ? 'bg-forest-600 border-forest-600' : 'border-ivory-400'}`}>
-                      {shoppingChecked.includes(item.name) && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
-                    </div>
-                    <span className="text-xl">{item.emoji}</span>
-                    <div className="flex-1 text-left">
-                      <p className={`text-sm font-medium ${shoppingChecked.includes(item.name) ? 'line-through text-bark-400' : 'text-bark-800'}`}>{item.name}</p>
-                      <p className="text-xs text-bark-500">{item.qty}</p>
-                    </div>
-                  </button>
-                ))}
+              {(() => {
+                const CATS = [
+                  { label:'Légumes', emoji:'🥕', keys:['carotte','patate','courgette','courge','épinard','brocoli','chou','pois','oignon','ail','poireau','aubergine','poivron','tomate','concombre','salade','navet','betterave','igname','taro','gombo','manioc','feuille'] },
+                  { label:'Fruits', emoji:'🍎', keys:['banane','mangue','pomme','poire','prune','pêche','abricot','orange','citron','lime','fraise','ananas','papaye','avocat','kiwi','figue','datte','pastèque','melon','raisin','goyave','fruit'] },
+                  { label:'Céréales', emoji:'🌾', keys:['mil','fonio','riz','quinoa','semoule','farine','maïs','avoine','blé','pain','pâte','céréale','bouillie','polenta'] },
+                  { label:'Protéines', emoji:'🍗', keys:['poulet','poisson','viande','œuf','lentille','pois chiche','thon','sardine','saumon','bœuf','agneau','dinde','crevette','soja','arachide','cajou','haricot'] },
+                  { label:'Huiles', emoji:'🫒', keys:['huile','beurre','margarine','ghee','palme','sésame'] },
+                  { label:'Épices', emoji:'🌿', keys:['sel','poivre','cumin','gingembre','cannelle','coriandre','curcuma','vanille','noix','herbe','épice','bouillon'] },
+                ];
+                const items = normalizedList ?? shoppingList;
+                const used = new Set<string>();
+                const groups: { label:string; emoji:string; items:typeof items }[] = [];
+                for (const cat of CATS) {
+                  const matched = items.filter(item => !used.has(item.name) && cat.keys.some(k => item.name.toLowerCase().includes(k)));
+                  if (matched.length) { matched.forEach(i => used.add(i.name)); groups.push({ ...cat, items: matched }); }
+                }
+                const rest = items.filter(i => !used.has(i.name));
+                if (rest.length) groups.push({ label:'Autres', emoji:'🛒', items: rest });
+                return (
+                  <div className="space-y-4">
+                    {groups.map(group => (
+                      <div key={group.label}>
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-bark-500 mb-1.5 flex items-center gap-1.5">
+                          <span>{group.emoji}</span>{group.label}
+                        </p>
+                        <div className="space-y-1.5">
+                          {group.items.map(item => (
+                            <button key={item.name} onClick={() => toggleShoppingItem(item.name)}
+                              className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${shoppingChecked.includes(item.name) ? 'bg-forest-50 opacity-60' : 'bg-ivory-50'}`}>
+                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${shoppingChecked.includes(item.name) ? 'bg-forest-600 border-forest-600' : 'border-ivory-400'}`}>
+                                {shoppingChecked.includes(item.name) && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                              </div>
+                              <span className="text-lg">{item.emoji}</span>
+                              <div className="flex-1 text-left">
+                                <p className={`text-sm font-medium ${shoppingChecked.includes(item.name) ? 'line-through text-bark-400' : 'text-bark-800'}`}>{item.name}</p>
+                                <p className="text-xs text-bark-500">{item.qty}</p>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
               </div>
               <div className="flex gap-2 mt-5">
                 <button onClick={clearShoppingChecked} className="py-3 px-4 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm flex-shrink-0">{t('nutrition.uncheck_all')}</button>

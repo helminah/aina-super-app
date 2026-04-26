@@ -91,7 +91,16 @@
       "maghreb": "Maghreb",
       "europe": "Orop",
       "amerique": "Amerik"
-    }
+    },
+    "parent_role_title": "Yow, ana nga?",
+    "parent_role_subtitle": "Ngir wuuteel njëkk AINA bi",
+    "parent_maman": "Yaay",
+    "parent_papa": "Baay",
+    "parent_other": "Yeneen / Romb",
+    "hello_mom_of": "Asalaamu aleykum, {{role}} yi",
+    "parent_role_hello_maman": "yaay",
+    "parent_role_hello_papa": "baay",
+    "parent_role_hello_parent": "romb"
   },
   "appointment": {
     "kicker": "Rendez-vous",

@@ -36,8 +36,9 @@ export function OnboardingFlow() {
   const [birthHeight, setBirthHeight] = useState('');
   const [country, setCountry] = useState<Country | ''>('');
   const [selectedVaccines, setSelectedVaccines] = useState<string[]>([]);
+  const [parentRole, setParentRole] = useState<'maman' | 'papa' | 'parent' | ''>('');
 
-  const totalSteps = 5;
+  const totalSteps = 6;
 
   const next = () => { setDir(1); setStep(s => Math.min(s + 1, totalSteps)); };
   const prev = () => { setDir(-1); setStep(s => Math.max(s - 1, 1)); };
@@ -49,6 +50,7 @@ export function OnboardingFlow() {
       case 3: return birthWeight !== '' && birthHeight !== '';
       case 4: return country !== '';
       case 5: return true;
+      case 6: return parentRole !== '';
       default: return false;
     }
   };
@@ -70,6 +72,7 @@ export function OnboardingFlow() {
       country: country as Country,
       completedVaccines: selectedVaccines,
       createdAt: new Date().toISOString(),
+      parentRole: (parentRole as 'maman' | 'papa' | 'parent') || 'parent',
     };
     setProfile(profile);
     selectedVaccines.forEach(v => toggleVaccine(v));
@@ -261,6 +264,34 @@ export function OnboardingFlow() {
                 country={country}
                 onPick={setCountry}
               />
+            )}
+
+            {step === 6 && (
+              <div className="flex flex-col items-center justify-center gap-6">
+                <div className="text-5xl">👨‍👩‍👧</div>
+                <div className="text-center">
+                  <h1 className="font-heading text-2xl font-bold text-bark-800">{t('onboarding.parent_role_title')}</h1>
+                  <p className="text-bark-500 text-sm mt-2">{t('onboarding.parent_role_subtitle')}</p>
+                </div>
+                <div className="flex flex-col gap-3 w-full">
+                  {([
+                    { id: 'maman' as const, emoji: '👩', label: t('onboarding.parent_maman') },
+                    { id: 'papa'  as const, emoji: '👨', label: t('onboarding.parent_papa')  },
+                    { id: 'parent' as const, emoji: '🧑', label: t('onboarding.parent_other') },
+                  ]).map(opt => (
+                    <button
+                      key={opt.id}
+                      onClick={() => setParentRole(opt.id)}
+                      className={`w-full p-4 rounded-2xl flex items-center gap-4 text-left transition-all ${
+                        parentRole === opt.id ? 'bg-violet-100 ring-2 ring-violet-500' : 'bg-ivory-50'
+                      }`}
+                    >
+                      <span className="text-3xl">{opt.emoji}</span>
+                      <span className="font-heading font-bold text-bark-800 text-lg">{opt.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
 
             {step === 5 && (

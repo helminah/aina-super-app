@@ -91,7 +91,16 @@
       "maghreb": "Maghreb",
       "europe": "Europe",
       "amerique": "Americas"
-    }
+    },
+    "parent_role_title": "And you are...?",
+    "parent_role_subtitle": "To personalize your AINA experience",
+    "parent_maman": "Mom",
+    "parent_papa": "Dad",
+    "parent_other": "Other / Co-parent",
+    "hello_mom_of": "Hello, {{role}} of",
+    "parent_role_hello_maman": "mom",
+    "parent_role_hello_papa": "dad",
+    "parent_role_hello_parent": "parent of"
   },
   "appointment": {
     "kicker": "Appointment",
