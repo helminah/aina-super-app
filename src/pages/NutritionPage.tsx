@@ -745,27 +745,42 @@ export function NutritionPage() {
                   <Share2 className="w-4 h-4" /> Partager
                 </button>
                 <button
-                  onClick={async () => {
-                    toast('✨ AINA organise ta liste...', { duration: 2000 });
-                    try {
-                      const resp = await fetch('/api/shopping-pdf', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ items: normalizedList ?? shoppingList, babyName: profile?.name }),
+                  onClick={() => {
+                    const CATS: { label: string; emoji: string; keys: string[] }[] = [
+                      { label: 'Légumes',          emoji: '🥕', keys: ['carotte','patate','courgette','courge','épinard','brocoli','chou','haricot vert','pois','oignon','ail','poireau','aubergine','poivron','tomate','concombre','salade','navet','betterave','fenouil','igname','taro','gombo','manioc','feuille'] },
+                      { label: 'Fruits',           emoji: '🍎', keys: ['banane','mangue','pomme','poire','prune','pêche','abricot','orange','citron','lime','fraise','ananas','papaye','avocat','kiwi','figue','datte','pastèque','melon','raisin','goyave','fruit'] },
+                      { label: 'Céréales & féculents', emoji: '🌾', keys: ['mil','fonio','riz','quinoa','semoule','farine','maïs','avoine','orge','blé','pain','pâte','macaroni','céréale','bouillie','polenta','galette'] },
+                      { label: 'Protéines',        emoji: '🍗', keys: ['poulet','poisson','viande','œuf','lentille','pois chiche','thon','sardine','saumon','bœuf','agneau','dinde','crevette','haricot blanc','haricot rouge','soja','arachide','noix de cajou'] },
+                      { label: 'Huiles & matières grasses', emoji: '🫒', keys: ['huile','beurre','margarine','ghee','palme','sésame'] },
+                      { label: 'Épices & condiments', emoji: '🌿', keys: ['sel','poivre','cumin','gingembre','cannelle','coriandre','curcuma','vanille','noix','herbe','épice','bouillon','sucre','miel'] },
+                    ];
+                    const items = normalizedList ?? shoppingList;
+                    const used = new Set<number>();
+                    const sorted: { label: string; emoji: string; items: typeof items }[] = [];
+                    for (const cat of CATS) {
+                      const matched = items.filter((item, i) => {
+                        if (used.has(i)) return false;
+                        const n = item.name.toLowerCase();
+                        return cat.keys.some(k => n.includes(k));
                       });
-                      const data = await resp.json();
-                      const cats: { name: string; emoji: string; items: { name: string; qty: string }[] }[] = data.categories ?? [];
-                      const lines = [`🛒 Liste de courses — ${profile?.name ?? 'Bébé'}`, '─'.repeat(32), ''];
-                      for (const cat of cats) {
-                        lines.push(`${cat.emoji} ${cat.name.toUpperCase()}`);
-                        for (const item of cat.items) lines.push(`  • ${item.name} — ${item.qty}`);
-                        lines.push('');
+                      if (matched.length) {
+                        matched.forEach(item => used.add(items.indexOf(item)));
+                        sorted.push({ ...cat, items: matched });
                       }
-                      lines.push('🌿 Généré par AINA · aina-super-app.vercel.app');
-                      const text = lines.join('\n');
-                      if (navigator.share) { try { await navigator.share({ title: 'Liste de courses AINA', text }); } catch { /* annulé */ } }
-                      else { await navigator.clipboard.writeText(text); toast.success('Liste copiée !', { description: 'Organiseé par catégorie ✨' }); }
-                    } catch { toast.error('Erreur — réessaie'); }
+                    }
+                    const rest = items.filter((_, i) => !used.has(i));
+                    if (rest.length) sorted.push({ label: 'Autres', emoji: '🛒', items: rest });
+
+                    const lines = [`🛒 Courses — ${profile?.name ?? 'Bébé'}`, '─'.repeat(28), ''];
+                    for (const cat of sorted) {
+                      lines.push(`${cat.emoji} ${cat.label.toUpperCase()}`);
+                      for (const item of cat.items) lines.push(`  • ${item.name} — ${item.qty}`);
+                      lines.push('');
+                    }
+                    lines.push('🌿 AINA · aina-super-app.vercel.app');
+                    const text = lines.join('\n');
+                    if (navigator.share) { navigator.share({ title: 'Courses AINA', text }).catch(() => {}); }
+                    else { navigator.clipboard.writeText(text); toast.success('Liste triée copiée !'); }
                   }}
                   className="flex-shrink-0 py-3 px-4 rounded-full bg-violet-500 text-white font-bold text-sm flex items-center justify-center gap-1.5"
                 >
