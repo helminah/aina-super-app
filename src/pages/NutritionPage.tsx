@@ -176,15 +176,25 @@ export function NutritionPage() {
   }, [favorites, aiRecipes]);
 
   // Shopping list generation (statique + AI)
-  // Mots liés au lait — exclus de la liste de courses (géré séparément par la mère)
-  const MILK_WORDS = ['lait', 'milk', 'ronono', 'meew', 'infantile', 'maternel', 'allaitement'];
-  const isMilk = (name: string) => MILK_WORDS.some(w => name.toLowerCase().includes(w));
+  // Ingrédients exclus de la liste de courses
+  const EXCLUDED_WORDS = ['lait', 'milk', 'ronono', 'meew', 'infantile', 'maternel', 'allaitement', 'eau'];
+  const isExcluded = (name: string) => {
+    const n = name.toLowerCase().trim();
+    return EXCLUDED_WORDS.some(w => n === w || n.startsWith(w + ' ') || n.includes(' ' + w));
+  };
+  // Normalise le nom avant insertion — regroupe les variantes
+  const normalizeName = (name: string): string => {
+    const n = name.toLowerCase();
+    if (n.includes('oeuf') || n.includes('œuf')) return '🥚 Œuf';
+    return name;
+  };
 
   const shoppingList = useMemo(() => {
     const ingredientMap = new Map<string, { qty: string; emoji: string; count: number; unit: string }>();
 
-    const addIngredient = (name: string, qty: string, emoji: string) => {
-      if (isMilk(name)) return; // exclut le lait
+    const addIngredient = (rawName: string, qty: string, emoji: string) => {
+      if (isExcluded(rawName)) return;
+      const name = normalizeName(rawName);
       const existing = ingredientMap.get(name);
       // Extrait la valeur numérique et l'unité de la quantité (ex: "200 g" → 200, "g")
       const match = qty.match(/^([\d.,]+)\s*(.*)$/);
