@@ -9,6 +9,15 @@ import { toast } from 'sonner';
 import { useGlassNotification } from '@/components/GlassNotification';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
 import { AIRecipeGenerator } from '@/components/nutrition/AIRecipeGenerator';
+import { foodAgeGroups, type FoodAgeGroup } from '@/data/food-guide';
+import { getLocalizedField } from '@/lib/i18n-data';
+
+// Tranches d'âge pour les recettes (même structure que FoodGuide)
+const RECIPE_AGE_GROUPS: FoodAgeGroup[] = [
+  { label: { fr: '6-9 mois', en: '6-9 months', mg: '6-9 volana', wo: '6-9 weer' }, minMonths: 6,  maxMonths: 9,  emoji: '🥣', description: { fr: 'Premières purées', en: 'First purees', mg: 'Voalohany', wo: 'Njëkk' } },
+  { label: { fr: '9-12 mois', en: '9-12 months', mg: '9-12 volana', wo: '9-12 weer' }, minMonths: 9,  maxMonths: 12, emoji: '🍽️', description: { fr: 'Textures et morceaux', en: 'Textures and chunks', mg: 'Endrika sy potikely', wo: 'Xeex ak xaajam' } },
+  { label: { fr: '12-24 mois', en: '12-24 months', mg: '12-24 volana', wo: '12-24 weer' }, minMonths: 12, maxMonths: 25, emoji: '👨‍👩‍👧', description: { fr: 'Repas en famille', en: 'Family meals', mg: 'Sakafo fianakaviana', wo: 'Lekk njaboot' } },
+];
 import { useTranslation } from 'react-i18next';
 import { tl } from '@/lib/i18n-data';
 
@@ -97,10 +106,10 @@ export function NutritionPage() {
   const navigate = useNavigate();
   const [view, setView] = useState<NutritionView>('recipes');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterAge, setFilterAge] = useState<number | null>(() => {
-    // Pré-sélectionner l'âge du bébé si dans la plage des recettes
+  const [filterAgeGroup, setFilterAgeGroup] = useState<FoodAgeGroup | null>(() => {
     const babyAge = profile ? Math.floor((Date.now() - new Date(profile.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44)) : 0;
-    return AGES.includes(babyAge as typeof AGES[number]) ? babyAge : null;
+    // Trouve la tranche qui correspond à l'âge du bébé (>=6m seulement)
+    return babyAge >= 6 ? (RECIPE_AGE_GROUPS.find(g => babyAge >= g.minMonths && babyAge < g.maxMonths) ?? RECIPE_AGE_GROUPS[RECIPE_AGE_GROUPS.length - 1]) : null;
   });
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -139,7 +148,7 @@ export function NutritionPage() {
   // Filtered recipes
   const filteredRecipes = useMemo(() => {
     let result = allRecipes;
-    if (filterAge) result = result.filter(r => r.age === filterAge);
+    if (filterAgeGroup) result = result.filter(r => r.age >= filterAgeGroup.minMonths && r.age < filterAgeGroup.maxMonths);
     if (filterCategory) result = result.filter(r => r.category === filterCategory);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -156,7 +165,7 @@ export function NutritionPage() {
       });
     }
     return result;
-  }, [allRecipes, filterAge, filterCategory, searchQuery, aiRecipes]);
+  }, [allRecipes, filterAgeGroup, filterCategory, searchQuery, aiRecipes]);
 
   const favoriteRecipes = useMemo(() => {
     const staticFavs = recipes.filter(r => favorites.includes(r.id)).map(staticToDisplay);
@@ -393,26 +402,28 @@ export function NutritionPage() {
             />
           </div>
 
-          {/* Age chips — toujours visibles, âge bébé mis en avant */}
-          <div className="flex gap-1.5 overflow-x-auto no-scrollbar mb-2 pb-1">
+          {/* Tranches d'âge — même style que FoodGuide */}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar mb-2 pb-1">
             <button
-              onClick={() => setFilterAge(null)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${!filterAge ? 'bg-bark-800 text-white' : 'bg-ivory-100 text-bark-500'}`}
+              onClick={() => setFilterAgeGroup(null)}
+              className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${!filterAgeGroup ? 'bg-bark-800 text-white' : 'bg-ivory-100 text-bark-500'}`}
             >
               {t('nutrition.filter_all')}
             </button>
-            {AGES.map(age => {
-              const isBabyAge = age === ageMonths;
-              const isSelected = filterAge === age;
+            {RECIPE_AGE_GROUPS.map(g => {
+              const isBabyGroup = ageMonths >= g.minMonths && ageMonths < g.maxMonths;
+              const isSelected = filterAgeGroup?.label.fr === g.label.fr;
               return (
                 <button
-                  key={age}
-                  onClick={() => setFilterAge(isSelected ? null : age)}
-                  className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${isSelected ? 'text-white shadow-md' : isBabyAge ? 'text-white ring-2 ring-offset-1' : 'bg-ivory-100 text-bark-500'}`}
-                  style={isSelected || isBabyAge ? { backgroundColor: AGE_COLORS[age] ?? '#888' } : {}}
-                  title={isBabyAge ? '⭐ Âge de ton bébé' : ''}
+                  key={g.label.fr}
+                  onClick={() => setFilterAgeGroup(isSelected ? null : g)}
+                  className={`flex-shrink-0 px-3 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                    isSelected ? 'bg-amber-500 text-white shadow-md shadow-amber-500/30' :
+                    isBabyGroup ? 'bg-amber-100 text-amber-700 ring-2 ring-amber-400' :
+                    'bg-ivory-100 text-bark-500'
+                  }`}
                 >
-                  {age}m{isBabyAge ? ' ⭐' : ''}
+                  {g.emoji} {getLocalizedField(g.label)}{isBabyGroup ? ' ⭐' : ''}
                 </button>
               );
             })}
