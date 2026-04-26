@@ -477,7 +477,8 @@
     "hint_foods": "🥕 Torolalana sakafo — inona ny hampidirana sy oviana, arakaraka ny taona zazakely",
     "hint_favorites": "❤️ Ny recipe tianao sy ny recipe IA rehetra voatahiry",
     "hint_planner": "📅 Amboary ny sakafon'ny herinandro, andro isan'andro",
-    "hint_shopping": "🛒 Ny lisitrao fividianana voafarita avy amin'ny planning"
+    "hint_shopping": "🛒 Ny lisitrao fividianana voafarita avy amin'ny planning",
+    "filter_all": "Rehetra"
   },
   "recipe_detail": {
     "not_found": "Tsy hita ny nahandro",

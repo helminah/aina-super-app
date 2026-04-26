@@ -477,7 +477,8 @@
     "hint_foods": "🥕 Guide lekk — lan la wax yokk ak kankum, ci at bi xale bi",
     "hint_favorites": "❤️ Recipe yi nga bëgg ak recipe IA yi nga dëkke",
     "hint_planner": "📅 Sos planning lekk yi ci ayubés bi, bés bu nekk",
-    "hint_shopping": "🛒 Liste courses bi juddoo ci planning bi"
+    "hint_shopping": "🛒 Liste courses bi juddoo ci planning bi",
+    "filter_all": "Yëp"
   },
   "recipe_detail": {
     "not_found": "Recette bi gisuwu",

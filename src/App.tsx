@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useBaby } from '@/contexts/BabyContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,19 +7,20 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { SplashScreen } from '@/components/SplashScreen';
 import { QuickSettings } from '@/components/QuickSettings';
 import { AIChatAssistant } from '@/components/AIChatAssistant';
-import { AuthPage } from '@/pages/AuthPage';
-import { DashboardPage } from '@/pages/DashboardPage';
-import { HealthPage } from '@/pages/HealthPage';
-import { HealthReportPage } from '@/pages/HealthReportPage';
-import { NutritionPage } from '@/pages/NutritionPage';
-import { JournalPage } from '@/pages/JournalPage';
-import { ProfilePage } from '@/pages/ProfilePage';
-import { RecipeDetailPage } from '@/pages/RecipeDetailPage';
-import { DoctorPage } from '@/pages/DoctorPage';
-import { CarePage } from '@/pages/CarePage';
-import { AboutPage } from '@/pages/AboutPage';
 import { SupabaseSyncBridge } from '@/components/SupabaseSyncBridge';
 import { IntroGuide } from '@/components/IntroGuide';
+
+const AuthPage        = lazy(() => import('@/pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const DashboardPage   = lazy(() => import('@/pages/DashboardPage').then(m => ({ default: m.DashboardPage })));
+const HealthPage      = lazy(() => import('@/pages/HealthPage').then(m => ({ default: m.HealthPage })));
+const HealthReportPage= lazy(() => import('@/pages/HealthReportPage').then(m => ({ default: m.HealthReportPage })));
+const NutritionPage   = lazy(() => import('@/pages/NutritionPage').then(m => ({ default: m.NutritionPage })));
+const JournalPage     = lazy(() => import('@/pages/JournalPage').then(m => ({ default: m.JournalPage })));
+const ProfilePage     = lazy(() => import('@/pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const RecipeDetailPage= lazy(() => import('@/pages/RecipeDetailPage').then(m => ({ default: m.RecipeDetailPage })));
+const DoctorPage      = lazy(() => import('@/pages/DoctorPage').then(m => ({ default: m.DoctorPage })));
+const CarePage        = lazy(() => import('@/pages/CarePage').then(m => ({ default: m.CarePage })));
+const AboutPage       = lazy(() => import('@/pages/AboutPage').then(m => ({ default: m.AboutPage })));
 
 // Affiché une seule fois par session (cold open)
 const SPLASH_FLAG = 'aina-splash-shown';
@@ -87,6 +88,7 @@ export default function App() {
           setIntroDone(true);
         }} />
       )}
+      <Suspense fallback={<div className="min-h-dvh bg-ivory-100" />}>
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<DashboardPage />} />
@@ -102,6 +104,7 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
       <QuickSettings />
       <AIChatAssistant />
       <SupabaseSyncBridge />

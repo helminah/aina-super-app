@@ -477,7 +477,8 @@
     "hint_foods": "🥕 Food guide — what to introduce and when, by your baby's age",
     "hint_favorites": "❤️ Your favorite recipes and all your saved AI recipes",
     "hint_planner": "📅 Plan your weekly meals, day by day",
-    "hint_shopping": "🛒 Your shopping list generated from the meal plan"
+    "hint_shopping": "🛒 Your shopping list generated from the meal plan",
+    "filter_all": "All"
   },
   "recipe_detail": {
     "not_found": "Recipe not found",

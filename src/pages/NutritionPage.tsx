@@ -97,7 +97,11 @@ export function NutritionPage() {
   const navigate = useNavigate();
   const [view, setView] = useState<NutritionView>('recipes');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterAge, setFilterAge] = useState<number | null>(null);
+  const [filterAge, setFilterAge] = useState<number | null>(() => {
+    // Pré-sélectionner l'âge du bébé si dans la plage des recettes
+    const babyAge = profile ? Math.floor((Date.now() - new Date(profile.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44)) : 0;
+    return AGES.includes(babyAge as typeof AGES[number]) ? babyAge : null;
+  });
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [pickerSlot, setPickerSlot] = useState<string | null>(null);
@@ -378,48 +382,54 @@ export function NutritionPage() {
           {/* Search — visible seulement si >= 6 mois OU showRecipesAnyway */}
           {(ageMonths >= 6 || showRecipesAnyway || pickerSlot) && <div>
           {/* Search */}
-          <div className="relative mb-4">
+          <div className="relative mb-3">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder={t('nutrition.search_placeholder')}
-              className="w-full pl-10 pr-12 py-3 rounded-full bg-ivory-50 text-bark-800 focus:outline-none focus:ring-2 focus:ring-forest-300"
+              className="w-full pl-10 pr-4 py-3 rounded-full bg-ivory-50 text-bark-800 focus:outline-none focus:ring-2 focus:ring-forest-300"
             />
-            <button onClick={() => setShowFilters(!showFilters)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center">
-              <Filter className="w-4 h-4 text-forest-500" />
-            </button>
           </div>
 
-          {/* Filters */}
-          {showFilters && (
-            <div className="mb-4 bg-ivory-50 rounded-2xl p-4 space-y-3">
-              <div>
-                <p className="text-xs font-semibold text-bark-600 mb-2">{t('nutrition.filter_age')}</p>
-                <div className="flex gap-2 flex-wrap">
-                  {AGES.map(age => (
-                    <button key={age} onClick={() => setFilterAge(filterAge === age ? null : age)}
-                      className={`w-10 h-10 rounded-full text-xs font-bold transition-all ${filterAge === age ? 'text-white shadow-md' : 'bg-ivory-100 text-bark-500'}`}
-                      style={filterAge === age ? { backgroundColor: AGE_COLORS[age] } : {}}>
-                      {age}m
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-bark-600 mb-2">{t('nutrition.filter_meal_type')}</p>
-                <div className="flex gap-2">
-                  {CATEGORY_IDS.map(cat => (
-                    <button key={cat.id} onClick={() => setFilterCategory(filterCategory === cat.id ? null : cat.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${filterCategory === cat.id ? 'bg-forest-600 text-white' : 'bg-ivory-100 text-bark-500'}`}>
-                      {cat.emoji} {t(`nutrition.categories.${cat.id}`)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Age chips — toujours visibles, âge bébé mis en avant */}
+          <div className="flex gap-1.5 overflow-x-auto no-scrollbar mb-2 pb-1">
+            <button
+              onClick={() => setFilterAge(null)}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${!filterAge ? 'bg-bark-800 text-white' : 'bg-ivory-100 text-bark-500'}`}
+            >
+              {t('nutrition.filter_all')}
+            </button>
+            {AGES.map(age => {
+              const isBabyAge = age === ageMonths;
+              const isSelected = filterAge === age;
+              return (
+                <button
+                  key={age}
+                  onClick={() => setFilterAge(isSelected ? null : age)}
+                  className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${isSelected ? 'text-white shadow-md' : isBabyAge ? 'text-white ring-2 ring-offset-1' : 'bg-ivory-100 text-bark-500'}`}
+                  style={isSelected || isBabyAge ? { backgroundColor: AGE_COLORS[age] ?? '#888' } : {}}
+                  title={isBabyAge ? '⭐ Âge de ton bébé' : ''}
+                >
+                  {age}m{isBabyAge ? ' ⭐' : ''}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Category chips — toujours visibles */}
+          <div className="flex gap-1.5 overflow-x-auto no-scrollbar mb-3 pb-1">
+            {CATEGORY_IDS.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setFilterCategory(filterCategory === cat.id ? null : cat.id)}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${filterCategory === cat.id ? 'bg-amber-500 text-white shadow-sm' : 'bg-ivory-100 text-bark-500'}`}
+              >
+                {cat.emoji} {t(`nutrition.categories.${cat.id}`)}
+              </button>
+            ))}
+          </div>
 
           {/* Recipe grid */}
           <div className="grid grid-cols-2 gap-3">

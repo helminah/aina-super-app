@@ -477,7 +477,8 @@
     "hint_foods": "🥕 Guide alimentaire — quoi introduire et quand selon l'âge de ton bébé",
     "hint_favorites": "❤️ Tes recettes favorites et toutes tes recettes IA sauvegardées",
     "hint_planner": "📅 Planifie les repas de la semaine, jour par jour",
-    "hint_shopping": "🛒 Ta liste de courses générée depuis le planning"
+    "hint_shopping": "🛒 Ta liste de courses générée depuis le planning",
+    "filter_all": "Tous"
   },
   "recipe_detail": {
     "not_found": "Recette introuvable",
