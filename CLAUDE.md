@@ -66,6 +66,25 @@ ANTHROPIC_API_KEY=sk-ant-...   # Server-side only — never prefix with VITE_
 VITE_API_URL=                  # Empty in production (same-origin). http://localhost:3001 in dev (via vite proxy)
 ```
 
+## Testing & Validation Norms
+
+```bash
+npm run build   # TypeScript strict check — must pass with 0 errors before any PR
+npm run lint    # ESLint — no warnings allowed on AI/medical components
+```
+
+**Manual smoke tests before deploy:**
+1. `curl https://aina-super-app.vercel.app/api/health` → `{"ok":true,"model":"claude-opus-4-7"}`
+2. POST `/api/redflag` with `{ symptoms, babyAgeMonths }` → must return `{ level, message, disclaimer }`
+3. POST `/api/nutrition` with `{ action:"recipe", babyAgeMonths, country, ingredients }` → valid JSON recipe
+4. POST `/api/chat` → SSE stream with `data: {"token":"..."}` events
+
+**Medical safety invariants (never break these):**
+- `disclaimer` field always present in redflag response (server-side forced)
+- `level` always one of `green|yellow|red` (server validates, defaults to `yellow`)
+- API key never in client bundle (no `VITE_ANTHROPIC_*` env vars)
+- `temperature` param must NOT be set for claude-opus-4-7 (deprecated)
+
 ## Vercel Deployment
 
 ```bash
