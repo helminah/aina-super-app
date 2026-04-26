@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Globe, ExternalLink, Instagram, Youtube, Linkedin, Music2 } from 'lucide-react';
+import { ArrowLeft, Globe, ExternalLink, Instagram, Youtube, Linkedin, Music2, Twitter } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DR_HELMINAH_LINKS, type DrHelminahLinkKey } from '@/config/drhelminah';
@@ -17,6 +17,7 @@ const LINK_META: Record<SocialKey, { Icon: LucideIcon; gradient: string }> = {
   tiktok:    { Icon: Music2,    gradient: 'from-bark-800 via-sky-400 to-rose-400' },
   youtube:   { Icon: Youtube,   gradient: 'from-red-600 to-red-500' },
   linkedin:  { Icon: Linkedin,  gradient: 'from-sky-700 to-sky-500' },
+  twitter:   { Icon: Twitter,   gradient: 'from-gray-800 to-gray-600' },
 };
 
 export function AboutPage() {

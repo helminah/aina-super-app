@@ -6,11 +6,12 @@
  */
 
 export const DR_HELMINAH_LINKS = {
-  website:   'https://drhelminah.com',
+  website:   'https://www.drhelminah.com',
   instagram: 'https://www.instagram.com/dr.helminah/',
   tiktok:    'https://www.tiktok.com/@dr.helminah',
   youtube:   'https://www.youtube.com/@drhelminah',
-  linkedin:  'https://linkedin.com/in/helminah-rm',
+  linkedin:  'https://www.linkedin.com/in/helminah-rm',
+  twitter:   'https://x.com/minahrandria',
   email:     'mailto:helminahpro@gmail.com',
   calendly:  'https://calendly.com/helminahmalalaniaina/appel-decouverte-avec-helminah',
 } as const;

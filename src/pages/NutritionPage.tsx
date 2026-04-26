@@ -746,7 +746,7 @@ export function NutritionPage() {
                 </button>
                 <button
                   onClick={async () => {
-                    toast('✨ AINA prépare ton PDF...', { duration: 2000 });
+                    toast('✨ AINA organise ta liste...', { duration: 2000 });
                     try {
                       const resp = await fetch('/api/shopping-pdf', {
                         method: 'POST',
@@ -754,26 +754,22 @@ export function NutritionPage() {
                         body: JSON.stringify({ items: normalizedList ?? shoppingList, babyName: profile?.name }),
                       });
                       const data = await resp.json();
-                      const cats: { name: string; emoji: string; items: { name: string; qty: string; emoji: string }[] }[] = data.categories ?? [];
-                      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Liste de courses AINA</title>
-<style>body{font-family:Georgia,serif;max-width:600px;margin:40px auto;padding:0 20px;color:#1a1a1a}
-h1{color:#7c3aed;border-bottom:2px solid #7c3aed;padding-bottom:8px}
-h2{font-size:16px;color:#4f46e5;margin-top:24px}
-li{margin:6px 0;font-size:14px}.qty{color:#7c5e72;font-size:13px}
-.footer{margin-top:32px;font-size:12px;color:#9ca3af;border-top:1px solid #e5e7eb;padding-top:12px}
-</style></head><body>
-<h1>🛒 Liste de courses — ${profile?.name ?? 'Bébé'}</h1>
-<p style="color:#6b7280;font-size:13px">Générée par AINA · ${new Date().toLocaleDateString()}</p>
-${cats.map(c => `<h2>${c.emoji} ${c.name}</h2><ul>${c.items.map(i => `<li>${i.emoji} <b>${i.name}</b> <span class="qty">— ${i.qty}</span></li>`).join('')}</ul>`).join('')}
-<div class="footer">⚕️ AINA ne remplace pas l'avis de ton pédiatre · aina-super-app.vercel.app</div>
-</body></html>`;
-                      const win = window.open('', '_blank');
-                      if (win) { win.document.write(html); win.document.close(); win.print(); }
-                    } catch { toast.error('Erreur PDF'); }
+                      const cats: { name: string; emoji: string; items: { name: string; qty: string }[] }[] = data.categories ?? [];
+                      const lines = [`🛒 Liste de courses — ${profile?.name ?? 'Bébé'}`, '─'.repeat(32), ''];
+                      for (const cat of cats) {
+                        lines.push(`${cat.emoji} ${cat.name.toUpperCase()}`);
+                        for (const item of cat.items) lines.push(`  • ${item.name} — ${item.qty}`);
+                        lines.push('');
+                      }
+                      lines.push('🌿 Généré par AINA · aina-super-app.vercel.app');
+                      const text = lines.join('\n');
+                      if (navigator.share) { try { await navigator.share({ title: 'Liste de courses AINA', text }); } catch { /* annulé */ } }
+                      else { await navigator.clipboard.writeText(text); toast.success('Liste copiée !', { description: 'Organiseé par catégorie ✨' }); }
+                    } catch { toast.error('Erreur — réessaie'); }
                   }}
                   className="flex-shrink-0 py-3 px-4 rounded-full bg-violet-500 text-white font-bold text-sm flex items-center justify-center gap-1.5"
                 >
-                  PDF ✨
+                  ✨ Trier
                 </button>
               </div>
             </>

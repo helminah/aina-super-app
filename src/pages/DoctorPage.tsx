@@ -1,4 +1,4 @@
-import { ArrowLeft, Heart, Instagram, Youtube, Linkedin, Mail } from 'lucide-react';
+import { ArrowLeft, Heart, Instagram, Youtube, Linkedin, Mail, Twitter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DR_HELMINAH_LINKS } from '@/config/drhelminah';
@@ -7,8 +7,9 @@ const SOCIALS = [
   { platform: 'Instagram', handle: '@dr.helminah',    href: DR_HELMINAH_LINKS.instagram, icon: Instagram, bg: 'bg-pink-50',  color: 'text-pink-500'  },
   { platform: 'TikTok',    handle: '@dr.helminah',    href: DR_HELMINAH_LINKS.tiktok,    icon: null,       bg: 'bg-gray-50',  color: 'text-bark-800'  },
   { platform: 'YouTube',   handle: '@drhelminah',     href: DR_HELMINAH_LINKS.youtube,   icon: Youtube,    bg: 'bg-red-50',   color: 'text-red-500'   },
-  { platform: 'LinkedIn',  handle: 'helminah-rm',     href: DR_HELMINAH_LINKS.linkedin,  icon: Linkedin,   bg: 'bg-blue-50',  color: 'text-blue-600'  },
-  { platform: 'Email',     handle: 'helminahpro@gmail.com', href: DR_HELMINAH_LINKS.email, icon: Mail,    bg: 'bg-amber-50', color: 'text-amber-600' },
+  { platform: 'LinkedIn',  handle: 'helminah-rm',          href: DR_HELMINAH_LINKS.linkedin, icon: Linkedin, bg: 'bg-blue-50',   color: 'text-blue-600'  },
+  { platform: 'X / Twitter', handle: '@minahrandria',     href: DR_HELMINAH_LINKS.twitter,  icon: Twitter,  bg: 'bg-gray-50',   color: 'text-bark-800'  },
+  { platform: 'Email',     handle: 'helminahpro@gmail.com', href: DR_HELMINAH_LINKS.email,  icon: Mail,     bg: 'bg-amber-50',  color: 'text-amber-600' },
 ];
 
 function TikTokIcon({ className }: { className?: string }) {

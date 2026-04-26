@@ -92,7 +92,7 @@ function DoseCalculator({ weight }: { weight: number }) {
   const { t, i18n } = useTranslation();
   const timeLocale = i18n.language.startsWith('en') ? 'en-US' : 'fr-FR';
   const { doseRecords, addDose, removeDose } = useBaby();
-  const [medication, setMedication] = useState<'paracetamol' | 'ibuprofen'>('paracetamol');
+  const [medication] = useState<'paracetamol'>('paracetamol');
   const [form, setForm] = useState<MedicationForm>(MEDICATION_FORMS.paracetamol[0]);
   const [customWeight, setCustomWeight] = useState(weight);
 
@@ -123,28 +123,10 @@ function DoseCalculator({ weight }: { weight: number }) {
       {/* Medication */}
       <div className="glass-card rounded-2xl p-5">
         <p className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold mb-3">{t('care.dose.medication')}</p>
-        <div className="flex gap-2">
-          {(['paracetamol', 'ibuprofen'] as const).map(m => (
-            <button
-              key={m}
-              onClick={() => {
-                setMedication(m);
-                setForm(MEDICATION_FORMS[m][0]);
-              }}
-              className={`flex-1 py-3 rounded-xl font-heading font-bold text-sm transition-all ${
-                medication === m ? 'bg-red-500 text-white shadow-md' : 'bg-white text-bark-600'
-              }`}
-            >
-              {m === 'paracetamol' ? t('care_dose.paracetamol') : t('care_dose.ibuprofen')}
-            </button>
-          ))}
+        <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-500 rounded-xl">
+          <Pill className="w-4 h-4 text-white" />
+          <span className="font-heading font-bold text-sm text-white">{t('care_dose.paracetamol')}</span>
         </div>
-        {medication === 'ibuprofen' && (
-          <p className="text-[11px] text-amber-700 mt-3 flex items-start gap-1.5">
-            <AlertTriangle className="w-3 h-3 flex-shrink-0 mt-0.5" />
-            {t('care.dose.ibuprofen_warning')}
-          </p>
-        )}
       </div>
 
       {/* Weight */}
