@@ -14,6 +14,8 @@ Designed for the **Anthropic Hackathon 2026 (Opus 4.7)** — deadline Apr 26.
 
 > 🌐 **Live demo: https://aina-super-app.vercel.app**
 >
+> ⚠️ Due to API credit limits, the live demo may not respond in real-time. The full functionality is demonstrated in the video and implemented in the codebase.
+>
 > 🇫🇷 Lire en français : see below
 
 ---
