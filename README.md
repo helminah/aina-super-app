@@ -12,36 +12,32 @@ exportable health record.
 
 Designed for the **Anthropic Hackathon 2026 (Opus 4.7)** — deadline Apr 26.
 
-> 🌐 Live demo: _deployment link coming soon_
+> 🌐 **Live demo: https://aina-super-app.vercel.app**
 >
 > 🇫🇷 Lire en français : see below
 
 ---
 
-## ✨ AI Features (powered by Claude Haiku 4.5)
+## ✨ AI Features (powered by Claude Opus 4.7)
 
-Three integrated AI capabilities, backed by an Express proxy that keeps the
-Anthropic API key server-side (never in the bundle), with prompt caching on
-the large system prompts (~90% cost reduction on cache hits).
+Five AI capabilities using Claude Opus 4.7's exclusive features — Extended Thinking, Vision, and SSE Streaming. All calls go through a secure Express/Vercel proxy (API key never in client bundle). Prompt caching on system prompts (~90% cost reduction on cache hits).
+
+### 📷 Vision + Medical Triage (Red Flag Checker)
+Parent describes symptoms and optionally **photographs** the baby (rash, wound, skin condition). Claude Opus 4.7 analyzes the image with **Extended Thinking** (`thinking: adaptive, effort: high`) and classifies urgency in 3 levels (🟢 monitor · 🟡 consult in 24h · 🔴 call emergency now). Emergency number localized to each of 30 countries. **Never diagnoses** — disclaimer enforced server-side.
 
 ### 🍽️ AI Recipe Generator
-Natural-language ingredient list + baby age + country → a personalized baby
-recipe (title, ingredients, steps, nutrition notes, texture). A _Weekly meal
-plan_ button generates a full 7-day plan adapted to allergies and age.
+Local ingredients (millet, mango, groundnut…) + baby exact age + country → personalized recipe with textures, nutrition notes, allergen exclusions. 7-day meal plan option. Adapted to African and European local foods.
 
-### 🚨 AI Red Flag Checker
-Parents describe what they observe in plain text; Claude classifies the
-situation in 3 levels (🟢 monitor · 🟡 consult within 24h · 🔴 immediate
-emergency) with clear guidance. **Never diagnoses** — always orients to a
-pediatrician or SAMU when appropriate. Disclaimer enforced server-side.
+### 💬 AINA IA Chatbot (SSE Streaming)
+Floating conversational assistant with **real-time token streaming** (SSE). Detects parent's language and responds in it — French, English, Wolof, or Malagasy. Supports **photo attachment** (scan ingredients or symptoms). Urgent symptom detection triggers immediate emergency redirect.
 
-### 💬 AINA IA Chatbot
-Floating conversational assistant, available from any page. Parents can ask
-free-form questions about sleep, feeding, development, vaccines, etc. Limited
-to 10 turns per session (token safety). Urgent symptoms trigger an immediate
-emergency redirect.
+### 📷 Visual Ingredient Scan
+Parent photographs available ingredients → AINA IA generates a recipe adapted to baby's exact age using those local ingredients.
 
-All three integrate the WHO/EPI food guide as contextual knowledge (cached).
+### 🛒 AI Shopping List
+Meal planner → categorized shopping list (🥕 Vegetables · 🍎 Fruits · 🌾 Grains · 🍗 Proteins…). Normalizes quantities to market-friendly units (320g → ~2 medium sweet potatoes). Excludes non-purchasable items (water, cooking liquid).
+
+All features integrate WHO/EPI food guide as cached contextual knowledge.
 
 ---
 
