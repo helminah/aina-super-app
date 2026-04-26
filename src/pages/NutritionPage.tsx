@@ -758,7 +758,6 @@ export function NutritionPage() {
                   </div>
                 );
               })()}
-              </div>
               <div className="flex gap-2 mt-5">
                 <button onClick={clearShoppingChecked} className="py-3 px-4 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm flex-shrink-0">{t('nutrition.uncheck_all')}</button>
                 <button
