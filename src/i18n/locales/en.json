@@ -224,7 +224,7 @@
   "ai_recipe": {
     "kicker": "Nutrition assistant",
     "header_title": "Personalized recipe for {{name}}",
-    "header_subtitle": "{{months}} months · adapted to {{country}} EPI",
+    "header_subtitle": "{{months}} months · {{country}}",
     "ingredients_label": "What ingredients do you have?",
     "ingredients_placeholder": "millet, mango, milk, sweet potato, carrot…",
     "ingredients_hint": "Separated by commas — or leave empty for a free suggestion.",
@@ -251,7 +251,9 @@
     "milk_only_preview": "See recipes to prepare for food introduction",
     "preview_mode_banner": "Preview mode — recipes for when baby turns 6 months",
     "preview_mode_back": "Back",
-    "milk_only_anyway": "Look anyway"
+    "milk_only_anyway": "Look anyway",
+    "autofill_body": "Let AINA prepare a varied and balanced menu, adapted to your baby's age. You can always edit meals after!",
+    "autofill_title": "Need inspiration? 🌿"
   },
   "profile_form": {
     "change_photo": "Change photo",

@@ -1,9 +1,10 @@
 import { useState, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useBaby } from '@/contexts/BabyContext';
 import { recipes } from '@/data/recipes';
 import type { AiRecipeEntry } from '@/types/child';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { useGlassNotification } from '@/components/GlassNotification';
@@ -117,6 +118,7 @@ export function NutritionPage() {
   const [expandedAiId, setExpandedAiId] = useState<number | null>(null);
   const [showRecipesAnyway, setShowRecipesAnyway] = useState(false);
   const [showAutoFillDialog, setShowAutoFillDialog] = useState(false);
+  const [showAIRecipe, setShowAIRecipe] = useState(false);
   const seenTabs = useRef<Set<string>>(new Set(JSON.parse(localStorage.getItem('aina_seen_tabs') || '[]')));
   const { show: showGlass, node: glassNode } = useGlassNotification();
   const tabHints: Record<string, string> = {
@@ -491,7 +493,15 @@ export function NutritionPage() {
             <p className="text-center text-bark-500 py-10">{t('nutrition.no_recipes')}</p>
           )}
 
-          {!pickerSlot && ageMonths >= 6 && <AIRecipeGenerator />}
+          {/* Bouton flottant IA Recette */}
+          {!pickerSlot && ageMonths >= 6 && (
+            <button
+              onClick={() => setShowAIRecipe(true)}
+              className="mt-4 w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-amber-500/30"
+            >
+              <Sparkles className="w-4 h-4" /> {t('ai_recipe.kicker')}
+            </button>
+          )}
           </div>}
         </div>
       )}
@@ -580,8 +590,8 @@ export function NutritionPage() {
         <div>
           {/* Auto-fill — popup chaleureux */}
           <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-100 p-4">
-            <p className="text-sm font-heading font-bold text-bark-800 mb-1">Tu manques d'inspiration ? 🌿</p>
-            <p className="text-xs text-bark-500 mb-3">Laisse AINA préparer un menu varié et équilibré, adapté à l'âge de ton bébé. Tu peux toujours modifier les repas après !</p>
+            <p className="text-sm font-heading font-bold text-bark-800 mb-1">{t('ai_recipe.autofill_title')}</p>
+            <p className="text-xs text-bark-500 mb-3">{t('ai_recipe.autofill_body')}</p>
             <div className="flex gap-2">
               {[1, 3, 7].map(days => (
                 <button
@@ -721,26 +731,49 @@ export function NutritionPage() {
                   </button>
                 ))}
               </div>
-              <div className="flex gap-3 mt-5">
-                <button onClick={clearShoppingChecked} className="flex-1 py-3 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm">{t('nutrition.uncheck_all')}</button>
+              <div className="flex gap-2 mt-5">
+                <button onClick={clearShoppingChecked} className="py-3 px-4 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm flex-shrink-0">{t('nutrition.uncheck_all')}</button>
                 <button
                   onClick={async () => {
-                    const lines = shoppingList.map(item =>
-                      `${item.emoji} ${item.name} — ${item.qty}`
-                    ).join('\n');
+                    const lines = (normalizedList ?? shoppingList).map(item => `${item.emoji} ${item.name} — ${item.qty}`).join('\n');
                     const text = `🛒 Ma liste de courses AINA\n${'─'.repeat(28)}\n\n${lines}\n\n🌿 Généré par AINA`;
-                    if (navigator.share) {
-                      try {
-                        await navigator.share({ title: 'Ma liste de courses AINA', text });
-                      } catch { /* annulé */ }
-                    } else {
-                      await navigator.clipboard.writeText(text);
-                      toast.success('Liste copiée !', { description: 'Colle-la dans WhatsApp ou SMS' });
-                    }
+                    if (navigator.share) { try { await navigator.share({ title: 'Ma liste de courses AINA', text }); } catch { /* annulé */ } }
+                    else { await navigator.clipboard.writeText(text); toast.success('Liste copiée !'); }
                   }}
-                  className="flex-1 py-3 rounded-full bg-forest-600 text-white font-bold text-sm flex items-center justify-center gap-2"
+                  className="flex-1 py-3 rounded-full bg-forest-600 text-white font-bold text-sm flex items-center justify-center gap-1.5"
                 >
                   <Share2 className="w-4 h-4" /> Partager
+                </button>
+                <button
+                  onClick={async () => {
+                    toast('✨ AINA prépare ton PDF...', { duration: 2000 });
+                    try {
+                      const resp = await fetch('/api/shopping-pdf', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ items: normalizedList ?? shoppingList, babyName: profile?.name }),
+                      });
+                      const data = await resp.json();
+                      const cats: { name: string; emoji: string; items: { name: string; qty: string; emoji: string }[] }[] = data.categories ?? [];
+                      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Liste de courses AINA</title>
+<style>body{font-family:Georgia,serif;max-width:600px;margin:40px auto;padding:0 20px;color:#1a1a1a}
+h1{color:#7c3aed;border-bottom:2px solid #7c3aed;padding-bottom:8px}
+h2{font-size:16px;color:#4f46e5;margin-top:24px}
+li{margin:6px 0;font-size:14px}.qty{color:#7c5e72;font-size:13px}
+.footer{margin-top:32px;font-size:12px;color:#9ca3af;border-top:1px solid #e5e7eb;padding-top:12px}
+</style></head><body>
+<h1>🛒 Liste de courses — ${profile?.name ?? 'Bébé'}</h1>
+<p style="color:#6b7280;font-size:13px">Générée par AINA · ${new Date().toLocaleDateString()}</p>
+${cats.map(c => `<h2>${c.emoji} ${c.name}</h2><ul>${c.items.map(i => `<li>${i.emoji} <b>${i.name}</b> <span class="qty">— ${i.qty}</span></li>`).join('')}</ul>`).join('')}
+<div class="footer">⚕️ AINA ne remplace pas l'avis de ton pédiatre · aina-super-app.vercel.app</div>
+</body></html>`;
+                      const win = window.open('', '_blank');
+                      if (win) { win.document.write(html); win.document.close(); win.print(); }
+                    } catch { toast.error('Erreur PDF'); }
+                  }}
+                  className="flex-shrink-0 py-3 px-4 rounded-full bg-violet-500 text-white font-bold text-sm flex items-center justify-center gap-1.5"
+                >
+                  PDF ✨
                 </button>
               </div>
             </>
@@ -757,6 +790,40 @@ export function NutritionPage() {
       )}
       </div>
       {glassNode}
+
+      {/* Sheet popup AIRecipeGenerator */}
+      {createPortal(
+        <AnimatePresence>
+          {showAIRecipe && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-black/40 flex items-end justify-center"
+              onClick={() => setShowAIRecipe(false)}
+            >
+              <motion.div
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 26, stiffness: 300 }}
+                className="w-full max-w-[480px] max-h-[90dvh] overflow-y-auto rounded-t-3xl bg-ivory-100"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="flex justify-end p-3 pb-0">
+                  <button onClick={() => setShowAIRecipe(false)} className="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
+                    <X className="w-4 h-4 text-bark-600" />
+                  </button>
+                </div>
+                <div className="px-2 pb-8">
+                  <AIRecipeGenerator />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }

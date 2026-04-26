@@ -224,7 +224,7 @@
   "ai_recipe": {
     "kicker": "Ndimbal lekk",
     "header_title": "Recette bu {{name}} moom",
-    "header_subtitle": "{{months}} weer · melni ak PEV {{country}}",
+    "header_subtitle": "{{months}} weer · {{country}}",
     "ingredients_label": "Ban ay ingrédients nga am ?",
     "ingredients_placeholder": "dugub, mangoro, meew, pomme de terre mboq, karoot…",
     "ingredients_hint": "Séparer ak virgule — walla bàyyil lépp ngir ndigël bu jam.",
@@ -251,7 +251,9 @@
     "milk_only_preview": "Xool recipe yi ngir preparar",
     "preview_mode_banner": "Yoon bu preparar — recipe yi ba 6 weer",
     "preview_mode_back": "Dellu",
-    "milk_only_anyway": "Xool rekk"
+    "milk_only_anyway": "Xool rekk",
+    "autofill_body": "Yelal AINA a sos menu bu wuuteel ak bu bax, mak ci at bi xale bi. Mën a soppi lekk yi ci kanam!",
+    "autofill_title": "Amul xel? 🌿"
   },
   "profile_form": {
     "change_photo": "Soppi foto",

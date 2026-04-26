@@ -224,7 +224,7 @@
   "ai_recipe": {
     "kicker": "Assistant nutrition",
     "header_title": "Recette personnalisée pour {{name}}",
-    "header_subtitle": "{{months}} mois · adapté au PEV {{country}}",
+    "header_subtitle": "{{months}} mois · {{country}}",
     "ingredients_label": "Quels ingrédients as-tu ?",
     "ingredients_placeholder": "mil, mangue, lait, patate douce, carotte…",
     "ingredients_hint": "Séparés par virgule — ou laisse vide pour suggestion libre.",
@@ -251,7 +251,9 @@
     "milk_only_preview": "Voir les recettes pour préparer l'introduction",
     "preview_mode_banner": "Mode préparation — recettes pour quand bébé aura 6 mois",
     "preview_mode_back": "Retour",
-    "milk_only_anyway": "Regarder quand même"
+    "milk_only_anyway": "Regarder quand même",
+    "autofill_body": "Laisse AINA préparer un menu varié et équilibré, adapté à l'âge de ton bébé. Tu peux toujours modifier les repas après !",
+    "autofill_title": "Tu manques d'inspiration ? 🌿"
   },
   "profile_form": {
     "change_photo": "Changer la photo",

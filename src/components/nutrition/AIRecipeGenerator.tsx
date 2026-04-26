@@ -4,6 +4,7 @@ import { Sparkles, Clock, Flame, ChefHat, CalendarRange, RefreshCw, AlertCircle,
 import { useTranslation } from 'react-i18next';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
+import { COUNTRY_BY_CODE } from '@/data/countries';
 import { toast } from 'sonner';
 import {
   generateRecipe,
@@ -160,7 +161,7 @@ export function AIRecipeGenerator() {
             {t('ai_recipe.header_title', { name: profile.name })}
           </p>
           <p className="text-white/85 text-xs mt-0.5">
-            {t('ai_recipe.header_subtitle', { months: ageMonths, country: profile.country })}
+            {t('ai_recipe.header_subtitle', { months: ageMonths, country: COUNTRY_BY_CODE[profile.country]?.label ?? profile.country })}
           </p>
         </motion.div>
       </div>

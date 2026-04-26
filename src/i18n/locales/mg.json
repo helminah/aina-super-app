@@ -224,7 +224,7 @@
   "ai_recipe": {
     "kicker": "Mpanampy amin'ny sakafo",
     "header_title": "Fomba nahandro manokana ho an'i {{name}}",
-    "header_subtitle": "{{months}} volana · mifanaraka amin'ny PEV {{country}}",
+    "header_subtitle": "{{months}} volana · {{country}}",
     "ingredients_label": "Inona no akora ananao?",
     "ingredients_placeholder": "ampemby, manga, ronono, vomanga mamy, karaoty…",
     "ingredients_hint": "Sarahina amin'ny faingo — na avelao foana raha hangataka soso-kevitra.",
@@ -251,7 +251,9 @@
     "milk_only_preview": "Jereo ny recipe ho fiomanana",
     "preview_mode_banner": "Fomba fiomanana — recipe ho an'ny 6 volana",
     "preview_mode_back": "Miverina",
-    "milk_only_anyway": "Hijery ihany"
+    "milk_only_anyway": "Hijery ihany",
+    "autofill_body": "Avelao ny AINA hanomana sakafo isan-karazany mifanaraka amin'ny taona ny zazakely. Azo ovaina foana ny sakafo aorian'izany!",
+    "autofill_title": "Tsy manana hevitra? 🌿"
   },
   "profile_form": {
     "change_photo": "Hanova sary",
