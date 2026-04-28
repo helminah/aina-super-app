@@ -13,8 +13,12 @@ export const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }
 export function extractJson(text) {
   const trimmed = (text ?? '').trim();
   try { return JSON.parse(trimmed); } catch { /* try next */ }
-  const match = trimmed.match(/\{[\s\S]*\}/);
-  if (match) { try { return JSON.parse(match[0]); } catch { /* fall through */ } }
+  const first = trimmed.indexOf('{');
+  const last = trimmed.lastIndexOf('}');
+  if (first !== -1 && last !== -1 && last > first) {
+    const candidate = trimmed.slice(first, last + 1);
+    try { return JSON.parse(candidate); } catch { /* fall through */ }
+  }
   throw new Error('Réponse Claude non parseable en JSON : ' + trimmed.slice(0, 200));
 }
 
@@ -31,6 +35,10 @@ export async function callClaude({
   imageBase64 = null,
   imageMediaType = 'image/jpeg',
 }) {
+  if (imageBase64 && imageBase64.length > 7_000_000) {
+    throw new Error('Image trop volumineuse (max ~5MB binaire / ~7MB base64).');
+  }
+
   const userContent = imageBase64
     ? [
         { type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageBase64 } },
@@ -41,11 +49,10 @@ export async function callClaude({
   const params = {
     model: MODEL,
     max_tokens: maxTokens,
-    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral', ttl: '1h' } }],
     messages: [{ role: 'user', content: userContent }],
   };
   if (thinking) {
-    // Opus 4.7 : nouvelle syntaxe adaptive (remplace enabled + budget_tokens)
     params.thinking = { type: 'adaptive' };
     params.output_config = { effort: 'high' };
   }

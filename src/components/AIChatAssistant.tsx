@@ -3,9 +3,13 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, RefreshCw, Camera } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { streamChatMessage, type ChatMessage } from '@/lib/anthropic';
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**
  * AIChatAssistant — bouton flottant + sheet de conversation avec "AINA IA".
@@ -49,6 +53,16 @@ export function AIChatAssistant() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      toast.error('Format non supporté');
+      e.target.value = '';
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error('Image trop lourde (max 5 Mo)');
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const dataUrl = ev.target?.result as string;

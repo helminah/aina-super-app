@@ -178,9 +178,9 @@ export function HealthPage() {
               const isPEV = ['pev-base'].includes(
                 ([] as string[]).concat(group.vaccines[0]?.country ?? []).some(c => c) ? 'pev-base' : ''
               );
-              const pevMap: Record<string, string> = {
-                '2 mois': '6 semaines (1 mois ½)', '3 mois': '10 semaines (2 mois ½)', '4 mois': '14 semaines (3 mois ½)',
-              };
+              // PEV labels (6/10/14 weeks) come from i18n. mg/wo translations are placeholders
+              // copied from FR (suffixed with _todo when unsure) — TODO: native translation.
+              const pevMap = t('health.pev_labels', { returnObjects: true }) as Record<string, string>;
               const rawLabel = getLocalizedField(group.vaccines[0].ageLabel);
               const groupHeader = group.ageMonths === 0
                 ? t('health.vaccines.birth')

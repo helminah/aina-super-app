@@ -80,7 +80,6 @@ export function ProfilePage() {
       birthWeight: parseFloat(newWeight),
       birthHeight: parseFloat(newHeight),
       country: newCountry,
-      completedVaccines: [],
       createdAt: new Date().toISOString(),
     };
     addBaby(baby);

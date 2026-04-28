@@ -345,6 +345,11 @@
       "how_herd_immunity_html": "Vaccinating baby also means <strong>protecting others</strong>: fragile people, future big sisters and brothers, pregnant women, seniors.",
       "how_side_effects_note": "Side effects (mild fever, redness) are temporary and minor. Always rare compared with the diseases they prevent."
     },
+    "pev_labels": {
+      "2 mois": "6 weeks (1.5 months)",
+      "3 mois": "10 weeks (2.5 months)",
+      "4 mois": "14 weeks (3.5 months)"
+    },
     "growth": {
       "weight": "Weight (kg)",
       "height": "Height (cm)",
@@ -489,7 +494,10 @@
     "hint_favorites": "❤️ Your favorite recipes and all your saved AI recipes",
     "hint_planner": "📅 Plan your weekly meals, day by day",
     "hint_shopping": "🛒 Your shopping list generated from the meal plan",
-    "filter_all": "All"
+    "filter_all": "All",
+    "menu_generated_one": "{{count}}-day menu generated!",
+    "menu_generated_other": "{{count}}-day menu generated!",
+    "menu_editable_hint": "You can edit each meal 😊"
   },
   "recipe_detail": {
     "not_found": "Recipe not found",

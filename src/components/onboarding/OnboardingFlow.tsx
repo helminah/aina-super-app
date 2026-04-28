@@ -70,7 +70,6 @@ export function OnboardingFlow() {
       birthWeight: parseFloat(birthWeight),
       birthHeight: parseFloat(birthHeight),
       country: country as Country,
-      completedVaccines: selectedVaccines,
       createdAt: new Date().toISOString(),
       parentRole: (parentRole as 'maman' | 'papa' | 'parent') || 'parent',
     };

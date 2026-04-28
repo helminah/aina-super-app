@@ -12,7 +12,6 @@ export interface ChildProfile {
   birthWeight: number;
   birthHeight: number;
   country: Country;
-  completedVaccines: string[];
   createdAt: string;
   photoDataUrl?: string;
   parentRole?: ParentRole;

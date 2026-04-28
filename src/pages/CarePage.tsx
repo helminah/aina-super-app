@@ -5,7 +5,7 @@ import { ArrowLeft, Pill, Thermometer, Droplets, Phone, AlertTriangle, Info } fr
 import { useBaby } from '@/contexts/BabyContext';
 import { useTranslation } from 'react-i18next';
 import { getAgeInMonths } from '@/lib/age-utils';
-import { MEDICATION_FORMS, DOSE_PER_KG, getPracticalDose, type MedicationForm } from '@/data/medications';
+import { MEDICATION_FORMS, DOSE_PER_KG, MAX_DAILY_DOSE_MG_PER_KG, MIN_INTERVAL_HOURS, getPracticalDose, type MedicationForm } from '@/data/medications';
 import { getEmergency } from '@/data/emergency-numbers';
 
 type CareSection = 'dose' | 'fever' | 'stool';
@@ -99,18 +99,28 @@ function DoseCalculator({ weight }: { weight: number }) {
   const doseMg = Math.round(customWeight * DOSE_PER_KG[medication]);
   const practical = getPracticalDose(doseMg, form);
 
-  // Last dose for this med + next allowed time (6h)
+  // Last dose for this med + next allowed time (intervalle min selon médicament)
   const lastDose = doseRecords.find(d => d.medication === medication);
-  const INTERVAL_MS = 6 * 60 * 60 * 1000;
+  const INTERVAL_MS = MIN_INTERVAL_HOURS[medication] * 60 * 60 * 1000;
   const nextAllowedAt = lastDose ? new Date(new Date(lastDose.givenAt).getTime() + INTERVAL_MS) : null;
   const nowMs = Date.now();
-  const mustWait = nextAllowedAt && nextAllowedAt.getTime() > nowMs;
-  const waitMinutes = mustWait ? Math.ceil((nextAllowedAt.getTime() - nowMs) / 60000) : 0;
+  const mustWait = !!(nextAllowedAt && nextAllowedAt.getTime() > nowMs);
+  const waitMinutes = mustWait ? Math.ceil((nextAllowedAt!.getTime() - nowMs) / 60000) : 0;
+  const waitHours = Math.max(1, Math.ceil(waitMinutes / 60));
 
   // Last 24h history (all meds)
   const recent = doseRecords.filter(d => Date.now() - new Date(d.givenAt).getTime() < 24 * 60 * 60 * 1000);
 
+  // Cumul 24h pour le médicament en cours (mg) + plafond journalier
+  const cumul24hMg = recent
+    .filter(d => d.medication === medication)
+    .reduce((sum, d) => sum + d.doseMg, 0);
+  const maxDailyMg = MAX_DAILY_DOSE_MG_PER_KG[medication] * customWeight;
+  const overDailyLimit = cumul24hMg + doseMg > maxDailyMg;
+  const blocked = mustWait || overDailyLimit;
+
   const handleRecord = () => {
+    if (blocked) return;
     addDose({
       medication,
       doseMg,
@@ -169,6 +179,24 @@ function DoseCalculator({ weight }: { weight: number }) {
         </div>
       </div>
 
+      {/* Overdose / Interval guards */}
+      {overDailyLimit && (
+        <div role="alert" className="bg-red-600 text-white rounded-2xl p-4 elev-brand flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <p className="text-sm font-semibold leading-relaxed">
+            ⚠️ Dose maximale journalière atteinte. Ne pas administrer. Consulte ton pédiatre.
+          </p>
+        </div>
+      )}
+      {!overDailyLimit && mustWait && (
+        <div role="alert" className="bg-amber-100 border border-amber-300 text-amber-900 rounded-2xl p-4 flex items-start gap-3">
+          <span aria-hidden="true" className="text-lg leading-none mt-0.5">⏱</span>
+          <p className="text-sm font-semibold leading-relaxed">
+            Attends encore {waitHours} h avant la prochaine dose
+          </p>
+        </div>
+      )}
+
       {/* Result */}
       <div className="bg-gradient-to-br from-red-500 to-rose-500 rounded-2xl p-6 text-white elev-brand">
         <p className="text-[11px] uppercase tracking-[0.15em] text-white/80 font-semibold">{t('care.dose.recommended_dose')}</p>
@@ -180,14 +208,18 @@ function DoseCalculator({ weight }: { weight: number }) {
 
         <button
           onClick={handleRecord}
-          disabled={!!mustWait}
+          disabled={blocked}
           className={`mt-4 w-full py-3 rounded-full font-heading font-bold text-sm transition-all ${
-            mustWait
+            blocked
               ? 'bg-white/15 text-white/60 cursor-not-allowed'
               : 'bg-white text-red-600 active:scale-[0.98]'
           }`}
         >
-          {mustWait ? `${t('care.dose.too_soon')} ~${waitMinutes} min` : `${t('care.dose.record_dose')} ✓`}
+          {overDailyLimit
+            ? '⚠️ Dose max atteinte'
+            : mustWait
+              ? `${t('care.dose.too_soon')} ~${waitMinutes} min`
+              : `${t('care.dose.record_dose')} ✓`}
         </button>
       </div>
 
