@@ -5,7 +5,7 @@
  */
 import { z } from 'zod';
 import { anthropic, MODEL, extractJson, callClaude } from './ai.js';
-import { NUTRITION_SYSTEM, CHAT_SYSTEM, REDFLAG_SYSTEM } from './prompts.js';
+import { NUTRITION_SYSTEM, CHAT_SYSTEM, CHAT_COACH_SYSTEM, REDFLAG_SYSTEM } from './prompts.js';
 
 const ALLOWED_IMAGE_MIME = ['image/jpeg', 'image/png', 'image/webp'];
 const FORCED_DISCLAIMER = '⚕️ Ceci est une information générale, pas un diagnostic médical. En cas de doute, consultez votre pédiatre.';
@@ -58,6 +58,7 @@ const ChatBodySchema = z.object({
   country: z.string().optional().nullable(),
   imageBase64: z.string().optional().nullable(),
   imageMediaType: z.string().optional().nullable(),
+  coachMode: z.boolean().optional().default(false),
 });
 
 const NutritionBodySchema = z.object({
@@ -263,7 +264,7 @@ export async function handleChat(req, res) {
   if (!parsed.success) {
     return res.status(400).json({ error: firstZodMessage(parsed.error) });
   }
-  const { messages, babyAgeMonths, country, imageBase64, imageMediaType } = parsed.data;
+  const { messages, babyAgeMonths, country, imageBase64, imageMediaType, coachMode } = parsed.data;
 
   if (imageBase64 && imageMediaType && !ALLOWED_IMAGE_MIME.includes(imageMediaType)) {
     return res.status(400).json({ error: 'Type d\'image non supporté (jpeg, png ou webp uniquement)' });
@@ -271,6 +272,7 @@ export async function handleChat(req, res) {
   if (imageBase64 && imageBase64.length > 7_000_000) {
     return res.status(400).json({ error: 'Image trop volumineuse (max ~5MB binaire / ~7MB base64).' });
   }
+  const systemPrompt = coachMode ? CHAT_COACH_SYSTEM : CHAT_SYSTEM;
 
   try {
     const contextualizedMessages = [...messages];
@@ -303,7 +305,7 @@ export async function handleChat(req, res) {
     const stream = anthropic.messages.stream({
       model: MODEL,
       max_tokens: 1500,
-      system: [{ type: 'text', text: CHAT_SYSTEM, cache_control: { type: 'ephemeral', ttl: '1h' } }],
+      system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral', ttl: '1h' } }],
       messages: contextualizedMessages,
     });
 

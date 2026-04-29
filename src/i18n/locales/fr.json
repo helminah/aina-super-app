@@ -179,6 +179,15 @@
     "suggestion_cow_milk": "Comment introduire le lait de vache ?",
     "suggestion_sleep": "Mon bébé dort mal la nuit, des conseils ?",
     "suggestion_fever": "Quand consulter pour une fièvre ?",
+    "aina_coach": "AINA Coach",
+    "coach_subtitle": "apprenti parent · questions guidées",
+    "coach_welcome": "Bonjour {{name}} 👋 Ici on ne te donne pas la réponse — on t'aide à la trouver toi-même. Décris ce qui se passe avec ton bébé, je te poserai quelques questions courtes et tu verras vite la cause probable.",
+    "coach_welcome_disclaimer": "🎓 Mode apprenti — je te guide pas à pas pour développer tes réflexes de parent.",
+    "coach_suggestion_crying": "Mon bébé pleure et je ne sais pas pourquoi",
+    "coach_suggestion_no_eat": "Mon bébé refuse de manger",
+    "coach_suggestion_no_sleep": "Mon bébé n'arrive pas à s'endormir",
+    "switch_to_coach": "Mode coach",
+    "switch_to_chat": "Mode chat",
     "unexpected_error": "Erreur inattendue"
   },
   "journal_form": {

@@ -179,6 +179,15 @@
     "suggestion_cow_milk": "Naka la ma dugal meew nag ?",
     "suggestion_sleep": "Sama liir nelawul bu baax ci guddi, am ndigël ?",
     "suggestion_fever": "Kañ la mëna demal doktoor su am tàng ?",
+    "aina_coach": "AINA Coach",
+    "coach_subtitle": "waajur ndongo · laaj yu jubadi",
+    "coach_welcome": "Salaam {{name}} 👋 Fii, du ma la jox tontu — ma ngi la dimbali ngir nga gis ko sa bopp. Wax ma li xew ci sa xale, ma laaj la laaj yu gàtt, te dinga gis bu gaaw fan la sabab bi mën a yor.",
+    "coach_welcome_disclaimer": "🎓 Modul ndongo — ma ngi la jiitu pas ngir nga am xeltu waajur.",
+    "coach_suggestion_crying": "Sama xale jooy na te xamuma lu tax",
+    "coach_suggestion_no_eat": "Sama xale bañ na lekk",
+    "coach_suggestion_no_sleep": "Sama xale mënul nelaw",
+    "switch_to_coach": "Modul coach",
+    "switch_to_chat": "Modul chat",
     "unexpected_error": "Njumtekaay bu nu xalatul"
   },
   "journal_form": {

@@ -176,7 +176,7 @@ export function sendChatMessage(params: {
  * Le serveur envoie des événements `data: {"token":"..."}` puis `data: {"done":true}`.
  */
 export async function streamChatMessage(
-  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string; imageBase64?: string; imageMediaType?: string },
+  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string; imageBase64?: string; imageMediaType?: string; coachMode?: boolean },
   onToken: (token: string) => void,
   onDone: () => void,
   onError: (error: string) => void,

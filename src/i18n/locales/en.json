@@ -179,6 +179,15 @@
     "suggestion_cow_milk": "How do I introduce cow's milk?",
     "suggestion_sleep": "My baby sleeps badly at night, any advice?",
     "suggestion_fever": "When should I consult for a fever?",
+    "aina_coach": "AINA Coach",
+    "coach_subtitle": "parent apprentice · guided questions",
+    "coach_welcome": "Hi {{name}} 👋 Here I don't give you the answer — I help you find it yourself. Tell me what's happening with your baby, I'll ask a few short questions and you'll quickly see the likely cause.",
+    "coach_welcome_disclaimer": "🎓 Apprentice mode — I guide you step by step to build your parenting reflexes.",
+    "coach_suggestion_crying": "My baby is crying and I don't know why",
+    "coach_suggestion_no_eat": "My baby refuses to eat",
+    "coach_suggestion_no_sleep": "My baby can't fall asleep",
+    "switch_to_coach": "Coach mode",
+    "switch_to_chat": "Chat mode",
     "unexpected_error": "Unexpected error"
   },
   "journal_form": {
