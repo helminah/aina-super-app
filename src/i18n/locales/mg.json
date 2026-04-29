@@ -345,6 +345,11 @@
       "how_herd_immunity_html": "Ny fanaovana vakisiny ny zaza koa dia <strong>fiarovana ny hafa</strong> : olona malemy, zoky amin'ny ho avy, bevohoka, zokiolona.",
       "how_side_effects_note": "Ny voka-dratsy (tazo kely, menamena) dia vetivety sy kely. Tena mihena noho ireo aretina sorohina."
     },
+    "pev_labels": {
+      "2 mois": "herinandro 6 (1 volana sy sasany)",
+      "3 mois": "herinandro 10 (2 volana sy sasany)",
+      "4 mois": "herinandro 14 (3 volana sy sasany)"
+    },
     "growth": {
       "weight": "Lanja (kg)",
       "height": "Halehibe (cm)",
@@ -489,7 +494,10 @@
     "hint_favorites": "❤️ Ny recipe tianao sy ny recipe IA rehetra voatahiry",
     "hint_planner": "📅 Amboary ny sakafon'ny herinandro, andro isan'andro",
     "hint_shopping": "🛒 Ny lisitrao fividianana voafarita avy amin'ny planning",
-    "filter_all": "Rehetra"
+    "filter_all": "Rehetra",
+    "menu_generated_one": "Menu mandritra ny {{count}} andro vita !",
+    "menu_generated_other": "Menu mandritra ny {{count}} andro vita !",
+    "menu_editable_hint": "Azonao ovaina ny sakafo tsirairay 😊"
   },
   "recipe_detail": {
     "not_found": "Tsy hita ny nahandro",
