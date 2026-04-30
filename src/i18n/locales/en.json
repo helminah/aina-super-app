@@ -163,6 +163,9 @@
     "level_green": "Watch closely",
     "level_yellow": "Consult within 24h",
     "level_red": "Immediate emergency",
+    "share_with_doctor": "Send to my pediatrician",
+    "share_title": "Brief for the pediatrician",
+    "copied_clipboard": "Message copied to clipboard",
     "unexpected_error": "Unexpected error"
   },
   "chat": {
