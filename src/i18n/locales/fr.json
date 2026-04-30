@@ -163,6 +163,9 @@
     "level_green": "À surveiller",
     "level_yellow": "Consulter dans 24h",
     "level_red": "Urgence immédiate",
+    "share_with_doctor": "Envoyer à mon pédiatre",
+    "share_title": "Brief pour le pédiatre",
+    "copied_clipboard": "Message copié dans le presse-papiers",
     "unexpected_error": "Erreur inattendue"
   },
   "chat": {
