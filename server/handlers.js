@@ -4,7 +4,7 @@
  * truth for input validation, rate limiting, and AI call orchestration.
  */
 import { z } from 'zod';
-import { anthropic, MODEL, extractJson, callClaude } from './ai.js';
+import { anthropic, MODEL_CHAT, MODEL_REDFLAG, MODEL_NUTRITION, MODEL_NORMALIZE, extractJson, callClaude } from './ai.js';
 import { NUTRITION_SYSTEM, CHAT_SYSTEM, CHAT_COACH_SYSTEM, REDFLAG_SYSTEM } from './prompts.js';
 
 const ALLOWED_IMAGE_MIME = ['image/jpeg', 'image/png', 'image/webp'];
@@ -151,6 +151,7 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
       system: NUTRITION_SYSTEM,
       userMessage,
       maxTokens: action === 'weekly-plan' ? 2048 : 1200,
+      model: MODEL_NUTRITION,
     });
 
     const data = extractJson(text);
@@ -219,6 +220,7 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
       thinking: true,
       imageBase64: imageBase64 ?? null,
       imageMediaType: imageMediaType ?? 'image/jpeg',
+      model: MODEL_REDFLAG,
     });
 
     let data;
@@ -303,7 +305,7 @@ export async function handleChat(req, res) {
     if (typeof res.flushHeaders === 'function') res.flushHeaders();
 
     const stream = anthropic.messages.stream({
-      model: MODEL,
+      model: MODEL_CHAT,
       max_tokens: 1500,
       system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral', ttl: '1h' } }],
       messages: contextualizedMessages,
@@ -355,6 +357,7 @@ Normalise cette liste pour qu'une maman puisse l'utiliser au marché africain. R
       system: 'Tu es un assistant de cuisine pour mamans africaines. Tu normalises les listes de courses en équivalents pratiques pour le marché local. Réponds toujours en JSON valide uniquement.',
       userMessage,
       maxTokens: 600,
+      model: MODEL_NORMALIZE,
     });
     const data = extractJson(text);
     res.json({ items: Array.isArray(data) ? data : [] });

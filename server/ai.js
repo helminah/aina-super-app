@@ -7,6 +7,10 @@ dotenv.config({ path: ['.env.local', '.env'] });
 import Anthropic from '@anthropic-ai/sdk';
 
 export const MODEL = 'claude-opus-4-7';
+export const MODEL_CHAT = process.env.MODEL_CHAT || 'claude-haiku-4-5-20251001';
+export const MODEL_REDFLAG = process.env.MODEL_REDFLAG || MODEL;
+export const MODEL_NUTRITION = process.env.MODEL_NUTRITION || MODEL;
+export const MODEL_NORMALIZE = process.env.MODEL_NORMALIZE || 'claude-haiku-4-5-20251001';
 
 export const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -34,6 +38,7 @@ export async function callClaude({
   thinking = false,
   imageBase64 = null,
   imageMediaType = 'image/jpeg',
+  model = MODEL,
 }) {
   if (imageBase64 && imageBase64.length > 7_000_000) {
     throw new Error('Image trop volumineuse (max ~5MB binaire / ~7MB base64).');
@@ -47,7 +52,7 @@ export async function callClaude({
     : userMessage;
 
   const params = {
-    model: MODEL,
+    model,
     max_tokens: maxTokens,
     system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral', ttl: '1h' } }],
     messages: [{ role: 'user', content: userContent }],
