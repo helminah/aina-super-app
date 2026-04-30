@@ -632,7 +632,7 @@ export function NutritionPage() {
                       });
                     });
                     setPlanDay(DAY_IDS[0]);
-                    toast.success(`Menu ${days === 1 ? '1 jour' : `${days} jours`} généré !`, { description: 'Tu peux modifier chaque repas 😊' });
+                    toast.success(t('nutrition.menu_generated', { count: days }), { description: t('nutrition.menu_editable_hint') });
                   }}
                   className="flex-1 py-2 rounded-full bg-amber-500 text-white text-xs font-bold shadow-sm"
                 >

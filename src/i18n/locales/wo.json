@@ -179,6 +179,18 @@
     "suggestion_cow_milk": "Naka la ma dugal meew nag ?",
     "suggestion_sleep": "Sama liir nelawul bu baax ci guddi, am ndigël ?",
     "suggestion_fever": "Kañ la mëna demal doktoor su am tàng ?",
+    "aina_coach": "AINA Coach",
+    "coach_subtitle": "waajur ndongo · laaj yu jubadi",
+    "coach_welcome": "Salaam {{name}} 👋 Fii, du ma la jox tontu — ma ngi la dimbali ngir nga gis ko sa bopp. Wax ma li xew ci sa xale, ma laaj la laaj yu gàtt, te dinga gis bu gaaw fan la sabab bi mën a yor.",
+    "coach_welcome_disclaimer": "🎓 Modul ndongo — ma ngi la jiitu pas ngir nga am xeltu waajur.",
+    "coach_suggestion_crying": "Sama xale jooy na te xamuma lu tax",
+    "coach_suggestion_no_eat": "Sama xale bañ na lekk",
+    "coach_suggestion_no_sleep": "Sama xale mënul nelaw",
+    "switch_to_coach": "Modul coach",
+    "switch_to_chat": "Modul chat",
+    "mode_selector": "Tànn modul",
+    "mode_chat": "Chat",
+    "mode_coach": "Coach",
     "unexpected_error": "Njumtekaay bu nu xalatul"
   },
   "journal_form": {
@@ -345,6 +357,11 @@
       "how_herd_immunity_html": "Joxe vaksin sa liir, moo di it <strong>aar yeneen</strong> : ñiy am jafe-jafe, maami bu ñëw, soxna yu biir, mag ñi.",
       "how_side_effects_note": "Njàng yi koy topp (tàng mu yomb, diis) dañu yomb te dañuy jeex. Dañuy néew lool ci kanamu feebar yi ñu aar."
     },
+    "pev_labels": {
+      "2 mois": "ay-yoon 6 (1 weer ak genn-wàll)",
+      "3 mois": "ay-yoon 10 (2 weer ak genn-wàll)",
+      "4 mois": "ay-yoon 14 (3 weer ak genn-wàll)"
+    },
     "growth": {
       "weight": "Diis (kg)",
       "height": "Gùdd (cm)",
@@ -489,7 +506,10 @@
     "hint_favorites": "❤️ Recipe yi nga bëgg ak recipe IA yi nga dëkke",
     "hint_planner": "📅 Sos planning lekk yi ci ayubés bi, bés bu nekk",
     "hint_shopping": "🛒 Liste courses bi juddoo ci planning bi",
-    "filter_all": "Yëp"
+    "filter_all": "Yëp",
+    "menu_generated_one": "Menu bu {{count}} bés sosees na !",
+    "menu_generated_other": "Menu bu {{count}} bés sosees na !",
+    "menu_editable_hint": "Mën nga soppi lekk yu nekk 😊"
   },
   "recipe_detail": {
     "not_found": "Recette bi gisuwu",

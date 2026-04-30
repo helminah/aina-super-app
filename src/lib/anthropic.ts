@@ -176,7 +176,7 @@ export function sendChatMessage(params: {
  * Le serveur envoie des événements `data: {"token":"..."}` puis `data: {"done":true}`.
  */
 export async function streamChatMessage(
-  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string; imageBase64?: string; imageMediaType?: string },
+  params: { messages: ChatMessage[]; babyAgeMonths?: number; country?: string; imageBase64?: string; imageMediaType?: string; coachMode?: boolean },
   onToken: (token: string) => void,
   onDone: () => void,
   onError: (error: string) => void,
@@ -204,24 +204,60 @@ export async function streamChatMessage(
   const decoder = new TextDecoder();
   let buffer = '';
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const parts = buffer.split('\n\n');
-    buffer = parts.pop() ?? '';
-    for (const part of parts) {
-      const line = part.trim();
-      if (!line.startsWith('data: ')) continue;
-      try {
-        const data = JSON.parse(line.slice(6));
-        if (data.error) { onError(data.error); return; }
-        if (data.token) onToken(data.token);
-        if (data.done) { onDone(); return; }
-      } catch { /* ignore malformed SSE */ }
+  const INACTIVITY_MS = 30_000;
+  let aborted = false;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  const clearInactivityTimer = () => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
     }
+  };
+  const resetInactivityTimer = () => {
+    clearInactivityTimer();
+    timeoutId = setTimeout(() => {
+      aborted = true;
+      try { reader.cancel(); } catch { /* ignore */ }
+      onError('Connexion perdue. Réessaie.');
+    }, INACTIVITY_MS);
+  };
+  resetInactivityTimer();
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (aborted) return;
+      if (done) break;
+      resetInactivityTimer();
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop() ?? '';
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (typeof data.error === 'string' && data.error.length > 0) {
+            clearInactivityTimer();
+            onError(data.error);
+            return;
+          }
+          if (typeof data.token === 'string' && data.token.length > 0) {
+            onToken(data.token);
+          }
+          if (data.done === true) {
+            clearInactivityTimer();
+            onDone();
+            return;
+          }
+        } catch { /* ignore malformed SSE */ }
+      }
+    }
+  } catch {
+    if (aborted) return;
   }
-  onDone();
+  clearInactivityTimer();
+  if (!aborted) onDone();
 }
 
 export { AnthropicApiError };

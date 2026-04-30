@@ -54,6 +54,16 @@ export const DOSE_PER_KG: Record<string, number> = {
   ibuprofen: 10,
 };
 
+export const MAX_DAILY_DOSE_MG_PER_KG: Record<string, number> = {
+  paracetamol: 60,
+  ibuprofen: 30,
+};
+
+export const MIN_INTERVAL_HOURS: Record<string, number> = {
+  paracetamol: 6,
+  ibuprofen: 8,
+};
+
 /** Arrondi au 0.5 ml le plus proche (précision seringue doseuse) */
 export function computeSyrupDose(doseMg: number, mgPerMl: number): number {
   const raw = doseMg / mgPerMl;

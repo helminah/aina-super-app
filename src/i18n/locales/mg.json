@@ -179,6 +179,18 @@
     "suggestion_cow_milk": "Ahoana no fampidirana ny rononon'omby?",
     "suggestion_sleep": "Tsy matory tsara amin'ny alina ny zanako, misy torohevitra?",
     "suggestion_fever": "Rahoviana no tokony hanatona mpitsabo rehefa misy tazo?",
+    "aina_coach": "AINA Coach",
+    "coach_subtitle": "ray aman-dreny mpianatra · fanontaniana mitarika",
+    "coach_welcome": "Manao ahoana {{name}} 👋 Eto, tsy omeko anao ny valiny — fa manampy anao hahita azy ianao ihany. Lazao izay mitranga amin'ny zanakao, dia hanontaniako fanontaniana fohy vitsivitsy ary ho hitanao haingana ny mety ho fototry ny olana.",
+    "coach_welcome_disclaimer": "🎓 Modely fianarana — mitarika anao tsikelikely aho mba hampandroso ny fahaizanao raiamandreny.",
+    "coach_suggestion_crying": "Mitomany ny zanako fa tsy fantatro ny antony",
+    "coach_suggestion_no_eat": "Mandà tsy hihinana ny zanako",
+    "coach_suggestion_no_sleep": "Tsy mahita torimaso ny zanako",
+    "switch_to_coach": "Modely coach",
+    "switch_to_chat": "Modely chat",
+    "mode_selector": "Mifidiana modely",
+    "mode_chat": "Chat",
+    "mode_coach": "Coach",
     "unexpected_error": "Hadisoana tsy nampoizina"
   },
   "journal_form": {
@@ -345,6 +357,11 @@
       "how_herd_immunity_html": "Ny fanaovana vakisiny ny zaza koa dia <strong>fiarovana ny hafa</strong> : olona malemy, zoky amin'ny ho avy, bevohoka, zokiolona.",
       "how_side_effects_note": "Ny voka-dratsy (tazo kely, menamena) dia vetivety sy kely. Tena mihena noho ireo aretina sorohina."
     },
+    "pev_labels": {
+      "2 mois": "herinandro 6 (1 volana sy sasany)",
+      "3 mois": "herinandro 10 (2 volana sy sasany)",
+      "4 mois": "herinandro 14 (3 volana sy sasany)"
+    },
     "growth": {
       "weight": "Lanja (kg)",
       "height": "Halehibe (cm)",
@@ -489,7 +506,10 @@
     "hint_favorites": "❤️ Ny recipe tianao sy ny recipe IA rehetra voatahiry",
     "hint_planner": "📅 Amboary ny sakafon'ny herinandro, andro isan'andro",
     "hint_shopping": "🛒 Ny lisitrao fividianana voafarita avy amin'ny planning",
-    "filter_all": "Rehetra"
+    "filter_all": "Rehetra",
+    "menu_generated_one": "Menu mandritra ny {{count}} andro vita !",
+    "menu_generated_other": "Menu mandritra ny {{count}} andro vita !",
+    "menu_editable_hint": "Azonao ovaina ny sakafo tsirairay 😊"
   },
   "recipe_detail": {
     "not_found": "Tsy hita ny nahandro",

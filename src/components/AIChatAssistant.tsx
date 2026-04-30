@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, RefreshCw, Camera } from 'lucide-react';
+import { MessageCircle, X, Send, RefreshCw, Camera, Sparkles, GraduationCap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { streamChatMessage, type ChatMessage } from '@/lib/anthropic';
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**
  * AIChatAssistant — bouton flottant + sheet de conversation avec "AINA IA".
@@ -22,11 +26,19 @@ export function AIChatAssistant() {
   const { profile } = useBaby();
   const [open, setOpen] = useState(false);
 
-  const suggestions = useMemo(() => [
-    t('chat.suggestion_cow_milk'),
-    t('chat.suggestion_sleep'),
-    t('chat.suggestion_fever'),
-  ], [t]);
+  const [coachMode, setCoachMode] = useState(false);
+  const suggestions = useMemo(() => coachMode
+    ? [
+        t('chat.coach_suggestion_crying'),
+        t('chat.coach_suggestion_no_eat'),
+        t('chat.coach_suggestion_no_sleep'),
+      ]
+    : [
+        t('chat.suggestion_cow_milk'),
+        t('chat.suggestion_sleep'),
+        t('chat.suggestion_fever'),
+      ],
+  [t, coachMode]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -49,6 +61,16 @@ export function AIChatAssistant() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      toast.error('Format non supporté');
+      e.target.value = '';
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error('Image trop lourde (max 5 Mo)');
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const dataUrl = ev.target?.result as string;
@@ -77,7 +99,7 @@ export function AIChatAssistant() {
     setImagePreview(null);
 
     await streamChatMessage(
-      { messages: next, babyAgeMonths: ageMonths, country: profile.country, imageBase64: pendingImage ?? undefined, imageMediaType: pendingMime },
+      { messages: next, babyAgeMonths: ageMonths, country: profile.country, imageBase64: pendingImage ?? undefined, imageMediaType: pendingMime, coachMode },
       (token) => {
         setMessages(prev => {
           const copy = [...prev];
@@ -140,7 +162,7 @@ export function AIChatAssistant() {
               onClick={e => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="mesh-violet grain px-5 pt-5 pb-4 relative overflow-hidden">
+              <div className={`grain px-5 pt-5 pb-4 relative overflow-hidden ${coachMode ? 'bg-gradient-to-br from-emerald-500 via-teal-500 to-violet-500' : 'mesh-violet'}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -150,9 +172,13 @@ export function AIChatAssistant() {
                     <img src="/aina-ia.jpg" alt="AINA IA" className="w-full h-full object-cover object-top scale-110" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-heading font-bold text-white">{t('chat.aina_ai')}</p>
+                    <p className="font-heading font-bold text-white flex items-center gap-1.5">
+                      {coachMode ? t('chat.aina_coach') : t('chat.aina_ai')}
+                      {coachMode && <GraduationCap className="w-4 h-4" />}
+                    </p>
                     <p className="text-[11px] text-white/85 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> {t('chat.online_status')}
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      {coachMode ? t('chat.coach_subtitle') : t('chat.online_status')}
                     </p>
                   </div>
                   <button
@@ -163,18 +189,65 @@ export function AIChatAssistant() {
                     <X className="w-4 h-4 text-white" />
                   </button>
                 </motion.div>
+
+                {/* Segmented toggle Chat | Coach — toujours visible côte à côte */}
+                <div
+                  role="tablist"
+                  aria-label={t('chat.mode_selector')}
+                  className="relative z-10 mt-3 flex p-1 rounded-full bg-white/15 backdrop-blur"
+                >
+                  <button
+                    role="tab"
+                    aria-selected={!coachMode}
+                    onClick={() => {
+                      if (!coachMode) return;
+                      setCoachMode(false);
+                      setMessages([]);
+                      setError(null);
+                    }}
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
+                      !coachMode
+                        ? 'bg-white text-violet-700 shadow-sm'
+                        : 'text-white/80 hover:text-white'
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    {t('chat.mode_chat')}
+                  </button>
+                  <button
+                    role="tab"
+                    aria-selected={coachMode}
+                    onClick={() => {
+                      if (coachMode) return;
+                      setCoachMode(true);
+                      setMessages([]);
+                      setError(null);
+                    }}
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
+                      coachMode
+                        ? 'bg-white text-emerald-700 shadow-sm'
+                        : 'text-white/80 hover:text-white'
+                    }`}
+                  >
+                    <GraduationCap className="w-3.5 h-3.5" />
+                    {t('chat.mode_coach')}
+                  </button>
+                </div>
               </div>
 
               {/* Messages */}
               <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 bg-ivory-100 space-y-3">
                 {messages.length === 0 && (
                   <div className="space-y-3">
-                    <div className="bg-white rounded-2xl rounded-tl-sm p-4 elev-1 max-w-[85%]">
+                    <div className={`rounded-2xl rounded-tl-sm p-4 elev-1 max-w-[85%] ${coachMode ? 'bg-emerald-50 border border-emerald-200' : 'bg-white'}`}>
                       <p className="text-sm text-bark-700 leading-relaxed">
-                        {t('chat.welcome', { name: profile.name, role: t(`onboarding.parent_role_hello_${profile.parentRole ?? 'maman'}`) })}
+                        {coachMode
+                          ? t('chat.coach_welcome', { name: profile.name })
+                          : t('chat.welcome', { name: profile.name, role: t(`onboarding.parent_role_hello_${profile.parentRole ?? 'maman'}`) })
+                        }
                       </p>
                       <p className="text-[11px] text-bark-400 italic mt-2">
-                        {t('chat.welcome_disclaimer')}
+                        {coachMode ? t('chat.coach_welcome_disclaimer') : t('chat.welcome_disclaimer')}
                       </p>
                     </div>
                     <div className="pt-2">
@@ -186,7 +259,7 @@ export function AIChatAssistant() {
                           <button
                             key={s}
                             onClick={() => send(s)}
-                            className="w-full text-left px-4 py-2.5 rounded-2xl bg-white text-sm text-bark-700 elev-1 hover:bg-violet-50 transition-colors"
+                            className={`w-full text-left px-4 py-2.5 rounded-2xl bg-white text-sm text-bark-700 elev-1 transition-colors ${coachMode ? 'hover:bg-emerald-50' : 'hover:bg-violet-50'}`}
                           >
                             {s}
                           </button>

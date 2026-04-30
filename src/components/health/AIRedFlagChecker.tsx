@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert, Camera, X } from 'lucide-react';
+import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert, Camera, X, CheckCircle2, AlertTriangle, OctagonAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { analyzeRedFlags, AnthropicApiError, type RedFlagAnalysis, type RedFlagLevel } from '@/lib/anthropic';
 import { getEmergency } from '@/data/emergency-numbers';
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**
  * AIRedFlagChecker — le parent décrit ce qu'il observe, l'IA classe
@@ -32,6 +36,16 @@ export function AIRedFlagChecker() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      toast.error('Format non supporté');
+      e.target.value = '';
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error('Image trop lourde (max 5 Mo)');
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const dataUrl = ev.target?.result as string;
@@ -180,6 +194,21 @@ export function AIRedFlagChecker() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-3"
             >
+              {/* Disclaimer médical — banner prominent au-dessus du résultat */}
+              <div
+                role="note"
+                className={`rounded-xl border-2 p-3 flex items-start gap-2 ${
+                  isUrgent
+                    ? 'bg-red-50 border-red-400 text-red-900'
+                    : 'bg-ivory-100 border-bark-200 text-bark-700'
+                }`}
+              >
+                <span aria-hidden="true" className="text-base leading-none mt-0.5">⚕️</span>
+                <p className="text-sm font-medium leading-relaxed">
+                  {result.disclaimer || t('red_flag_checker.disclaimer')}
+                </p>
+              </div>
+
               <ResultCard level={result.level} message={result.message} />
 
               {isUrgent && (
@@ -221,13 +250,6 @@ export function AIRedFlagChecker() {
               >
                 {t('red_flag_checker.new_analysis')}
               </button>
-
-              {/* Disclaimer médical */}
-              <div className="mt-4 pt-4 border-t border-ivory-300">
-                <p className="text-[11px] text-bark-500 italic text-center leading-relaxed">
-                  {t('red_flag_checker.disclaimer')}
-                </p>
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -243,18 +265,23 @@ function ResultCard({ level, message }: { level: RedFlagLevel; message: string }
     border: string;
     text: string;
     emoji: string;
+    symbol: string;
+    Icon: typeof CheckCircle2;
     label: string;
   }> = {
-    green:  { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-800', emoji: '🟢', label: t('red_flag_checker.level_green') },
-    yellow: { bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-800',   emoji: '🟡', label: t('red_flag_checker.level_yellow') },
-    red:    { bg: 'bg-red-50',     border: 'border-red-300',     text: 'text-red-800',     emoji: '🔴', label: t('red_flag_checker.level_red') },
+    green:  { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-800', emoji: '🟢', symbol: '●', Icon: CheckCircle2,  label: t('red_flag_checker.level_green') },
+    yellow: { bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-800',   emoji: '🟡', symbol: '▲', Icon: AlertTriangle, label: t('red_flag_checker.level_yellow') },
+    red:    { bg: 'bg-red-50',     border: 'border-red-300',     text: 'text-red-800',     emoji: '🔴', symbol: '■', Icon: OctagonAlert,  label: t('red_flag_checker.level_red') },
   };
   const c = config[level];
+  const Icon = c.Icon;
 
   return (
     <div className={`${c.bg} ${c.border} border-2 rounded-2xl p-4`}>
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-2xl">{c.emoji}</span>
+        <span className="text-2xl" aria-hidden="true">{c.emoji}</span>
+        <span className={`text-xl font-bold ${c.text}`} aria-hidden="true">{c.symbol}</span>
+        <Icon className={`w-5 h-5 ${c.text}`} aria-hidden="true" />
         <p className={`font-heading font-bold ${c.text}`}>{c.label}</p>
       </div>
       <p className={`text-sm ${c.text} leading-relaxed`}>{message}</p>
