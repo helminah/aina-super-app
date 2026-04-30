@@ -163,6 +163,9 @@
     "level_green": "Topp ko",
     "level_yellow": "Demal doktoor ci 24h",
     "level_red": "Gaaw gëwëlu",
+    "share_with_doctor": "Yónni ko sama doktoor",
+    "share_title": "Brief ngir doktoor bi",
+    "copied_clipboard": "Bataaxal bi nañu ko duggal ci presse-papier",
     "unexpected_error": "Njumtekaay bu nu xalatul"
   },
   "chat": {

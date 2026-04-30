@@ -163,6 +163,9 @@
     "level_green": "Tokony hojerena",
     "level_yellow": "Manatona mpitsabo ao anatin'ny 24h",
     "level_red": "Vonjy taitra avy hatrany",
+    "share_with_doctor": "Alefaso amin'ny dokoterako",
+    "share_title": "Fanazavana ho an'ny dokotera",
+    "copied_clipboard": "Voakopia ny hafatra",
     "unexpected_error": "Hadisoana tsy nampoizina"
   },
   "chat": {

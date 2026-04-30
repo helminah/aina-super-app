@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert, Camera, X, CheckCircle2, AlertTriangle, OctagonAlert } from 'lucide-react';
+import { AlertCircle, Stethoscope, Phone, RefreshCw, Send, ShieldAlert, Camera, X, CheckCircle2, AlertTriangle, OctagonAlert, Share2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useBaby } from '@/contexts/BabyContext';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { analyzeRedFlags, AnthropicApiError, type RedFlagAnalysis, type RedFlagLevel } from '@/lib/anthropic';
 import { getEmergency } from '@/data/emergency-numbers';
+import { composePediatricianMessage, shareMessage } from '@/lib/share-pediatrician';
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -19,8 +20,8 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
  * (« Autre détail ») pour affiner l'analyse sans refaire tout.
  */
 export function AIRedFlagChecker() {
-  const { t } = useTranslation();
-  const { profile } = useBaby();
+  const { t, i18n } = useTranslation();
+  const { profile, weightEntries, vaccineRecords } = useBaby();
   const [symptoms, setSymptoms] = useState('');
   const [result, setResult] = useState<RedFlagAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
@@ -98,6 +99,27 @@ export function AIRedFlagChecker() {
     const combined = `${symptoms}\n\n${t('red_flag_checker.precision_prefix')} : ${additional.trim()}`;
     setSymptoms(combined);
     void handleAnalyze(combined);
+  };
+
+  const handleSharePediatrician = async () => {
+    if (!result || !profile) return;
+    const lang = (['fr', 'en', 'mg', 'wo'] as const).includes(i18n.language as never)
+      ? (i18n.language as 'fr' | 'en' | 'mg' | 'wo')
+      : 'fr';
+    const message = composePediatricianMessage({
+      profile,
+      ageMonths,
+      symptoms,
+      result,
+      weights: weightEntries,
+      vaccines: vaccineRecords,
+      parentDisplay: t(`onboarding.parent_role_hello_${profile.parentRole ?? 'maman'}`),
+      locale: lang,
+    });
+    const outcome = await shareMessage(message, t('red_flag_checker.share_title'));
+    if (outcome === 'clipboard') {
+      toast.success(t('red_flag_checker.copied_clipboard'));
+    }
   };
 
   const isUrgent = result?.level === 'red';
@@ -218,6 +240,15 @@ export function AIRedFlagChecker() {
                 >
                   <Phone className="w-4 h-4" /> {getEmergency(profile.country).label} — {getEmergency(profile.country).number}
                 </a>
+              )}
+
+              {result.level !== 'green' && (
+                <button
+                  onClick={handleSharePediatrician}
+                  className="w-full py-3 rounded-full bg-emerald-600 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-600/30 hover:bg-emerald-700 active:scale-[0.98] transition-all"
+                >
+                  <Share2 className="w-4 h-4" /> {t('red_flag_checker.share_with_doctor')}
+                </button>
               )}
 
               {/* Follow-up — ajouter un détail sans repartir de zéro */}
