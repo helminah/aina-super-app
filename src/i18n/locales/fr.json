@@ -188,6 +188,9 @@
     "coach_suggestion_no_sleep": "Mon bébé n'arrive pas à s'endormir",
     "switch_to_coach": "Mode coach",
     "switch_to_chat": "Mode chat",
+    "mode_selector": "Choisir le mode",
+    "mode_chat": "Chat",
+    "mode_coach": "Coach",
     "unexpected_error": "Erreur inattendue"
   },
   "journal_form": {

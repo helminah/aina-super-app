@@ -188,6 +188,9 @@
     "coach_suggestion_no_sleep": "Tsy mahita torimaso ny zanako",
     "switch_to_coach": "Modely coach",
     "switch_to_chat": "Modely chat",
+    "mode_selector": "Mifidiana modely",
+    "mode_chat": "Chat",
+    "mode_coach": "Coach",
     "unexpected_error": "Hadisoana tsy nampoizina"
   },
   "journal_form": {

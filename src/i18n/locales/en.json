@@ -188,6 +188,9 @@
     "coach_suggestion_no_sleep": "My baby can't fall asleep",
     "switch_to_coach": "Coach mode",
     "switch_to_chat": "Chat mode",
+    "mode_selector": "Select mode",
+    "mode_chat": "Chat",
+    "mode_coach": "Coach",
     "unexpected_error": "Unexpected error"
   },
   "journal_form": {

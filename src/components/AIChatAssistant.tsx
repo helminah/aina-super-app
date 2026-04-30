@@ -190,22 +190,47 @@ export function AIChatAssistant() {
                   </button>
                 </motion.div>
 
-                {/* Toggle Coach mode */}
-                <div className="relative z-10 mt-3 flex">
+                {/* Segmented toggle Chat | Coach — toujours visible côte à côte */}
+                <div
+                  role="tablist"
+                  aria-label={t('chat.mode_selector')}
+                  className="relative z-10 mt-3 flex p-1 rounded-full bg-white/15 backdrop-blur"
+                >
                   <button
+                    role="tab"
+                    aria-selected={!coachMode}
                     onClick={() => {
-                      const next = !coachMode;
-                      setCoachMode(next);
+                      if (!coachMode) return;
+                      setCoachMode(false);
                       setMessages([]);
                       setError(null);
                     }}
-                    aria-pressed={coachMode}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-white text-[11px] font-semibold hover:bg-white/25 transition-colors"
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
+                      !coachMode
+                        ? 'bg-white text-violet-700 shadow-sm'
+                        : 'text-white/80 hover:text-white'
+                    }`}
                   >
-                    {coachMode
-                      ? <><Sparkles className="w-3 h-3" /> {t('chat.switch_to_chat')}</>
-                      : <><GraduationCap className="w-3 h-3" /> {t('chat.switch_to_coach')}</>
-                    }
+                    <Sparkles className="w-3.5 h-3.5" />
+                    {t('chat.mode_chat')}
+                  </button>
+                  <button
+                    role="tab"
+                    aria-selected={coachMode}
+                    onClick={() => {
+                      if (coachMode) return;
+                      setCoachMode(true);
+                      setMessages([]);
+                      setError(null);
+                    }}
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold transition-all ${
+                      coachMode
+                        ? 'bg-white text-emerald-700 shadow-sm'
+                        : 'text-white/80 hover:text-white'
+                    }`}
+                  >
+                    <GraduationCap className="w-3.5 h-3.5" />
+                    {t('chat.mode_coach')}
                   </button>
                 </div>
               </div>

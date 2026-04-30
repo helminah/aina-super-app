@@ -10,6 +10,16 @@ import { NUTRITION_SYSTEM, CHAT_SYSTEM, CHAT_COACH_SYSTEM, REDFLAG_SYSTEM } from
 const ALLOWED_IMAGE_MIME = ['image/jpeg', 'image/png', 'image/webp'];
 const FORCED_DISCLAIMER = '⚕️ Ceci est une information générale, pas un diagnostic médical. En cas de doute, consultez votre pédiatre.';
 
+function ensureApiKey(res) {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    res.status(503).json({
+      error: 'Configuration serveur incomplète : ANTHROPIC_API_KEY absente. Si tu es admin, vérifie les variables d\'environnement Vercel (Preview + Production).',
+    });
+    return false;
+  }
+  return true;
+}
+
 function getClientIp(req) {
   return req.headers['x-forwarded-for']?.split(',')[0]?.trim()
     || req.socket?.remoteAddress
@@ -97,6 +107,7 @@ const RecipeOutputSchema = z.object({
 }).passthrough();
 
 export async function handleNutrition(req, res) {
+  if (!ensureApiKey(res)) return;
   if (!nutritionLimiter(req).ok) return tooMany(res);
 
   const parsed = NutritionBodySchema.safeParse(req.body ?? {});
@@ -186,6 +197,7 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
 }
 
 export async function handleRedflag(req, res) {
+  if (!ensureApiKey(res)) return;
   if (!redflagLimiter(req).ok) return tooMany(res);
 
   const parsed = RedflagBodySchema.safeParse(req.body ?? {});
@@ -260,6 +272,7 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
 }
 
 export async function handleChat(req, res) {
+  if (!ensureApiKey(res)) return;
   if (!chatLimiter(req).ok) return tooMany(res);
 
   const parsed = ChatBodySchema.safeParse(req.body ?? {});
@@ -333,6 +346,7 @@ export async function handleChat(req, res) {
 }
 
 export async function handleNormalizeShopping(req, res) {
+  if (!ensureApiKey(res)) return;
   if (!normalizeShoppingLimiter(req).ok) return tooMany(res);
 
   const parsed = NormalizeShoppingBodySchema.safeParse(req.body ?? {});

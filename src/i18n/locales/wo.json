@@ -188,6 +188,9 @@
     "coach_suggestion_no_sleep": "Sama xale mënul nelaw",
     "switch_to_coach": "Modul coach",
     "switch_to_chat": "Modul chat",
+    "mode_selector": "Tànn modul",
+    "mode_chat": "Chat",
+    "mode_coach": "Coach",
     "unexpected_error": "Njumtekaay bu nu xalatul"
   },
   "journal_form": {
