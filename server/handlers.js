@@ -80,10 +80,13 @@ const NutritionBodySchema = z.object({
 });
 
 const RedflagBodySchema = z.object({
-  symptoms: z.string().trim().min(3, 'symptoms requis (description textuelle)'),
+  symptoms: z.string().trim().optional().default(''),
   babyAgeMonths: z.number().min(0).max(60, 'babyAgeMonths invalide'),
   imageBase64: z.string().optional().nullable(),
   imageMediaType: z.string().optional().nullable(),
+}).refine(data => data.symptoms.length >= 3 || !!data.imageBase64, {
+  message: 'Décris les symptômes ou joins une photo',
+  path: ['symptoms'],
 });
 
 const NormalizeShoppingBodySchema = z.object({
@@ -170,7 +173,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
     if (action === 'recipe') {
       const validated = RecipeOutputSchema.safeParse(data);
       if (!validated.success) {
-        // eslint-disable-next-line no-console
         console.warn('[api/nutrition] recipe schema validation failed:', validated.error?.issues);
         return res.json({
           title: 'Recette indisponible',
@@ -190,7 +192,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
 
     res.json({ ...data, _usage: usage });
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[api/nutrition]', err);
     res.status(500).json({ error: err?.message || 'erreur serveur' });
   }
@@ -209,12 +210,15 @@ export async function handleRedflag(req, res) {
   if (imageBase64 && imageMediaType && !ALLOWED_IMAGE_MIME.includes(imageMediaType)) {
     return res.status(400).json({ error: 'Type d\'image non supporté (jpeg, png ou webp uniquement)' });
   }
+  if (imageBase64 && imageBase64.length > 7_000_000) {
+    return res.status(400).json({ error: 'Image trop volumineuse (max ~5MB binaire / ~7MB base64).' });
+  }
 
   try {
     const userMessage = `Bébé de ${babyAgeMonths} mois.
 Symptômes/observations rapportés par le parent :
 """
-${symptoms.trim()}
+${symptoms.trim() || 'Photo jointe sans description textuelle. Analyse uniquement les signes visibles sans poser de diagnostic.'}
 """
 
 Analyse et classe en green / yellow / red selon les règles.
@@ -239,7 +243,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
     try {
       data = extractJson(text);
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.warn('[api/redflag] JSON parse failed:', e?.message);
       data = {};
     }
@@ -253,7 +256,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
 
     const validated = RedflagOutputSchema.safeParse(data);
     if (!validated.success) {
-      // eslint-disable-next-line no-console
       console.warn('[api/redflag] output schema validation failed:', validated.error?.issues);
       return res.json({
         level: 'yellow',
@@ -265,7 +267,6 @@ Réponds UNIQUEMENT en JSON selon ce schéma exact :
 
     res.json({ ...validated.data, _usage: usage });
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[api/redflag]', err);
     res.status(500).json({ error: err?.message || 'erreur serveur' });
   }
@@ -334,7 +335,6 @@ export async function handleChat(req, res) {
     res.write(`data: ${JSON.stringify({ done: true, _usage: final.usage })}\n\n`);
     res.end();
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[api/chat]', err);
     if (!res.headersSent) {
       res.status(500).json({ error: err?.message || 'erreur serveur' });
@@ -376,7 +376,6 @@ Normalise cette liste pour qu'une maman puisse l'utiliser au marché africain. R
     const data = extractJson(text);
     res.json({ items: Array.isArray(data) ? data : [] });
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[api/normalize-shopping]', err);
     res.status(500).json({ error: err?.message || 'erreur serveur' });
   }

@@ -110,10 +110,6 @@ export function OnboardingFlow() {
     return groups;
   };
 
-  const toggleVaccineSelection = (id: string) => {
-    setSelectedVaccines(prev => prev.includes(id) ? prev.filter(v => v !== id) : [...prev, id]);
-  };
-
   const toggleVaccineGroup = (ids: string[]) => {
     const allSelected = ids.every(id => selectedVaccines.includes(id));
     if (allSelected) {

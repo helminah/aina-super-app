@@ -16,6 +16,8 @@ interface AuthContextType {
   isGuest: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  sendPhoneOtp: (phone: string) => Promise<{ error: Error | null }>;
+  verifyPhoneOtp: (phone: string, token: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   continueAsGuest: () => void;
@@ -105,6 +107,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   };
 
+  const sendPhoneOtp = async (phone: string) => {
+    if (!isSupabaseConfigured) return { error: NOT_CONFIGURED_ERROR };
+    const { error } = await supabase.auth.signInWithOtp({
+      phone,
+      options: { shouldCreateUser: true },
+    });
+    return { error };
+  };
+
+  const verifyPhoneOtp = async (phone: string, token: string) => {
+    if (!isSupabaseConfigured) return { error: NOT_CONFIGURED_ERROR };
+    const { error } = await supabase.auth.verifyOtp({
+      phone,
+      token,
+      type: 'sms',
+    });
+    return { error };
+  };
+
   const signInWithGoogle = async () => {
     if (!isSupabaseConfigured) return { error: NOT_CONFIGURED_ERROR };
 
@@ -158,7 +179,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, isConfigured: isSupabaseConfigured, isGuest, signIn, signUp, signInWithGoogle, signOut, continueAsGuest }}
+      value={{ user, session, loading, isConfigured: isSupabaseConfigured, isGuest, signIn, signUp, sendPhoneOtp, verifyPhoneOtp, signInWithGoogle, signOut, continueAsGuest }}
     >
       {children}
     </AuthContext.Provider>

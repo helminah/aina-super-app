@@ -84,9 +84,9 @@ export function AIChatAssistant() {
   };
 
   const send = async (content: string) => {
-    if (!content.trim() || loading) return;
+    if ((!content.trim() && !imageBase64) || loading) return;
     setError(null);
-    const userMsg: ChatMessage = { role: 'user', content: content.trim() };
+    const userMsg: ChatMessage = { role: 'user', content: content.trim() || 'Photo jointe sans texte.' };
     const next = [...messages, userMsg];
     // Ajoute immédiatement un message assistant vide — rempli token par token.
     setMessages([...next, { role: 'assistant', content: '' }]);

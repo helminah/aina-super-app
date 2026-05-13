@@ -1,16 +1,16 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useBaby } from '@/contexts/BabyContext';
 import { recipes } from '@/data/recipes';
 import type { AiRecipeEntry } from '@/types/child';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Heart, CalendarDays, ShoppingCart, Filter, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock } from 'lucide-react';
+import { Search, Heart, CalendarDays, ShoppingCart, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
-import { useGlassNotification } from '@/components/GlassNotification';
+import { useGlassNotification } from '@/components/useGlassNotification';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
 import { AIRecipeGenerator } from '@/components/nutrition/AIRecipeGenerator';
-import { foodAgeGroups, type FoodAgeGroup } from '@/data/food-guide';
+import { type FoodAgeGroup } from '@/data/food-guide';
 import { getLocalizedField } from '@/lib/i18n-data';
 
 // Tranches d'âge pour les recettes (même structure que FoodGuide)
@@ -73,7 +73,6 @@ function staticToDisplay(r: typeof recipes[0]): DisplayRecipe {
 
 type NutritionView = 'recipes' | 'foods' | 'favorites' | 'planner' | 'shopping';
 
-const AGES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 const CATEGORY_IDS = [
   { id: 'petit-dejeuner', emoji: '🌅' },
   { id: 'dejeuner', emoji: '🍽️' },
@@ -113,11 +112,9 @@ export function NutritionPage() {
     return babyAge >= 6 ? (RECIPE_AGE_GROUPS.find(g => babyAge >= g.minMonths && babyAge < g.maxMonths) ?? RECIPE_AGE_GROUPS[RECIPE_AGE_GROUPS.length - 1]) : null;
   });
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [pickerSlot, setPickerSlot] = useState<string | null>(null);
   const [expandedAiId, setExpandedAiId] = useState<number | null>(null);
   const [showRecipesAnyway, setShowRecipesAnyway] = useState(false);
-  const [showAutoFillDialog, setShowAutoFillDialog] = useState(false);
   const [showAIRecipe, setShowAIRecipe] = useState(false);
   const seenTabs = useRef<Set<string>>(new Set(JSON.parse(localStorage.getItem('aina_seen_tabs') || '[]')));
   const { show: showGlass, node: glassNode } = useGlassNotification();
@@ -177,13 +174,13 @@ export function NutritionPage() {
 
   // Shopping list generation (statique + AI)
   // Ingrédients exclus de la liste de courses
-  const EXCLUDED_WORDS = ['lait', 'milk', 'ronono', 'meew', 'infantile', 'maternel', 'allaitement', 'eau'];
-  const isExcluded = (name: string) => {
+  const EXCLUDED_WORDS = useMemo(() => ['lait', 'milk', 'ronono', 'meew', 'infantile', 'maternel', 'allaitement', 'eau'], []);
+  const isExcluded = useCallback((name: string) => {
     const n = name.toLowerCase().trim();
     return EXCLUDED_WORDS.some(w => n === w || n.startsWith(w + ' ') || n.includes(' ' + w));
-  };
+  }, [EXCLUDED_WORDS]);
   // Normalise le nom avant insertion — regroupe les variantes d'un même ingrédient
-  const NORMALIZE_MAP: [RegExp, string][] = [
+  const NORMALIZE_MAP: [RegExp, string][] = useMemo(() => [
     [/\b(œuf|oeuf)\b.*/i,          'Œuf'],
     [/\bbanane\b.*/i,               'Banane'],
     [/\bmangue\b.*/i,               'Mangue'],
@@ -195,13 +192,13 @@ export function NutritionPage() {
     [/\bpatate douce\b.*/i,         'Patate douce'],
     [/\byaourt nature\b.*/i,        'Yaourt nature'],
     [/\byaourt\b.*/i,               'Yaourt'],
-  ];
-  const normalizeName = (name: string): string => {
+  ], []);
+  const normalizeName = useCallback((name: string): string => {
     for (const [re, normalized] of NORMALIZE_MAP) {
       if (re.test(name)) return normalized;
     }
     return name;
-  };
+  }, [NORMALIZE_MAP]);
 
   const shoppingList = useMemo(() => {
     const ingredientMap = new Map<string, { qty: string; emoji: string; count: number; unit: string }>();
@@ -247,7 +244,7 @@ export function NutritionPage() {
       qty: data.qty,
       emoji: data.emoji,
     }));
-  }, [mealPlan, aiRecipes]);
+  }, [mealPlan, aiRecipes, isExcluded, normalizeName]);
 
   const RecipeCard = ({ recipe }: { recipe: DisplayRecipe }) => {
     const activate = () => {
@@ -377,7 +374,7 @@ export function NutritionPage() {
                   <span>{i === 2 ? '✅' : '❌'}</span>{t(`nutrition.${k}`)}
                 </p>
               ))}
-              <p className="text-[10px] text-bark-400 mt-2 italic">Source : Organisation Mondiale de la Santé (OMS)</p>
+              <p className="text-[10px] text-bark-400 mt-2 italic">{t('nutrition.source_who_full')}</p>
             </div>
           </div>
         ) : <FoodGuide />
@@ -397,7 +394,7 @@ export function NutritionPage() {
                 <p className="text-white/90 text-sm leading-relaxed">{t('nutrition.age_guard_food_body', { name: profile?.name, months: ageMonths, remaining: 6 - ageMonths })}</p>
               </div>
               <div className="bg-white p-4 flex flex-col items-center gap-3">
-                <p className="text-[10px] text-bark-400 text-center italic">Source : OMS</p>
+                <p className="text-[10px] text-bark-400 text-center italic">{t('nutrition.source_who_short')}</p>
                 <button onClick={() => setShowRecipesAnyway(true)}
                   className="w-full py-3 rounded-full bg-amber-500 text-white font-heading font-bold text-sm shadow-md shadow-amber-500/30">
                   {t('ai_recipe.milk_only_preview')}
@@ -604,7 +601,7 @@ export function NutritionPage() {
                 <span>{i === 2 ? '✅' : '❌'}</span>{t(`nutrition.${k}`)}
               </p>
             ))}
-            <p className="text-[10px] text-bark-400 mt-2 italic">Source : Organisation Mondiale de la Santé (OMS)</p>
+            <p className="text-[10px] text-bark-400 mt-2 italic">{t('nutrition.source_who_full')}</p>
           </div>
         </div>
       )}
@@ -720,13 +717,13 @@ export function NutritionPage() {
               disabled={normalizingList}
               className="w-full mb-3 py-2.5 rounded-full bg-violet-500 text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
             >
-              {normalizingList ? '✨ AINA adapte ta liste...' : '✨ Adapter pour le marché avec AINA'}
+              {normalizingList ? t('nutrition.shopping_adapting') : t('nutrition.shopping_adapt_market')}
             </button>
           )}
           {normalizedList && (
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] text-violet-600 font-semibold">✨ Liste adaptée par AINA</span>
-              <button onClick={() => setNormalizedList(null)} className="text-[10px] text-bark-400 underline">Voir originale</button>
+              <span className="text-[11px] text-violet-600 font-semibold">{t('nutrition.shopping_adapted_by_aina')}</span>
+              <button onClick={() => setNormalizedList(null)} className="text-[10px] text-bark-400 underline">{t('nutrition.shopping_view_original')}</button>
             </div>
           )}
           {shoppingList.length === 0 ? (

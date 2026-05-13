@@ -92,7 +92,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
     if (oldProfile) {
       // Migrate old data to new per-baby keys
       const id = oldProfile.id;
-      const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'doses', 'appointments', 'mealplan', 'favorites', 'shopping-checked'];
+      const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'doses', 'appointments', 'mealplan', 'favorites', 'shopping-checked', 'ai-recipes'];
       keys.forEach(k => {
         const oldVal = safeGet(`aina-${k}`, null);
         if (oldVal !== null) {
@@ -210,7 +210,7 @@ export function BabyProvider({ children }: { children: ReactNode }) {
 
   const removeBaby = (id: string) => {
     // Clean up per-baby storage
-    const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'doses', 'appointments', 'mealplan', 'favorites', 'shopping-checked'];
+    const keys = ['weights', 'heights', 'hc', 'vaccines', 'logs', 'milestones', 'teeth', 'doses', 'appointments', 'mealplan', 'favorites', 'shopping-checked', 'ai-recipes'];
     keys.forEach(k => localStorage.removeItem(bk(id, k)));
 
     setBabies(prev => {

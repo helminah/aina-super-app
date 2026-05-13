@@ -10,56 +10,57 @@ export interface CountryMeta {
   code: string;
   label: string;
   flag: string;
+  phoneCode: string;
   schedule: VaccineSchedule;
   region: 'afrique-ouest' | 'afrique-centrale' | 'afrique-est' | 'ocean-indien' | 'maghreb' | 'europe' | 'amerique';
 }
 
 export const COUNTRIES: CountryMeta[] = [
   // Afrique de l'Ouest
-  { code: 'senegal',       label: 'Sénégal',        flag: '🇸🇳', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'cote-ivoire',   label: 'Côte d\'Ivoire', flag: '🇨🇮', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'mali',          label: 'Mali',           flag: '🇲🇱', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'burkina-faso',  label: 'Burkina Faso',   flag: '🇧🇫', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'niger',         label: 'Niger',          flag: '🇳🇪', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'benin',         label: 'Bénin',          flag: '🇧🇯', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'togo',          label: 'Togo',           flag: '🇹🇬', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'guinee',        label: 'Guinée',         flag: '🇬🇳', schedule: 'pev-base', region: 'afrique-ouest' },
-  { code: 'mauritanie',    label: 'Mauritanie',     flag: '🇲🇷', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'senegal',       label: 'Sénégal',        flag: '🇸🇳', phoneCode: '+221', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'cote-ivoire',   label: 'Côte d\'Ivoire', flag: '🇨🇮', phoneCode: '+225', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'mali',          label: 'Mali',           flag: '🇲🇱', phoneCode: '+223', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'burkina-faso',  label: 'Burkina Faso',   flag: '🇧🇫', phoneCode: '+226', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'niger',         label: 'Niger',          flag: '🇳🇪', phoneCode: '+227', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'benin',         label: 'Bénin',          flag: '🇧🇯', phoneCode: '+229', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'togo',          label: 'Togo',           flag: '🇹🇬', phoneCode: '+228', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'guinee',        label: 'Guinée',         flag: '🇬🇳', phoneCode: '+224', schedule: 'pev-base', region: 'afrique-ouest' },
+  { code: 'mauritanie',    label: 'Mauritanie',     flag: '🇲🇷', phoneCode: '+222', schedule: 'pev-base', region: 'afrique-ouest' },
 
   // Afrique Centrale
-  { code: 'cameroun',      label: 'Cameroun',       flag: '🇨🇲', schedule: 'pev-base', region: 'afrique-centrale' },
-  { code: 'gabon',         label: 'Gabon',          flag: '🇬🇦', schedule: 'pev-base', region: 'afrique-centrale' },
-  { code: 'congo',         label: 'Congo',          flag: '🇨🇬', schedule: 'pev-base', region: 'afrique-centrale' },
-  { code: 'rdc',           label: 'RD Congo',       flag: '🇨🇩', schedule: 'pev-base', region: 'afrique-centrale' },
-  { code: 'tchad',         label: 'Tchad',          flag: '🇹🇩', schedule: 'pev-base', region: 'afrique-centrale' },
-  { code: 'rca',           label: 'Centrafrique',   flag: '🇨🇫', schedule: 'pev-base', region: 'afrique-centrale' },
+  { code: 'cameroun',      label: 'Cameroun',       flag: '🇨🇲', phoneCode: '+237', schedule: 'pev-base', region: 'afrique-centrale' },
+  { code: 'gabon',         label: 'Gabon',          flag: '🇬🇦', phoneCode: '+241', schedule: 'pev-base', region: 'afrique-centrale' },
+  { code: 'congo',         label: 'Congo',          flag: '🇨🇬', phoneCode: '+242', schedule: 'pev-base', region: 'afrique-centrale' },
+  { code: 'rdc',           label: 'RD Congo',       flag: '🇨🇩', phoneCode: '+243', schedule: 'pev-base', region: 'afrique-centrale' },
+  { code: 'tchad',         label: 'Tchad',          flag: '🇹🇩', phoneCode: '+235', schedule: 'pev-base', region: 'afrique-centrale' },
+  { code: 'rca',           label: 'Centrafrique',   flag: '🇨🇫', phoneCode: '+236', schedule: 'pev-base', region: 'afrique-centrale' },
 
   // Afrique de l'Est
-  { code: 'rwanda',        label: 'Rwanda',         flag: '🇷🇼', schedule: 'pev-base', region: 'afrique-est' },
-  { code: 'burundi',       label: 'Burundi',        flag: '🇧🇮', schedule: 'pev-base', region: 'afrique-est' },
-  { code: 'djibouti',      label: 'Djibouti',       flag: '🇩🇯', schedule: 'pev-base', region: 'afrique-est' },
+  { code: 'rwanda',        label: 'Rwanda',         flag: '🇷🇼', phoneCode: '+250', schedule: 'pev-base', region: 'afrique-est' },
+  { code: 'burundi',       label: 'Burundi',        flag: '🇧🇮', phoneCode: '+257', schedule: 'pev-base', region: 'afrique-est' },
+  { code: 'djibouti',      label: 'Djibouti',       flag: '🇩🇯', phoneCode: '+253', schedule: 'pev-base', region: 'afrique-est' },
 
   // Océan Indien
-  { code: 'madagascar',    label: 'Madagascar',     flag: '🇲🇬', schedule: 'pev-base', region: 'ocean-indien' },
-  { code: 'comores',       label: 'Comores',        flag: '🇰🇲', schedule: 'pev-base', region: 'ocean-indien' },
-  { code: 'maurice',       label: 'Maurice',        flag: '🇲🇺', schedule: 'pev-base', region: 'ocean-indien' },
-  { code: 'seychelles',    label: 'Seychelles',     flag: '🇸🇨', schedule: 'pev-base', region: 'ocean-indien' },
+  { code: 'madagascar',    label: 'Madagascar',     flag: '🇲🇬', phoneCode: '+261', schedule: 'pev-base', region: 'ocean-indien' },
+  { code: 'comores',       label: 'Comores',        flag: '🇰🇲', phoneCode: '+269', schedule: 'pev-base', region: 'ocean-indien' },
+  { code: 'maurice',       label: 'Maurice',        flag: '🇲🇺', phoneCode: '+230', schedule: 'pev-base', region: 'ocean-indien' },
+  { code: 'seychelles',    label: 'Seychelles',     flag: '🇸🇨', phoneCode: '+248', schedule: 'pev-base', region: 'ocean-indien' },
 
   // Maghreb
-  { code: 'maroc',         label: 'Maroc',          flag: '🇲🇦', schedule: 'maghreb',  region: 'maghreb' },
-  { code: 'algerie',       label: 'Algérie',        flag: '🇩🇿', schedule: 'maghreb',  region: 'maghreb' },
-  { code: 'tunisie',       label: 'Tunisie',        flag: '🇹🇳', schedule: 'maghreb',  region: 'maghreb' },
+  { code: 'maroc',         label: 'Maroc',          flag: '🇲🇦', phoneCode: '+212', schedule: 'maghreb',  region: 'maghreb' },
+  { code: 'algerie',       label: 'Algérie',        flag: '🇩🇿', phoneCode: '+213', schedule: 'maghreb',  region: 'maghreb' },
+  { code: 'tunisie',       label: 'Tunisie',        flag: '🇹🇳', phoneCode: '+216', schedule: 'maghreb',  region: 'maghreb' },
 
   // Europe
-  { code: 'france',        label: 'France',         flag: '🇫🇷', schedule: 'european', region: 'europe' },
-  { code: 'belgique',      label: 'Belgique',       flag: '🇧🇪', schedule: 'european', region: 'europe' },
-  { code: 'suisse',        label: 'Suisse',         flag: '🇨🇭', schedule: 'european', region: 'europe' },
-  { code: 'luxembourg',    label: 'Luxembourg',     flag: '🇱🇺', schedule: 'european', region: 'europe' },
+  { code: 'france',        label: 'France',         flag: '🇫🇷', phoneCode: '+33',  schedule: 'european', region: 'europe' },
+  { code: 'belgique',      label: 'Belgique',       flag: '🇧🇪', phoneCode: '+32',  schedule: 'european', region: 'europe' },
+  { code: 'suisse',        label: 'Suisse',         flag: '🇨🇭', phoneCode: '+41',  schedule: 'european', region: 'europe' },
+  { code: 'luxembourg',    label: 'Luxembourg',     flag: '🇱🇺', phoneCode: '+352', schedule: 'european', region: 'europe' },
 
   // Amérique
-  { code: 'canada',        label: 'Canada',         flag: '🇨🇦', schedule: 'european', region: 'amerique' },
-  { code: 'united-states', label: 'United States',  flag: '🇺🇸', schedule: 'cdc-usa',  region: 'amerique' },
-  { code: 'haiti',         label: 'Haïti',          flag: '🇭🇹', schedule: 'pev-base', region: 'amerique' },
+  { code: 'canada',        label: 'Canada',         flag: '🇨🇦', phoneCode: '+1',   schedule: 'european', region: 'amerique' },
+  { code: 'united-states', label: 'United States',  flag: '🇺🇸', phoneCode: '+1',   schedule: 'cdc-usa',  region: 'amerique' },
+  { code: 'haiti',         label: 'Haïti',          flag: '🇭🇹', phoneCode: '+509', schedule: 'pev-base', region: 'amerique' },
 ];
 
 export const REGION_LABELS: Record<CountryMeta['region'], string> = {

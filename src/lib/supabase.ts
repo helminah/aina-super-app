@@ -9,7 +9,6 @@ const isValidKey = typeof rawKey === 'string' && rawKey.length > 10 && !rawKey.s
 export const isSupabaseConfigured = isValidUrl && isValidKey;
 
 if (!isSupabaseConfigured && import.meta.env.DEV) {
-  // eslint-disable-next-line no-console
   console.warn(
     '[AINA] Supabase non configuré : renseigne VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY dans .env.local. L\'app tourne en mode local (pas d\'auth cloud).',
   );

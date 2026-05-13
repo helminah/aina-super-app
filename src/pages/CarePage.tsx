@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Pill, Thermometer, Droplets, Phone, AlertTriangle, Info } from 'lucide-react';
@@ -95,6 +95,12 @@ function DoseCalculator({ weight }: { weight: number }) {
   const [medication] = useState<'paracetamol'>('paracetamol');
   const [form, setForm] = useState<MedicationForm>(MEDICATION_FORMS.paracetamol[0]);
   const [customWeight, setCustomWeight] = useState(weight);
+  const [nowMs, setNowMs] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = window.setInterval(() => setNowMs(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const doseMg = Math.round(customWeight * DOSE_PER_KG[medication]);
   const practical = getPracticalDose(doseMg, form);
@@ -103,13 +109,12 @@ function DoseCalculator({ weight }: { weight: number }) {
   const lastDose = doseRecords.find(d => d.medication === medication);
   const INTERVAL_MS = MIN_INTERVAL_HOURS[medication] * 60 * 60 * 1000;
   const nextAllowedAt = lastDose ? new Date(new Date(lastDose.givenAt).getTime() + INTERVAL_MS) : null;
-  const nowMs = Date.now();
   const mustWait = !!(nextAllowedAt && nextAllowedAt.getTime() > nowMs);
   const waitMinutes = mustWait ? Math.ceil((nextAllowedAt!.getTime() - nowMs) / 60000) : 0;
   const waitHours = Math.max(1, Math.ceil(waitMinutes / 60));
 
   // Last 24h history (all meds)
-  const recent = doseRecords.filter(d => Date.now() - new Date(d.givenAt).getTime() < 24 * 60 * 60 * 1000);
+  const recent = doseRecords.filter(d => nowMs - new Date(d.givenAt).getTime() < 24 * 60 * 60 * 1000);
 
   // Cumul 24h pour le médicament en cours (mg) + plafond journalier
   const cumul24hMg = recent
@@ -230,7 +235,7 @@ function DoseCalculator({ weight }: { weight: number }) {
           <div className="space-y-2">
             {recent.map(d => {
               const date = new Date(d.givenAt);
-              const ago = Math.round((Date.now() - date.getTime()) / 60000);
+              const ago = Math.round((nowMs - date.getTime()) / 60000);
               const hours = Math.floor(ago / 60);
               const leftoverMin = ago % 60;
               const agoLabel = ago < 60

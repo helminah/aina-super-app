@@ -7,7 +7,7 @@ import { getLocalizedField, translateAgeRange } from '@/lib/i18n-data';
 import { weightBoys, weightGirls, heightBoys, heightGirls, hcBoys, hcGirls } from '@/data/oms-growth';
 import { getAgeInMonths } from '@/lib/age-utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LineChart, Line, Area, AreaChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ComposedChart, Tooltip } from 'recharts';
+import { Line, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ComposedChart, Tooltip } from 'recharts';
 import { ShieldCheck, TrendingUp, Brain, Check, Plus, X, Clock, Smile } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TeethChart } from '@/components/health/TeethChart';
@@ -175,9 +175,6 @@ export function HealthPage() {
               const groupDone = group.vaccines.every(v => isVaccineDone(v.id));
               const groupOverdue = !groupDone && group.vaccines.some(v => !isVaccineDone(v.id) && v.ageMonths < ageMonths);
               const doneCount = group.vaccines.filter(v => isVaccineDone(v.id)).length;
-              const isPEV = ['pev-base'].includes(
-                ([] as string[]).concat(group.vaccines[0]?.country ?? []).some(c => c) ? 'pev-base' : ''
-              );
               // PEV labels (6/10/14 weeks) come from i18n. mg/wo translations are placeholders
               // copied from FR (suffixed with _todo when unsure) — TODO: native translation.
               const pevMap = t('health.pev_labels', { returnObjects: true }) as Record<string, string>;
@@ -307,9 +304,9 @@ export function HealthPage() {
             {(metric === 'weight' ? weightEntries : metric === 'height' ? heightEntries : hcEntries)
               .slice().reverse().slice(0, 10).map((e, i) => (
               <div key={i} className="bg-ivory-50 rounded-xl px-4 py-3 flex justify-between items-center">
-                <span className="text-sm text-bark-600">{new Date('date' in e ? e.date : '').toLocaleDateString('fr-FR')}</span>
+                <span className="text-sm text-bark-600">{new Date(e.date).toLocaleDateString('fr-FR')}</span>
                 <span className="font-heading font-bold text-bark-800">
-                  {'weight' in e ? `${(e as any).weight} kg` : 'height' in e ? `${(e as any).height} cm` : `${(e as any).circumference} cm`}
+                  {'weight' in e ? `${e.weight} kg` : 'height' in e ? `${e.height} cm` : `${e.circumference} cm`}
                 </span>
               </div>
             ))}

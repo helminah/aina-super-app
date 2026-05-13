@@ -1,19 +1,27 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Sparkles, Phone, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { AinaLogo } from '@/components/AinaLogo';
+import { COUNTRIES, COUNTRY_BY_CODE } from '@/data/countries';
+
+const DEFAULT_PHONE_COUNTRY = 'senegal';
 
 export function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [authMethod, setAuthMethod] = useState<'email' | 'phone'>('phone');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY);
+  const [phone, setPhone] = useState(COUNTRY_BY_CODE[DEFAULT_PHONE_COUNTRY].phoneCode);
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const { signIn, signUp, signInWithGoogle, isConfigured, continueAsGuest } = useAuth();
+  const { signIn, signUp, sendPhoneOtp, verifyPhoneOtp, signInWithGoogle, isConfigured, continueAsGuest } = useAuth();
   const { t } = useTranslation();
 
   const handleGoogle = async () => {
@@ -38,6 +46,47 @@ export function AuthPage() {
       toast.error(error.message);
     } else if (mode === 'signup') {
       toast.success(t('auth.signup_success'));
+    }
+  };
+
+  const normalizePhone = (value: string) => value.replace(/[^\d+]/g, '').replace(/^00/, '+');
+
+  const handlePhoneCountryChange = (code: string) => {
+    const nextPrefix = COUNTRY_BY_CODE[code]?.phoneCode ?? '';
+    const previousPrefix = COUNTRY_BY_CODE[phoneCountry]?.phoneCode ?? '';
+    setPhoneCountry(code);
+    setOtpSent(false);
+    setOtp('');
+    setPhone(current => {
+      const trimmed = current.trim();
+      if (!trimmed || trimmed === previousPrefix || trimmed.startsWith(previousPrefix)) {
+        return `${nextPrefix}${trimmed.slice(previousPrefix.length)}`;
+      }
+      return nextPrefix;
+    });
+  };
+
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const normalized = normalizePhone(phone);
+    if (!normalized.startsWith('+') || normalized.length < 8) {
+      toast.error(t('auth.phone_invalid'));
+      return;
+    }
+    setLoading(true);
+    const { error } = otpSent
+      ? await verifyPhoneOtp(normalized, otp.trim())
+      : await sendPhoneOtp(normalized);
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (!otpSent) {
+      setPhone(normalized);
+      setOtpSent(true);
+      toast.success(t('auth.phone_code_sent'));
     }
   };
 
@@ -97,52 +146,155 @@ export function AuthPage() {
             ))}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
-                <input
-                  type="email"
-                  placeholder={t('auth.email')}
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder={t('auth.password')}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4 text-bark-400" /> : <Eye className="w-4 h-4 text-bark-400" />}
-                </button>
-              </div>
-            </div>
+          <div className="grid grid-cols-2 gap-2 mb-4">
             <button
-              type="submit"
-              disabled={loading || !email || !password}
-              className={`w-full py-4 rounded-full font-heading font-bold text-white flex items-center justify-center gap-2 transition-all ${
-                loading || !email || !password ? 'opacity-50 cursor-not-allowed bg-forest-400' : 'btn-gradient active:scale-[0.98]'
+              type="button"
+              onClick={() => setAuthMethod('phone')}
+              className={`py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                authMethod === 'phone' ? 'bg-forest-600 text-white shadow-sm' : 'bg-ivory-200 text-bark-500'
               }`}
             >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>{mode === 'login' ? t('auth.login_cta') : t('auth.signup_cta')} <Sparkles className="w-4 h-4" /></>
-              )}
+              {t('auth.phone_tab')}
             </button>
-          </form>
+            <button
+              type="button"
+              onClick={() => setAuthMethod('email')}
+              className={`py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                authMethod === 'email' ? 'bg-forest-600 text-white shadow-sm' : 'bg-ivory-200 text-bark-500'
+              }`}
+            >
+              {t('auth.email_tab')}
+            </button>
+          </div>
+
+          {authMethod === 'phone' ? (
+            <form onSubmit={handlePhoneSubmit} className="space-y-4">
+              <div>
+                <label className="text-[11px] uppercase tracking-[0.15em] text-bark-500 font-semibold block mb-2">
+                  {t('auth.country_label')}
+                </label>
+                <select
+                  value={phoneCountry}
+                  onChange={e => handlePhoneCountryChange(e.target.value)}
+                  className="w-full px-4 py-3.5 rounded-2xl bg-ivory-200 text-bark-800 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
+                >
+                  {COUNTRIES.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {country.flag} {country.label} ({country.phoneCode})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
+                  <input
+                    type="tel"
+                    inputMode="tel"
+                    placeholder={t('auth.phone_placeholder')}
+                    value={phone}
+                    onChange={e => {
+                      setPhone(e.target.value);
+                      setOtpSent(false);
+                      setOtp('');
+                    }}
+                    className="w-full pl-11 pr-4 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
+                  />
+                </div>
+              </div>
+              {otpSent && (
+                <div>
+                  <div className="relative">
+                    <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      placeholder={t('auth.otp_placeholder')}
+                      value={otp}
+                      onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      className="w-full pl-11 pr-4 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm tracking-[0.35em]"
+                    />
+                  </div>
+                </div>
+              )}
+              <p className="text-[11px] text-bark-500 leading-relaxed px-1">
+                {t('auth.phone_hint')}
+              </p>
+              <button
+                type="submit"
+                disabled={loading || !phone || (otpSent && otp.length < 4)}
+                className={`w-full py-4 rounded-full font-heading font-bold text-white flex items-center justify-center gap-2 transition-all ${
+                  loading || !phone || (otpSent && otp.length < 4) ? 'opacity-50 cursor-not-allowed bg-forest-400' : 'btn-gradient active:scale-[0.98]'
+                }`}
+              >
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>{otpSent ? t('auth.verify_code') : t('auth.send_code')} <Sparkles className="w-4 h-4" /></>
+                )}
+              </button>
+              {otpSent && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOtpSent(false);
+                    setOtp('');
+                  }}
+                  className="w-full text-xs text-bark-500 underline"
+                >
+                  {t('auth.change_phone')}
+                </button>
+              )}
+            </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
+                  <input
+                    type="email"
+                    placeholder={t('auth.email')}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    className="w-full pl-11 pr-4 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-bark-400" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={t('auth.password')}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="w-full pl-11 pr-11 py-4 rounded-2xl bg-ivory-200 text-bark-800 placeholder:text-bark-400 focus:outline-none focus:ring-2 focus:ring-forest-300 text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4 text-bark-400" /> : <Eye className="w-4 h-4 text-bark-400" />}
+                  </button>
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={loading || !email || !password}
+                className={`w-full py-4 rounded-full font-heading font-bold text-white flex items-center justify-center gap-2 transition-all ${
+                  loading || !email || !password ? 'opacity-50 cursor-not-allowed bg-forest-400' : 'btn-gradient active:scale-[0.98]'
+                }`}
+              >
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>{mode === 'login' ? t('auth.login_cta') : t('auth.signup_cta')} <Sparkles className="w-4 h-4" /></>
+                )}
+              </button>
+            </form>
+          )}
 
           {isConfigured && (
             <>

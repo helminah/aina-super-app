@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface GlassNotificationProps {
   message: string;
@@ -41,26 +41,4 @@ export function GlassNotification({ message, duration = 3000, onDismiss }: Glass
     </div>,
     document.body,
   );
-}
-
-/** Hook pour afficher une GlassNotification facilement */
-export function useGlassNotification() {
-  const [current, setCurrent] = useState<string | null>(null);
-
-  const show = (message: string) => setCurrent(message);
-  const dismiss = () => setCurrent(null);
-
-  const node = (
-    <AnimatePresence>
-      {current && (
-        <GlassNotification
-          key={current}
-          message={current}
-          onDismiss={dismiss}
-        />
-      )}
-    </AnimatePresence>
-  );
-
-  return { show, node };
 }

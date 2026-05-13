@@ -23,7 +23,6 @@ import {
 const PORT = Number(process.env.PORT) || 3001;
 
 if (!process.env.ANTHROPIC_API_KEY) {
-  // eslint-disable-next-line no-console
   console.error('✗ ANTHROPIC_API_KEY manquante dans .env.local (ou variables d\'env)');
   process.exit(1);
 }
@@ -51,10 +50,7 @@ app.post('/api/chat', handleChat);
 app.post('/api/normalize-shopping', handleNormalizeShopping);
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`✓ AINA proxy Anthropic prêt sur http://localhost:${PORT}`);
-  // eslint-disable-next-line no-console
   console.log(`  Model : ${MODEL} · streaming chat · extended thinking redflag`);
-  // eslint-disable-next-line no-console
   console.log(`  Routes : POST /api/nutrition · POST /api/redflag · POST /api/chat · GET /api/health`);
 });

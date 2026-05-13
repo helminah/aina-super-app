@@ -9,7 +9,7 @@ import { SUPPORTED_LANGUAGES } from '@/i18n';
 import { useTheme, type ThemeMode } from '@/contexts/ThemeContext';
 import { Sun, Moon, SunMoon, Camera } from 'lucide-react';
 import { BabyAvatar } from '@/components/BabyAvatar';
-import { Calendar, Ruler, Weight, Settings, Trash2, Plus, ChevronDown, UserPlus, X, Check, MapPin, FileText } from 'lucide-react';
+import { Calendar, Ruler, Weight, Settings, Trash2, ChevronDown, UserPlus, X, Check, MapPin, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -41,7 +41,7 @@ export function ProfilePage() {
   const { t, i18n } = useTranslation();
   const { mode: themeMode, setMode: setThemeMode } = useTheme();
   const navigate = useNavigate();
-  const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile, removeBaby } = useBaby();
+  const { profile, babies, activeBabyId, switchBaby, addBaby, updateProfile, clearProfile } = useBaby();
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(profile?.name || '');
   const [editWeight, setEditWeight] = useState(String(profile?.birthWeight || ''));

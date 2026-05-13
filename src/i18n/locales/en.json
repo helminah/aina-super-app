@@ -44,7 +44,18 @@
     "login_cta": "Sign in",
     "signup_cta": "Create my account",
     "email": "Email",
+    "email_tab": "Email",
     "password": "Password",
+    "phone_tab": "Phone",
+    "country_label": "Number country",
+    "phone_placeholder": "WhatsApp/SMS number (+221...)",
+    "phone_hint": "Phone is often easier than email. If the SMS is slow, you can continue without an account and sync later.",
+    "phone_invalid": "Add the country code, for example +221...",
+    "phone_code_sent": "Code sent by SMS",
+    "otp_placeholder": "Code received",
+    "send_code": "Receive a code",
+    "verify_code": "Verify code",
+    "change_phone": "Change phone number",
     "signup_success": "Account created! Check your email 📧",
     "terms": "By continuing you accept our terms of use and privacy policy.",
     "dev_mode_label": "Test mode — explore without an account",
@@ -512,7 +523,13 @@
     "filter_all": "All",
     "menu_generated_one": "{{count}}-day menu generated!",
     "menu_generated_other": "{{count}}-day menu generated!",
-    "menu_editable_hint": "You can edit each meal 😊"
+    "menu_editable_hint": "You can edit each meal 😊",
+    "source_who_full": "Source: World Health Organization (WHO)",
+    "source_who_short": "Source: WHO",
+    "shopping_adapting": "✨ AINA is adapting your list...",
+    "shopping_adapt_market": "✨ Adapt for the market with AINA",
+    "shopping_adapted_by_aina": "✨ List adapted by AINA",
+    "shopping_view_original": "View original"
   },
   "recipe_detail": {
     "not_found": "Recipe not found",
@@ -939,7 +956,11 @@
     "Never refreeze a thawed food.",
     "Reheat only once, thoroughly (70°C min for meat/fish).",
     "Throw away any leftover started by baby (saliva) after 1h.",
-    "Label jars with preparation date."
+    "Label jars with preparation date.",
+    "Wash hands with soap for 20 seconds before preparing a meal.",
+    "Clean the work surface and utensils with hot soapy water.",
+    "Wash fruits and vegetables with safe drinking water.",
+    "Prefer metal or plastic utensils over wood, which is harder to clean."
   ],
   "hygiene_sections": [
     {

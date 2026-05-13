@@ -44,7 +44,18 @@
     "login_cta": "Se connecter",
     "signup_cta": "Créer mon compte",
     "email": "Email",
+    "email_tab": "Email",
     "password": "Mot de passe",
+    "phone_tab": "Téléphone",
+    "country_label": "Pays du numéro",
+    "phone_placeholder": "Numéro WhatsApp/SMS (+221...)",
+    "phone_hint": "Le téléphone est souvent plus simple que l'email. Si le SMS tarde, vous pouvez continuer sans compte et synchroniser plus tard.",
+    "phone_invalid": "Ajoutez l'indicatif du pays, par exemple +221...",
+    "phone_code_sent": "Code envoyé par SMS",
+    "otp_placeholder": "Code reçu",
+    "send_code": "Recevoir un code",
+    "verify_code": "Valider le code",
+    "change_phone": "Modifier le numéro",
     "signup_success": "Compte créé ! Vérifiez votre email 📧",
     "terms": "En continuant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
     "dev_mode_label": "Mode test — découvrir sans compte",
@@ -512,7 +523,13 @@
     "filter_all": "Tous",
     "menu_generated_one": "Menu de {{count}} jour généré !",
     "menu_generated_other": "Menu de {{count}} jours généré !",
-    "menu_editable_hint": "Tu peux modifier chaque repas 😊"
+    "menu_editable_hint": "Tu peux modifier chaque repas 😊",
+    "source_who_full": "Source : Organisation Mondiale de la Santé (OMS)",
+    "source_who_short": "Source : OMS",
+    "shopping_adapting": "✨ AINA adapte ta liste...",
+    "shopping_adapt_market": "✨ Adapter pour le marché avec AINA",
+    "shopping_adapted_by_aina": "✨ Liste adaptée par AINA",
+    "shopping_view_original": "Voir originale"
   },
   "recipe_detail": {
     "not_found": "Recette introuvable",
@@ -939,7 +956,11 @@
     "Ne jamais recongeler un aliment décongelé.",
     "Réchauffer une seule fois, à cœur (70°C minimum pour viandes/poissons).",
     "Jeter tout reste entamé par bébé (salive) après 1h.",
-    "Étiqueter les petits pots avec la date de préparation."
+    "Étiqueter les petits pots avec la date de préparation.",
+    "Se laver les mains au savon pendant 20 secondes avant de préparer un repas.",
+    "Nettoyer le plan de travail et les ustensiles avec de l'eau chaude savonneuse.",
+    "Laver les fruits et légumes à l'eau potable.",
+    "Préférer les ustensiles en métal ou plastique au bois, plus difficile à nettoyer."
   ],
   "hygiene_sections": [
     {

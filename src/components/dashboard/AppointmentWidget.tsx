@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Plus, X, MapPin, Trash2 } from 'lucide-react';
@@ -14,9 +14,13 @@ export function AppointmentWidget() {
   const { t } = useTranslation();
   const { appointments, addAppointment, removeAppointment } = useBaby();
   const [showAdd, setShowAdd] = useState(false);
+  const [today, setToday] = useState(() => new Date().toISOString().split('T')[0]);
 
-  // Filtrer à venir (date >= aujourd'hui)
-  const today = new Date().toISOString().split('T')[0];
+  useEffect(() => {
+    const id = window.setInterval(() => setToday(new Date().toISOString().split('T')[0]), 60_000);
+    return () => window.clearInterval(id);
+  }, []);
+
   const upcoming = appointments.filter(a => a.date >= today).slice(0, 3);
 
   return (
@@ -49,7 +53,7 @@ export function AppointmentWidget() {
           </div>
           <div className="space-y-2">
             {upcoming.map(appt => (
-              <AppointmentRow key={appt.id} appt={appt} onRemove={() => removeAppointment(appt.id)} />
+              <AppointmentRow key={appt.id} appt={appt} today={today} onRemove={() => removeAppointment(appt.id)} />
             ))}
           </div>
         </div>
@@ -70,10 +74,11 @@ export function AppointmentWidget() {
   );
 }
 
-function AppointmentRow({ appt, onRemove }: { appt: Appointment; onRemove: () => void }) {
+function AppointmentRow({ appt, today, onRemove }: { appt: Appointment; today: string; onRemove: () => void }) {
   const { t, i18n } = useTranslation();
   const date = new Date(appt.date + 'T' + (appt.time || '09:00'));
-  const daysAway = Math.ceil((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const todayDate = new Date(today + 'T00:00');
+  const daysAway = Math.ceil((date.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
   const label = daysAway === 0
     ? t('appointment.today')
     : daysAway === 1

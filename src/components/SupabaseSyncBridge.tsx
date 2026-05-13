@@ -21,12 +21,12 @@ export function SupabaseSyncBridge() {
     reinitialize,
   } = useBaby();
 
-  const initialPullDone = useRef(false);
+  const initialPullUserId = useRef<string | null>(null);
 
   // Pull Supabase → localStorage au premier login (nouveau device / browser vide)
   useEffect(() => {
-    if (!user || isGuest || initialPullDone.current) return;
-    initialPullDone.current = true;
+    if (!user || isGuest || initialPullUserId.current === user.id) return;
+    initialPullUserId.current = user.id;
 
     (async () => {
       const result = await pullBabies(user.id);
@@ -36,24 +36,23 @@ export function SupabaseSyncBridge() {
       safeSet('aina-babies', result.babies);
       safeSet('aina-active-baby', result.activeBabyId);
 
-      const firstBabyId = result.activeBabyId ?? result.babies[0]?.id;
-      if (firstBabyId) {
-        const stores = await pullAllBabyStores(user.id, firstBabyId);
+      for (const baby of result.babies) {
+        const stores = await pullAllBabyStores(user.id, baby.id);
         Object.entries(stores).forEach(([key, val]) => {
-          safeSet(`aina-${firstBabyId}-${key}`, val);
+          safeSet(`aina-${baby.id}-${key}`, val);
         });
       }
 
       reinitialize();
     })();
-  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, isGuest, babies.length, reinitialize]);
 
   // Push babies list (debounced 1s)
   useEffect(() => {
     if (!user || isGuest || babies.length === 0) return;
     const t = setTimeout(() => pushBabies(user.id, babies, activeBabyId), 1000);
     return () => clearTimeout(t);
-  }, [user?.id, babies, activeBabyId]);
+  }, [user, isGuest, babies, activeBabyId]);
 
   // Push tous les stores du bébé actif (debounced 1s)
   useEffect(() => {
@@ -76,7 +75,7 @@ export function SupabaseSyncBridge() {
     }, 1000);
     return () => clearTimeout(t);
   }, [
-    user?.id, activeBabyId,
+    user, isGuest, activeBabyId,
     weightEntries, heightEntries, hcEntries, vaccineRecords, dailyLogs,
     milestoneRecords, teethRecords, doseRecords, appointments,
     mealPlan, favorites, shoppingChecked, aiRecipes,
