@@ -4,3 +4,4 @@
 
 \i ./migrations/202604300001_prepare_aina_core_schema_and_fix_rls.sql
 \i ./migrations/202604300002_fix_set_updated_at_search_path.sql
+\i ./migrations/202605190001_bootstrap_auth_users.sql

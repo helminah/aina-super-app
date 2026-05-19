@@ -7,6 +7,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 const isNative = Capacitor.isNativePlatform();
 const NATIVE_REDIRECT = 'com.aina.superapp://login-callback';
+const EMAIL_REDIRECT_PATH = '/';
 
 interface AuthContextType {
   user: User | null;
@@ -31,6 +32,11 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const NOT_CONFIGURED_ERROR = new Error(
   'Supabase n\'est pas configuré. Renseigne .env (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY).',
 );
+
+function getAuthRedirectUrl() {
+  if (isNative) return NATIVE_REDIRECT;
+  return new URL(EMAIL_REDIRECT_PATH, window.location.origin).toString();
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -58,8 +64,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    supabase.auth
-      .getSession()
+    const hydrateSession = async () => {
+      const currentUrl = new URL(window.location.href);
+      const authCode = currentUrl.searchParams.get('code');
+
+      if (authCode) {
+        await supabase.auth.exchangeCodeForSession(authCode);
+        currentUrl.searchParams.delete('code');
+        window.history.replaceState({}, document.title, `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`);
+      }
+
+      return supabase.auth.getSession();
+    };
+
+    hydrateSession()
       .then(({ data: { session } }) => {
         setSession(session);
         setUser(session?.user ?? null);
@@ -103,7 +121,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     if (!isSupabaseConfigured) return { error: NOT_CONFIGURED_ERROR };
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: getAuthRedirectUrl(),
+        data: {
+          language: navigator.language?.slice(0, 2) || 'fr',
+        },
+      },
+    });
     return { error };
   };
 
@@ -141,7 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: getAuthRedirectUrl() },
     });
     return { error };
   };
