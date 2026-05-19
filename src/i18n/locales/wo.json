@@ -103,7 +103,7 @@
       "europe": "Orop",
       "amerique": "Amerik"
     },
-    "parent_role_title": "Yow nag, lan nga ci liir bi ?",
+    "parent_role_title": "Yow nag, kan nga ci liir bi ?",
     "parent_role_subtitle": "Ngir AINA gën a méngoo ak yow",
     "parent_maman": "Yaay",
     "parent_papa": "Papa",
@@ -332,10 +332,10 @@
     "sos_label": "SOS",
     "care_kit": "Trousse pharmacie",
     "pediatric_followup": "Toppatoo bi :",
-    "vaccines_overdue_one": "{{count}} vaccin bu yéex",
-    "vaccines_overdue_other": "{{count}} vaccin yu yéex",
-    "vaccines_upcoming_one": "{{count}} vaccin buy ñëw",
-    "vaccines_upcoming_other": "{{count}} vaccin yu di ñëw",
+    "vaccines_overdue_one": "{{count}} vaksin bu yéex",
+    "vaccines_overdue_other": "{{count}} vaksin yu yéex",
+    "vaccines_upcoming_one": "{{count}} vaksin buy ñëw",
+    "vaccines_upcoming_other": "{{count}} vaksin yu di ñëw",
     "care_kit_title": "Sama trousse pharmacie",
     "care_kit_desc": "Natt · Tàngaay · Selles",
     "care_kit_hint": "Xayma garab, ndigëlu tàngaay, xool selles yi",
@@ -377,7 +377,7 @@
       "4 mois": "14 ayu-bës (3 weer ak genn-wàll)"
     },
     "growth": {
-      "weight": "Poids (kg)",
+      "weight": "Diisaay (kg)",
       "height": "Njoolaay (cm)",
       "hc": "Natt bu bopp (cm)",
       "no_data": "Amul natt bu ñu denc. Yokkal natt bu bees.",
@@ -421,7 +421,7 @@
     }
   },
   "health_report": {
-    "print": "Imprimer",
+    "print": "Mbal",
     "record_title": "Carnet wér-gu-yaram",
     "generated_on": "Defar nañu ko ci {{date}}",
     "section_baby_info": "Mbiru liir bi",
@@ -430,7 +430,7 @@
     "field_birth_date": "Bisu juddu",
     "field_sex": "Góor walla Jigéen",
     "field_country": "Réew",
-    "field_birth_weight": "Poids ci juddu",
+    "field_birth_weight": "Diisaay ci juddu",
     "section_latest_measures": "Natt yu mujj",
     "measure_weight": "Diisaay",
     "measure_height": "Njoolaay",
@@ -450,7 +450,7 @@
   "nutrition": {
     "title": "Nutrition",
     "hero_kicker": "Safaay ak ni mu mel",
-    "hero_tagline": "Recettes · Favoris · Menu · Courses",
+    "hero_tagline": "Togg · Favoris · Menu · Marché",
     "tabs": {
       "recipes": "Recettes",
       "foods": "Lekk",
@@ -494,7 +494,7 @@
     "no_favorites": "Amul favoris",
     "no_favorites_hint": "Cuqal xol bi ngir denc say togg favoris.",
     "all_ai_recipes": "Say togg IA yépp",
-    "shopping_list": "Liste de courses",
+    "shopping_list": "Listu marché",
     "clear": "Dindi",
     "empty_shopping": "Liste bi amul dara",
     "empty_shopping_hint": "Sosal planning repas ngir liste de courses bi génn.",
@@ -509,7 +509,7 @@
     "delete_aria": "Dindi",
     "age_guard_food_title": "Meewu yaay rekk",
     "age_guard_food_body": "{{name}} am na {{months}} weer rekk. OMS dafa digal meewu yaay rekk (walla meewu xale) ba 6 weer. Bul ko jox lekk bu dëgër yii fan, walla thé ak jus.",
-    "age_guard_food_unlock": "Recettes yi ak guide bi ci 6 weer lay feeñ.",
+    "age_guard_food_unlock": "Togg yi ak guide bi ci 6 weer lañuy feeñ.",
     "age_guard_food_rule1": "Bul ko jox lekk bu dëgër",
     "age_guard_food_rule2": "Bul ko jox thé, jus walla ndox mu am suukër ci yii jamono",
     "age_guard_food_rule3": "Meewu yaay walla meewu xale rekk",
@@ -524,15 +524,15 @@
     "menu_generated_one": "Menu bu {{count}} bës sosee na !",
     "menu_generated_other": "Menu bu {{count}} bës sosee na !",
     "menu_editable_hint": "Mën nga soppi repas yu nekk 😊",
-    "source_who_full": "Source : Organisation Mondiale de la Santé (OMS)",
-    "source_who_short": "Source : OMS",
+    "source_who_full": "Gàddaay : Organisation Mondiale de la Santé (OMS)",
+    "source_who_short": "Gàddaay : OMS",
     "shopping_adapting": "✨ AINA mi ngi defar sa liste...",
     "shopping_adapt_market": "✨ Méngool sa liste ak marché bi ak AINA",
     "shopping_adapted_by_aina": "✨ Liste bu AINA méngool",
     "shopping_view_original": "Xool liste bu njëkk bi"
   },
   "recipe_detail": {
-    "not_found": "Recette bi gisuwul",
+    "not_found": "Togg bi gisuwul",
     "allergens_label": "Allergène : {{list}}",
     "months_suffix": "weer",
     "ingredients_title": "Ingrédients",
@@ -951,7 +951,7 @@
       ]
     }
   ],
-  "storage_golden_rules_title": "Règles d'or",
+  "storage_golden_rules_title": "Sàrtuy wurus",
   "storage_golden_rules": [
     "Bul recongeler aliment bu décongeler ba noppi.",
     "Tàngal ko benn yoon rekk, ba ci biir (70°C min ngir yàpp/jën).",
@@ -985,7 +985,7 @@
     {
       "title": "Préparer biberon meewu xale",
       "items": [
-        "Ndox bu tuuti minéraux (bu ñu bind \"pour bébé\")",
+        "Ndox bu tuuti minéraux (bu ñu bind \"ngir liir\")",
         "Toppal dose bi: 1 mesurette ci 30 ml ndox",
         "Defal ndox bi jëkka, te jiitu poudre bi, bul ko def inverse",
         "Yëngalal ko tuuti (bul ko yëngal degeer ndax moussage)",
@@ -1014,12 +1014,12 @@
     "back": "Dellu",
     "credentials": "Médecin · DES Pédiatrie",
     "university": "Université Cheikh Anta Diop (UCAD), Dakar",
-    "about_aina_title": "À propos d'AINA",
+    "about_aina_title": "Ci AINA",
     "about_aina_body": "AINA dafay tekki « Dund ak Sawu » ci làkk malagasy. App bii dafa juddu ci bëgg-bëggu Dr Helminah ngir pédiatrie ak bëgg-bëggam ngir jàppandal toppatoo liir ci yaay yi ci Afrik ak ci àdduna sépp.",
     "follow_title": "Toppal Dr Helminah"
   },
   "about": {
-    "title": "À propos de Dr Helminah",
+    "title": "Ci Dr Helminah",
     "subtitle": "Pédiatre · Ki sos AINA",
     "bio": "Helminah, juddoo Madagascar, mi ngi def formation pédiatrie ci Dakar. Bës bu nekk dafay gis njaboot yu wut ay tontu te duñu ko am. Créatrice de contenu ak stratège digital depuis 4 ans te bëgg IA — mu dugal dooleem yépp ci AINA ngir wajur yi am tontu bu leer, ci sa làkk, ci waxtu wu nekk.",
     "links_title": "Fima mën a fekk",

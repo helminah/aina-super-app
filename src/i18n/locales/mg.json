@@ -70,7 +70,7 @@
     "welcome_title": "Tongasoa eto amin'ny AINA",
     "welcome_subtitle": "Inona no anarana kely mamy iantsoanao an'i sombin'aina?",
     "name_placeholder": "Anaran'ny zazakely",
-    "birth_date_title": "Oviana no tonga tety an-tany i {{name}} kely?",
+    "birth_date_title": "Oviana no teraka i {{name}} kely?",
     "birth_date_subtitle": "Ary zazalahy sa zazavavy izy?",
     "measurements_title": "Lanja sy halavany rehefa teraka",
     "measurements_subtitle": "Mila izany isika, mami, mba hanaraha-maso tsara ny fitomboan'i babakely.",
@@ -315,7 +315,7 @@
     "add_baby_cta": "Hampiditra an'i {{name}}"
   },
   "dashboard": {
-    "hello_mom_of": "Salama e, maman'i",
+    "hello_mom_of": "Salama e, {{role}}",
     "tip_of_day": "Torohevitra androany",
     "next_vaccine": "Vaksiny manaraka",
     "days_until": "Afaka {{days}} andro",
