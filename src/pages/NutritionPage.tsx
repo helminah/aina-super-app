@@ -5,7 +5,7 @@ import { recipes } from '@/data/recipes';
 import type { AiRecipeEntry } from '@/types/child';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Heart, CalendarDays, ShoppingCart, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock } from 'lucide-react';
+import { Search, Heart, CalendarDays, ShoppingCart, X, Plus, Trash2, Clock, Flame, Apple, Sparkles, Share2, Lock, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { useGlassNotification } from '@/components/useGlassNotification';
 import { FoodGuide } from '@/components/nutrition/FoodGuide';
@@ -779,61 +779,261 @@ export function NutritionPage() {
                   </div>
                 );
               })()}
-              <div className="flex gap-2 mt-5">
-                <button onClick={clearShoppingChecked} className="py-3 px-4 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm flex-shrink-0">{t('nutrition.uncheck_all')}</button>
-                <button
-                  onClick={async () => {
-                    const lines = (normalizedList ?? shoppingList).map(item => `${item.emoji} ${item.name} — ${item.qty}`).join('\n');
-                    const text = `🛒 Ma liste de courses AINA\n${'─'.repeat(28)}\n\n${lines}\n\n🌿 Généré par AINA`;
-                    if (navigator.share) { try { await navigator.share({ title: 'Ma liste de courses AINA', text }); } catch { /* annulé */ } }
-                    else { await navigator.clipboard.writeText(text); toast.success('Liste copiée !'); }
-                  }}
-                  className="flex-1 py-3 rounded-full bg-forest-600 text-white font-bold text-sm flex items-center justify-center gap-1.5"
-                >
-                  <Share2 className="w-4 h-4" /> Partager
-                </button>
-                <button
-                  onClick={() => {
-                    const CATS: { label: string; emoji: string; keys: string[] }[] = [
-                      { label: 'Légumes',          emoji: '🥕', keys: ['carotte','patate','courgette','courge','épinard','brocoli','chou','haricot vert','pois','oignon','ail','poireau','aubergine','poivron','tomate','concombre','salade','navet','betterave','fenouil','igname','taro','gombo','manioc','feuille'] },
-                      { label: 'Fruits',           emoji: '🍎', keys: ['banane','mangue','pomme','poire','prune','pêche','abricot','orange','citron','lime','fraise','ananas','papaye','avocat','kiwi','figue','datte','pastèque','melon','raisin','goyave','fruit'] },
-                      { label: 'Céréales & féculents', emoji: '🌾', keys: ['mil','fonio','riz','quinoa','semoule','farine','maïs','avoine','orge','blé','pain','pâte','macaroni','céréale','bouillie','polenta','galette'] },
-                      { label: 'Protéines',        emoji: '🍗', keys: ['poulet','poisson','viande','œuf','lentille','pois chiche','thon','sardine','saumon','bœuf','agneau','dinde','crevette','haricot blanc','haricot rouge','soja','arachide','noix de cajou'] },
-                      { label: 'Huiles & matières grasses', emoji: '🫒', keys: ['huile','beurre','margarine','ghee','palme','sésame'] },
-                      { label: 'Épices & condiments', emoji: '🌿', keys: ['sel','poivre','cumin','gingembre','cannelle','coriandre','curcuma','vanille','noix','herbe','épice','bouillon','sucre','miel'] },
-                    ];
-                    const items = normalizedList ?? shoppingList;
-                    const used = new Set<number>();
-                    const sorted: { label: string; emoji: string; items: typeof items }[] = [];
-                    for (const cat of CATS) {
-                      const matched = items.filter((item, i) => {
-                        if (used.has(i)) return false;
-                        const n = item.name.toLowerCase();
-                        return cat.keys.some(k => n.includes(k));
-                      });
-                      if (matched.length) {
-                        matched.forEach(item => used.add(items.indexOf(item)));
-                        sorted.push({ ...cat, items: matched });
+              <div className="space-y-2 mt-5">
+                <div className="flex gap-2">
+                  <button onClick={clearShoppingChecked} className="py-3 px-4 rounded-full bg-ivory-200 text-bark-500 font-medium text-sm flex-shrink-0">{t('nutrition.uncheck_all')}</button>
+                  <button
+                    onClick={async () => {
+                      const lines = (normalizedList ?? shoppingList).map(item => `${item.emoji} ${item.name} — ${item.qty}`).join('\n');
+                      const text = `🛒 Ma liste de courses AINA\n${'─'.repeat(28)}\n\n${lines}\n\n🌿 Généré par AINA`;
+                      if (navigator.share) { try { await navigator.share({ title: 'Ma liste de courses AINA', text }); } catch { /* annulé */ } }
+                      else { await navigator.clipboard.writeText(text); toast.success('Liste copiée !'); }
+                    }}
+                    className="flex-1 py-3 rounded-full bg-forest-600 text-white font-bold text-sm flex items-center justify-center gap-1.5"
+                  >
+                    <Share2 className="w-4 h-4" /> Partager
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const CATS: { label: string; emoji: string; keys: string[] }[] = [
+                        { label: 'Légumes',          emoji: '🥕', keys: ['carotte','patate','courgette','courge','épinard','brocoli','chou','haricot vert','pois','oignon','ail','poireau','aubergine','poivron','tomate','concombre','salade','navet','betterave','fenouil','igname','taro','gombo','manioc','feuille'] },
+                        { label: 'Fruits',           emoji: '🍎', keys: ['banane','mangue','pomme','poire','prune','pêche','abricot','orange','citron','lime','fraise','ananas','papaye','avocat','kiwi','figue','datte','pastèque','melon','raisin','goyave','fruit'] },
+                        { label: 'Céréales & féculents', emoji: '🌾', keys: ['mil','fonio','riz','quinoa','semoule','farine','maïs','avoine','orge','blé','pain','pâte','macaroni','céréale','bouillie','polenta','galette'] },
+                        { label: 'Protéines',        emoji: '🍗', keys: ['poulet','poisson','viande','œuf','lentille','pois chiche','thon','sardine','saumon','bœuf','agneau','dinde','crevette','haricot blanc','haricot rouge','soja','arachide','noix de cajou'] },
+                        { label: 'Huiles & matières grasses', emoji: '🫒', keys: ['huile','beurre','margarine','ghee','palme','sésame'] },
+                        { label: 'Épices & condiments', emoji: '🌿', keys: ['sel','poivre','cumin','gingembre','cannelle','coriandre','curcuma','vanille','noix','herbe','épice','bouillon','sucre','miel'] },
+                      ];
+                      const items = normalizedList ?? shoppingList;
+                      const used = new Set<number>();
+                      const sorted: { label: string; emoji: string; items: typeof items }[] = [];
+                      for (const cat of CATS) {
+                        const matched = items.filter((item, i) => {
+                          if (used.has(i)) return false;
+                          const n = item.name.toLowerCase();
+                          return cat.keys.some(k => n.includes(k));
+                        });
+                        if (matched.length) {
+                          matched.forEach(item => used.add(items.indexOf(item)));
+                          sorted.push({ ...cat, items: matched });
+                        }
                       }
-                    }
-                    const rest = items.filter((_, i) => !used.has(i));
-                    if (rest.length) sorted.push({ label: 'Autres', emoji: '🛒', items: rest });
+                      const rest = items.filter((_, i) => !used.has(i));
+                      if (rest.length) sorted.push({ label: 'Autres', emoji: '🛒', items: rest });
 
-                    const lines = [`🛒 Courses — ${profile?.name ?? 'Bébé'}`, '─'.repeat(28), ''];
-                    for (const cat of sorted) {
-                      lines.push(`${cat.emoji} ${cat.label.toUpperCase()}`);
-                      for (const item of cat.items) lines.push(`  • ${item.name} — ${item.qty}`);
-                      lines.push('');
-                    }
-                    lines.push('🌿 AINA · aina-super-app.vercel.app');
-                    const text = lines.join('\n');
-                    if (navigator.share) { navigator.share({ title: 'Courses AINA', text }).catch(() => {}); }
-                    else { navigator.clipboard.writeText(text); toast.success('Liste triée copiée !'); }
-                  }}
-                  className="flex-shrink-0 py-3 px-4 rounded-full bg-violet-500 text-white font-bold text-sm flex items-center justify-center gap-1.5"
-                >
-                  ✨ Trier
-                </button>
+                      const lines = [`🛒 Courses — ${profile?.name ?? 'Bébé'}`, '─'.repeat(28), ''];
+                      for (const cat of sorted) {
+                        lines.push(`${cat.emoji} ${cat.label.toUpperCase()}`);
+                        for (const item of cat.items) lines.push(`  • ${item.name} — ${item.qty}`);
+                        lines.push('');
+                      }
+                      lines.push('🌿 AINA · aina-super-app.vercel.app');
+                      const text = lines.join('\n');
+                      if (navigator.share) { navigator.share({ title: 'Courses AINA', text }).catch(() => {}); }
+                      else { navigator.clipboard.writeText(text); toast.success('Liste triée copiée !'); }
+                    }}
+                    className="flex-1 py-3 rounded-full bg-violet-500 text-white font-bold text-sm flex items-center justify-center gap-1.5"
+                  >
+                    ✨ Trier
+                  </button>
+                  <button
+                    onClick={() => {
+                      const CATS = [
+                        { label: 'Légumes', emoji: '🥕', keys: ['carotte','patate','courgette','courge','épinard','brocoli','chou','haricot','pois','oignon','ail','poireau','aubergine','poivron','tomate','concombre','salade','navet','betterave','igname','taro','gombo','manioc','feuille'] },
+                        { label: 'Fruits', emoji: '🍎', keys: ['banane','mangue','pomme','poire','prune','pêche','abricot','orange','citron','lime','fraise','ananas','papaye','avocat','kiwi','figue','datte','pastèque','melon','raisin','goyave','fruit'] },
+                        { label: 'Céréales & féculents', emoji: '🌾', keys: ['mil','fonio','riz','quinoa','semoule','farine','maïs','avoine','orge','blé','pain','pâte','macaroni','céréale','bouillie','polenta','galette'] },
+                        { label: 'Protéines', emoji: '🍗', keys: ['poulet','poisson','viande','œuf','lentille','pois chiche','thon','sardine','saumon','bœuf','agneau','dinde','crevette','haricot blanc','haricot rouge','soja','arachide','noix'] },
+                        { label: 'Huiles & matières grasses', emoji: '🫒', keys: ['huile','beurre','margarine','ghee','palme','sésame'] },
+                        { label: 'Épices & condiments', emoji: '🌿', keys: ['sel','poivre','cumin','gingembre','cannelle','coriandre','curcuma','vanille','noix','herbe','épice','bouillon','sucre','miel'] },
+                      ];
+                      const items = normalizedList ?? shoppingList;
+                      const used = new Set<number>();
+                      const sorted: { label: string; emoji: string; items: typeof items }[] = [];
+                      for (const cat of CATS) {
+                        const matched = items.filter((item, i) => {
+                          if (used.has(i)) return false;
+                          const n = item.name.toLowerCase();
+                          return cat.keys.some(k => n.includes(k));
+                        });
+                        if (matched.length) {
+                          matched.forEach(item => used.add(items.indexOf(item)));
+                          sorted.push({ ...cat, items: matched });
+                        }
+                      }
+                      const rest = items.filter((_, i) => !used.has(i));
+                      if (rest.length) sorted.push({ label: 'Autres', emoji: '🛒', items: rest });
+
+                      const printWindow = window.open('', '_blank');
+                      if (!printWindow) {
+                        toast.error("Impossible d'ouvrir la fenêtre d'impression. Autorise les popups pour cette application.");
+                        return;
+                      }
+
+                      const babyName = profile?.name ?? 'Bébé';
+                      const html = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                          <title>Liste de courses AINA - ${babyName}</title>
+                          <meta charset="utf-8">
+                          <style>
+                            body {
+                              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                              color: #2c2523;
+                              margin: 0;
+                              padding: 40px;
+                              background: #fff;
+                            }
+                            .header {
+                              display: flex;
+                              align-items: center;
+                              justify-content: space-between;
+                              border-bottom: 2px solid #e2dcd5;
+                              padding-bottom: 20px;
+                              margin-bottom: 30px;
+                            }
+                            .title {
+                              font-size: 28px;
+                              font-weight: 700;
+                              color: #1b4332;
+                              margin: 0;
+                            }
+                            .subtitle {
+                              font-size: 14px;
+                              color: #70625c;
+                              margin: 5px 0 0 0;
+                            }
+                            .meta {
+                              text-align: right;
+                              font-size: 12px;
+                              color: #70625c;
+                            }
+                            .grid {
+                              display: grid;
+                              grid-template-columns: repeat(2, 1fr);
+                              gap: 20px;
+                            }
+                            .category-card {
+                              border: 1px solid #e2dcd5;
+                              border-radius: 12px;
+                              padding: 15px;
+                              background: #fbfbf9;
+                              break-inside: avoid;
+                            }
+                            .category-title {
+                              font-size: 15px;
+                              font-weight: 700;
+                              color: #1b4332;
+                              border-bottom: 1px solid #e2dcd5;
+                              padding-bottom: 8px;
+                              margin: 0 0 12px 0;
+                              display: flex;
+                              align-items: center;
+                              gap: 8px;
+                            }
+                            .item-list {
+                              list-style: none;
+                              padding: 0;
+                              margin: 0;
+                            }
+                            .item-row {
+                              display: flex;
+                              align-items: center;
+                              gap: 10px;
+                              padding: 6px 0;
+                              border-bottom: 1px dashed #eae5e0;
+                            }
+                            .item-row:last-child {
+                              border-bottom: none;
+                            }
+                            .checkbox {
+                              width: 16px;
+                              height: 16px;
+                              border: 1.5px solid #70625c;
+                              border-radius: 4px;
+                              flex-shrink: 0;
+                            }
+                            .item-name {
+                              font-size: 14px;
+                              font-weight: 550;
+                              flex-grow: 1;
+                            }
+                            .item-qty {
+                              font-size: 12px;
+                              color: #70625c;
+                            }
+                            .footer {
+                              margin-top: 40px;
+                              border-top: 1px solid #e2dcd5;
+                              padding-top: 15px;
+                              text-align: center;
+                              font-size: 11px;
+                              color: #9a8a82;
+                            }
+                            @media print {
+                              body {
+                                padding: 20px;
+                              }
+                              .category-card {
+                                page-break-inside: avoid;
+                              }
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          <div class="header">
+                            <div>
+                              <h1 class="title">🛒 Ma Liste de Courses AINA</h1>
+                              <p class="subtitle">Pour la préparation des repas de <strong>${babyName}</strong></p>
+                            </div>
+                            <div class="meta">
+                              <p>Généré le ${new Date().toLocaleDateString('fr-FR')}</p>
+                              <p>aina-super-app.vercel.app</p>
+                            </div>
+                          </div>
+                          <div class="grid">
+                            ${sorted.map(cat => `
+                              <div class="category-card">
+                                <h3 class="category-title">
+                                  <span>${cat.emoji}</span>
+                                  <span>${cat.label}</span>
+                                </h3>
+                                <ul class="item-list">
+                                  ${cat.items.map(item => `
+                                    <li class="item-row">
+                                      <div class="checkbox"></div>
+                                      <span style="font-size: 16px;">${item.emoji}</span>
+                                      <span class="item-name">${item.name}</span>
+                                      <span class="item-qty">${item.qty}</span>
+                                    </li>
+                                  `).join('')}
+                                </ul>
+                              </div>
+                            `).join('')}
+                          </div>
+                          <div class="footer">
+                            🌿 AINA — Votre compagnon de nutrition pédiatrique bienveillant.
+                          </div>
+                          <script>
+                            window.onload = function() {
+                              window.print();
+                              window.onafterprint = function() {
+                                window.close();
+                              };
+                            }
+                          </script>
+                        </body>
+                        </html>
+                      `;
+                      printWindow.document.write(html);
+                      printWindow.document.close();
+                    }}
+                    className="flex-1 py-3 rounded-full bg-forest-700 text-white font-bold text-sm flex items-center justify-center gap-1.5"
+                  >
+                    <Printer className="w-4 h-4" /> PDF / Imprimer
+                  </button>
+                </div>
               </div>
             </>
           )}
