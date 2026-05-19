@@ -17,12 +17,36 @@ export const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }
 export function extractJson(text) {
   const trimmed = (text ?? '').trim();
   try { return JSON.parse(trimmed); } catch { /* try next */ }
-  const first = trimmed.indexOf('{');
-  const last = trimmed.lastIndexOf('}');
-  if (first !== -1 && last !== -1 && last > first) {
-    const candidate = trimmed.slice(first, last + 1);
-    try { return JSON.parse(candidate); } catch { /* fall through */ }
+
+  const firstCurly = trimmed.indexOf('{');
+  const firstBracket = trimmed.indexOf('[');
+  let first = -1;
+  let isArray = false;
+
+  if (firstCurly !== -1 && firstBracket !== -1) {
+    if (firstCurly < firstBracket) {
+      first = firstCurly;
+      isArray = false;
+    } else {
+      first = firstBracket;
+      isArray = true;
+    }
+  } else if (firstCurly !== -1) {
+    first = firstCurly;
+    isArray = false;
+  } else if (firstBracket !== -1) {
+    first = firstBracket;
+    isArray = true;
   }
+
+  if (first !== -1) {
+    const last = isArray ? trimmed.lastIndexOf(']') : trimmed.lastIndexOf('}');
+    if (last !== -1 && last > first) {
+      const candidate = trimmed.slice(first, last + 1);
+      try { return JSON.parse(candidate); } catch { /* fall through */ }
+    }
+  }
+
   throw new Error('Réponse Claude non parseable en JSON : ' + trimmed.slice(0, 200));
 }
 

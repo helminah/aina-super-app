@@ -19,6 +19,7 @@ import {
   handleChat,
   handleNormalizeShopping,
 } from './handlers.js';
+import handleShoppingPdf from '../api/shopping-pdf.js';
 
 const PORT = Number(process.env.PORT) || 3001;
 
@@ -48,6 +49,7 @@ app.post('/api/nutrition', handleNutrition);
 app.post('/api/redflag', handleRedflag);
 app.post('/api/chat', handleChat);
 app.post('/api/normalize-shopping', handleNormalizeShopping);
+app.post('/api/shopping-pdf', handleShoppingPdf);
 
 app.listen(PORT, () => {
   console.log(`✓ AINA proxy Anthropic prêt sur http://localhost:${PORT}`);
