@@ -30,7 +30,7 @@
     "tap_to_expand": "Cuqal ngir gën a xam",
     "tap_to_collapse": "Cuqal ngir tëj",
     "day": "bës",
-    "days": "bës",
+    "days": "fan",
     "month": "weer",
     "week": "ayu-bës",
     "weeks": "ayu-bës",
@@ -71,7 +71,7 @@
     "welcome_subtitle": "Naka la sa liir bu rafet bi tudd ?",
     "name_placeholder": "Turu liir bi",
     "birth_date_title": "Kañ la {{name}} dugsi ci adduna ?",
-    "birth_date_subtitle": "Ndax góor la walla jigéen ?",
+    "birth_date_subtitle": "Ndax xale bu góor la walla bu jigéen?",
     "measurements_title": "Natt yu mu am ci juddu",
     "measurements_subtitle": "Soxla nañu ko ngir topp màggug liir bi.",
     "weight_kg": "Diisaay (kg)",
@@ -82,7 +82,7 @@
     "country_no_results": "Amul réew mu tudd « {{query}} ».",
     "vaccines_title": "Vaccins yi mu jël ba noppi",
     "vaccines_subtitle": "Tànnal vaksin yi {{name}} jël ba noppi ngir sunu toppatoo méngoo ak moom.",
-    "vaccines_too_young": "{{name}} tuuti na lool, amul vaccin bu mu wara jël léegi.",
+    "vaccines_too_young": "{{name}} tuuti na lool, amul vaccin bu mu wara jël yii fan.",
     "start": "Tàmbli",
     "continue": "Weyal",
     "birth_vaccines": "Vaksin yu juddu",
@@ -120,8 +120,8 @@
     "add_first": "Yokk sa rendez-vous doktoor bu njëkk",
     "today": "Tey",
     "tomorrow": "Ëllëk",
-    "in_days_one": "Ci {{count}} bës",
-    "in_days_other": "Ci {{count}} bës",
+    "in_days_one": "Ci {{count}} fan",
+    "in_days_other": "Ci {{count}} fan",
     "new_appointment": "Rendez-vous bu bees",
     "title_label": "Turu rendez-vous bi",
     "title_placeholder": "ex. seet pédiatre 9 weer",
@@ -148,17 +148,17 @@
     "normal_title": "Màgg gu rafet",
     "normal_message": "{{metric}}u {{name}} mi ngi màgg bu rafet ci biir courbe bu normal bi. Weyal ci yoon boobu!",
     "watch_title": "Xoolal ko bu baax",
-    "watch_message": "{{name}} mi ngi tuuti ci kaw walla ci suuf moyenne bi, waaye mi ngi ci biir limit yu normal yi. Dañu koy xoolal bu baax ci rendez-vous bu ñëw.",
+    "watch_message": "{{name}} dafa tollu tuuti ci kaw walla ci suuf moyenne bi, waaye li mu am normal na. Dañu koy gën a seetlu ci rendez-vous bu ñëw.",
     "alert_title": "Wax ak pédiatre bi dina baax",
-    "alert_low_message": "{{metric}} bi dafa nekk ci suufu 3e percentile. Du lu tiit, waaye wax ak pédiatre bi dina tax nga gën a xam courbe bi.",
-    "alert_high_message": "{{metric}} bi dafa nekk ci kawu 97e percentile. Wax ak sa pédiatre dina tax mu gën a xool ni mu méngoo.",
-    "curve_break_title": "Gis nañu soppaliku bu mag",
-    "curve_break_message": "Courbe bu {{name}} dafa wàcc walla mu yëkkatiku bu bari ci diggante ñaari natt yi. Dafa gën nga wax ko sa pédiatre gaaw."
+    "alert_low_message": "{{metric}} bi dafa wàcc tuuti. Du lu tiit, waaye wax ak sa pédiatre dina la gën a dalal xel.",
+    "alert_high_message": "{{metric}} bi dafa kawe tuuti. Wax ak sa pédiatre dina la gën a gindi.",
+    "curve_break_title": "Màggam dafa soppiku bu bari",
+    "curve_break_message": "Courbe bu {{name}} dafa wàcc walla mu yëkkatu bu gaaw. Dafa gën nga seet sa pédiatre fi mu tollu nii."
   },
   "red_flag_checker": {
     "header_kicker": "Kañ lañuy seet doktoor ?",
     "header_title": "Mandarxay alert ci {{name}}",
-    "header_subtitle": "Waxal li nga seetlu ci sa liir, lii du diagnostic — ab guide rekk la ngir gindi la.",
+    "header_subtitle": "Waxal li nga seetlu ci sa liir. Lii du wuutal doktoor, ab guide rekk la ngir gindi la.",
     "observation_label": "Li nga gis",
     "observation_placeholder": "ex. Tàngaay 38,5°C li dale ci suba, liir bi dafa bañ biberon, walla jooy yu amul teggi...",
     "observation_hint": "Gën nga leeral (jamono, tàngaay, melo), loolu dina dimbali IA bi mu gën laa gindi.",
@@ -166,7 +166,7 @@
     "analyze": "Gëstul",
     "call_samu": "Wooteel SAMU (15 / 1515)",
     "add_detail_label": "Yokk yeneen xibaar ?",
-    "add_detail_placeholder": "ex. li dale ci 2 bës, dafay wome...",
+    "add_detail_placeholder": "ex. li dale ci 2 fan, dafay wome...",
     "send_detail": "Yónne details yi",
     "new_analysis": "Gëstu bu bees",
     "disclaimer": "⚕️ Lii du wuutal xalaatu sa pédiatre.",
@@ -176,14 +176,14 @@
     "level_red": "Urgence gaaw",
     "share_with_doctor": "Yónne ko sa pédiatre",
     "share_title": "Brief ngir pédiatre bi",
-    "copied_clipboard": "Copier nañu message bi !",
+    "copied_clipboard": "Message bi copier na!",
     "unexpected_error": "Erreur am na"
   },
   "chat": {
     "aina_ai": "AINA IA",
     "online_status": "mu ngi fi · ay ndigël rekk la",
     "welcome": "Asalaamu aleykum {{role}} {{name}} 👋 Man la AINA IA. Laaj ma lu soxal wér-gu-yaram, nelaw, lekk walla màggug sa liir.",
-    "welcome_disclaimer": "⚕️ Du ma wuutal sa pédiatre — su fekkee jafe-jafe am na, seetal doktoor.",
+    "welcome_disclaimer": "⚕️ Du ma wuutal sa pédiatre — su fekkee jafe-jafe am na, seetal doktoor gaaw.",
     "ideas": "Yenn laaj yi:",
     "thinking": "AINA IA mu ngi xalaat…",
     "limit_reached": "Matal nga 10 laaj — sosal waxtu bu bees walla nga ñëwaat ci kanam.",
@@ -192,7 +192,7 @@
     "send": "Yónne",
     "suggestion_cow_milk": "Naka la mëna dugalee meewu nag ci lekk gi ?",
     "suggestion_sleep": "Sama liir nelawul bu baax ci guddi, looma mën a digal ?",
-    "suggestion_fever": "Kañ la wara seet doktoor su liir bi tàggee ?",
+    "suggestion_fever": "Kañ la wara seet doktoor su liir bi tàngée ?",
     "aina_coach": "AINA Coach",
     "coach_subtitle": "waajur buy jàng · laaj yu ñu gindi",
     "coach_welcome": "Asalaamu aleykum {{name}} 👋 Fii, du ma la jox tontu direct — damay dimbali rekk nga wut ko sa bopp. Wax ma li xew ci sa liir, ma laaj la laaj yu gàtt, nga mën a xam li ko jàpp.",
@@ -225,7 +225,7 @@
     "mood_label": "Naka la {{name}} def ?",
     "feed_breast": "Ween",
     "feed_bottle": "Biberon",
-    "feed_solid": "Solid",
+    "feed_solid": "Lekk",
     "diaper_pee": "💧 Saw",
     "diaper_poop": "💩 Selles",
     "diaper_mixed": "🔄 Mixte",
@@ -234,9 +234,9 @@
     "color_brown": "Marron",
     "color_black": "Ñuul",
     "color_red": "Xonq",
-    "summary_feed_breast": "Ween",
+    "summary_feed_breast": "Nàmpal",
     "summary_feed_bottle": "Biberon",
-    "summary_feed_solid": "Solid",
+    "summary_feed_solid": "Lekk",
     "summary_sleep_good": "Baax na",
     "summary_sleep_average": "Moyen",
     "summary_sleep_poor": "Dafa metti",
@@ -246,7 +246,7 @@
     "save": "Denc",
     "log_saved": "Denc na ✓",
     "log_deleted": "Dindi nañu ko",
-    "log_deleted_desc": "Dindi nañu ko ci téere bi",
+    "log_deleted_desc": "Dindi nañu ko ci journal bi",
     "delete_short": "Dindi"
   },
   "care_dose": {
@@ -261,7 +261,7 @@
     "header_title": "Togg bu méngoo ak {{name}}",
     "header_subtitle": "{{months}} weer · {{country}}",
     "ingredients_label": "Yan ingrédients nga yor ci kër gi ?",
-    "ingredients_placeholder": "mil, mangue, meew, patate douce, carotte…",
+    "ingredients_placeholder": "dugub, mangue, meew, pataas, carotte…",
     "ingredients_hint": "Tegaleel leen ak virgule — walla bàyyi ko noonu ngir mu jox la togg.",
     "generating": "Mu ngi ñëw...",
     "planning": "Planning bi",
@@ -273,7 +273,7 @@
     "save_recipe": "Denc togg bi",
     "saved": "Denc na",
     "recipe_saved": "Togg bi denc na !",
-    "recipe_saved_desc": "Dina nekk ci say togg IA.",
+    "recipe_saved_desc": "Di nga ko fekk ci say togg IA.",
     "plan_title": "Planning 7 fan",
     "breakfast": "Ndekki",
     "lunch": "Añ",
@@ -281,7 +281,7 @@
     "dinner": "Reer",
     "unexpected_error": "Erreur am na",
     "milk_only_title": "Meewu yaay rekk ba 6 weer",
-    "milk_only_body": "OMS dafa digal nàmpal meewu yaay rekk ba xale bi am 6 weer. Liir bi soxlawul lekk bu dëgër.",
+    "milk_only_body": "OMS dafa digal nàmpal meewu yaay rekk ba xale bi am 6 weer. Liir bi soxlawul beneen lekk yii jamono.",
     "milk_only_months": "{{name}} am na {{months}} weer — {{remaining}} weer moo ko des ci kanam balaa mu tàmbli lekk.",
     "milk_only_preview": "Xool togg yi ngir waajal lekk gi.",
     "preview_mode_banner": "Mode waajal — togg yi bu liir bi amee 6 weer.",
@@ -298,13 +298,13 @@
     "remove_photo": "Dindi foto bi",
     "modify": "Soppi",
     "first_name": "Turu liir",
-    "birth_weight_kg": "Poids bi mu am ci juddu (kg)",
+    "birth_weight_kg": "Diisaay ci juddu (kg)",
     "birth_height_cm": "Njoolaay ci juddu (cm)",
     "baby_added": "Liir bi yokku na ! 🍼",
     "profile_deleted": "Dindi nañu profil bi",
     "delete_name": "Dindi {{name}}",
     "confirm_delete_title": "Dëggal dindi gi",
-    "confirm_delete_body": "Mbiru {{name}} yépp dinañu dindi bu dul dellu.",
+    "confirm_delete_body": "Mbiru {{name}} yépp dinañu dindi te du dellu.",
     "new_baby_title": "Yokk beneen liir",
     "baby_name_placeholder": "Turu liir bi",
     "sex_label": "Góor walla Jigéen",
@@ -318,11 +318,11 @@
     "hello_mom_of": "Asalaamu aleykum, yaayu",
     "tip_of_day": "Ndigëlu bës bi",
     "next_vaccine": "Vaksin bi di ñëw",
-    "days_until": "Ci {{days}} bës",
-    "days_until_plural": "Ci {{days}} bës",
+    "days_until": "Ci {{days}} fan",
+    "days_until_plural": "Ci {{days}} fan",
     "vaccine_overdue": "Yéex na",
     "sleep": "Nelaw",
-    "weight": "Poids",
+    "weight": "Diisaay",
     "today": "tey",
     "latest": "bi mujj",
     "birth_value": "juddu",
@@ -331,16 +331,16 @@
     "suggestion_of_day": "Ndigëlu bës bi",
     "sos_label": "SOS",
     "care_kit": "Trousse pharmacie",
-    "pediatric_followup": "Fait par",
+    "pediatric_followup": "Toppatoo bi :",
     "vaccines_overdue_one": "{{count}} vaccin bu yéex",
     "vaccines_overdue_other": "{{count}} vaccin yu yéex",
-    "vaccines_upcoming_one": "{{count}} vaccine di ñëw",
-    "vaccines_upcoming_other": "{{count}} vaccine yu di ñëw",
+    "vaccines_upcoming_one": "{{count}} vaccin buy ñëw",
+    "vaccines_upcoming_other": "{{count}} vaccin yu di ñëw",
     "care_kit_title": "Sama trousse pharmacie",
     "care_kit_desc": "Natt · Tàngaay · Selles",
     "care_kit_hint": "Xayma garab, ndigëlu tàngaay, xool selles yi",
-    "vaccine_days_remaining_one": "Ci {{count}} bës",
-    "vaccine_days_remaining_other": "Ci {{count}} bës",
+    "vaccine_days_remaining_one": "Ci {{count}} fan",
+    "vaccine_days_remaining_other": "Ci {{count}} fan",
     "recipe_suggestion_template": "Ndigël: {{title}} ({{months}} weer+)",
     "recipe_suggestion_meta": "ngir {{months}} weer · {{time}} min · {{kcal}} kcal",
     "emergency_aria": "Urgence"
@@ -356,14 +356,14 @@
       "development": "Jeego yi"
     },
     "vaccines": {
-      "progress": "Progression bi",
-      "birth": "Naissance",
+      "progress": "Fi mu tollu",
+      "birth": "Juddu",
       "education_title": "Naka la vaksin di liggéeyé ci yaram ?",
       "education_kicker": "Gën a xam",
       "detail_why": "Njariñu vaksin",
       "detail_disease": "Feebar bi ñu wara moytu",
       "detail_risk": "Jafe-jafe yi mu mën a jur",
-      "detail_side_effects": "Li ci mën a topp (effets secondaires)",
+      "detail_side_effects": "Li ci mën a topp ci yaram",
       "details_aria": "Yeneen details",
       "disclaimer": "Lii du wuutal xalaatu sa doktoor. Sa pédiatre moo gën a xam.",
       "how_body_defense_html": "Yaramu sa liir dafa am <strong>sistem buy aar yaramam</strong> : sistemu aaru yaram. Waaye sistem boobu dafa soxla <strong>ñu jàngal ko mu xam noon yi</strong>.",
@@ -379,7 +379,7 @@
     "growth": {
       "weight": "Poids (kg)",
       "height": "Njoolaay (cm)",
-      "hc": "Périmètre crânien (cm)",
+      "hc": "Natt bu bopp (cm)",
       "no_data": "Amul natt bu ñu denc. Yokkal natt bu bees.",
       "add_measure": "Yokk natt",
       "measure_saved": "Natt bi denc na ✓",
@@ -398,7 +398,7 @@
       "tap_hint": "Cuqal bëñ bi su génnee",
       "upper_jaw": "Kaw",
       "lower_jaw": "Suuf",
-      "timeline": "Ordre bu ñuy génnee",
+      "timeline": "Ni bëñ yi diy génnee",
       "soothe_title": "Wàññi mettitug bëñ",
       "growing_well": "{{name}} mi ngi màgg bu baax 🌱",
       "count_one": "{{count}} bëñ",
@@ -422,21 +422,21 @@
   },
   "health_report": {
     "print": "Imprimer",
-    "record_title": "Carnet de Santé",
+    "record_title": "Carnet wér-gu-yaram",
     "generated_on": "Defar nañu ko ci {{date}}",
     "section_baby_info": "Mbiru liir bi",
     "field_first_name": "Turu liir",
-    "field_age": "Age",
+    "field_age": "At",
     "field_birth_date": "Bisu juddu",
-    "field_sex": "Sexe",
+    "field_sex": "Góor walla Jigéen",
     "field_country": "Réew",
     "field_birth_weight": "Poids ci juddu",
     "section_latest_measures": "Natt yu mujj",
-    "measure_weight": "Poids",
+    "measure_weight": "Diisaay",
     "measure_height": "Njoolaay",
-    "measure_hc": "Périmètre crânien",
+    "measure_hc": "Natt bu bopp",
     "birth_short": "juddu",
-    "not_set": "agul",
+    "not_set": "binndul",
     "section_vaccines": "Vaksin",
     "vaccines_done": "Jël na ko",
     "vaccines_overdue": "Yéex na",
@@ -449,7 +449,7 @@
   },
   "nutrition": {
     "title": "Nutrition",
-    "hero_kicker": "Goût ak texture",
+    "hero_kicker": "Safaay ak ni mu mel",
     "hero_tagline": "Recettes · Favoris · Menu · Courses",
     "tabs": {
       "recipes": "Recettes",
@@ -460,7 +460,7 @@
     },
     "foods": {
       "conservation_title": "Denc lekk bi",
-      "conservation_tagline": "Frigo · Congélateur · Desit · Jamono",
+      "conservation_tagline": "Frigo · Congélateur · Desit yi · Waxtu yi",
       "hygiene_title": "Hygiène ak waajal",
       "hygiene_tagline": "Biberon · jumtukaay · setal",
       "new_badge": "bu bees",
@@ -471,7 +471,7 @@
       "from_months": "li dale ci {{months}} weer",
       "foods_in_range": "{{count}} lekk yu ñu dugal ci age bi",
       "allergen_title": "Allergène",
-      "detail_conservation_note": "Denc purée yu kër yi 48h max ci frigo (ci ndab bu tëju) walla 1 weer ci congélateur. Tàngal li liir bi di lekk rekk, bul ko tàngal ñaari yoon.",
+      "detail_conservation_note": "Denc ruy ak purée yu kër yi 48h max ci frigo (ci ndab bu tëju) walla 1 weer ci congélateur. Tàngal li liir bi di lekk rekk, bul ko tàngal ñaari yoon.",
       "guide_kicker": "Guide"
     },
     "categories": {
@@ -508,18 +508,18 @@
     "remove_favorite": "Dindi ci favoris",
     "delete_aria": "Dindi",
     "age_guard_food_title": "Meewu yaay rekk",
-    "age_guard_food_body": "{{name}} am na {{months}} weer. OMS dafa digal meewu yaay rekk (walla meewu xale) ba 6 weer. Bul ko jox lekk bu dëgër, thé walla jus.",
+    "age_guard_food_body": "{{name}} am na {{months}} weer rekk. OMS dafa digal meewu yaay rekk (walla meewu xale) ba 6 weer. Bul ko jox lekk bu dëgër yii fan, walla thé ak jus.",
     "age_guard_food_unlock": "Recettes yi ak guide bi ci 6 weer lay feeñ.",
     "age_guard_food_rule1": "Bul ko jox lekk bu dëgër",
-    "age_guard_food_rule2": "Bul ko jox thé, jus walla ndox mu am suukër",
+    "age_guard_food_rule2": "Bul ko jox thé, jus walla ndox mu am suukër ci yii jamono",
     "age_guard_food_rule3": "Meewu yaay walla meewu xale rekk",
     "age_guard_planner_title": "Planning repas ci 4 weer",
-    "age_guard_planner_body": "{{name}} am na {{months}} weer. Planning repas ak liste de courses yi ci 4 weer lañuy feeñ, bu introduction alimentaire tàmbilee.",
-    "age_guard_planner_unlock": "{{remaining}} weer moo ko des balaa mu tàmbli.",
-    "hint_foods": "🥕 Guide alimentaire — lan nga wara dugal ci lekku sa liir ak kañ.",
-    "hint_favorites": "❤️ Say togg favoris ak say togg IA.",
-    "hint_planner": "📅 Planning repas yu ayu-bës bi, bës bu nekk.",
-    "hint_shopping": "🛒 Sa liste de courses bu génné ci planning bi.",
+    "age_guard_planner_body": "{{name}} am na {{months}} weer rekk. Planning repas ak liste de courses yi ci 4 weer lañuy feeñ, bu ngeen tàmbilee lekk.",
+    "age_guard_planner_unlock": "{{remaining}} weer moo ko des balaa mu tàmbli lekk.",
+    "hint_foods": "🥕 Guide alimentaire — lan ngay jox sa liir ak kañ la koy tàmbli.",
+    "hint_favorites": "❤️ Say togg yi nga gën a bëgg ak togg yu bees yu IA.",
+    "hint_planner": "📅 Sa planning togg ngir ayu-bës bi, fan bu nekk.",
+    "hint_shopping": "🛒 Sa liste de courses (marché) bu génné ci planning bi.",
     "filter_all": "Lépp",
     "menu_generated_one": "Menu bu {{count}} bës sosee na !",
     "menu_generated_other": "Menu bu {{count}} bës sosee na !",
@@ -539,7 +539,7 @@
     "preparation_title": "Naka lañ koy toggé",
     "why_title": "Njariñu togg bi",
     "doctor_advice_title": "Ndigëlu Dr Helminah",
-    "nutrition_title": "Valeurs nutritionnelles",
+    "nutrition_title": "Li togg bi di jox yaram",
     "nutrition_labels": {
       "energie": "Énergie",
       "proteines": "Protéines",
@@ -552,14 +552,14 @@
   "journal": {
     "title": "Journal",
     "hero_kicker": "Bës bu nekk am na njariñ",
-    "hero_tagline": "Repas · Sommeil · Couches · Humeur",
+    "hero_tagline": "Lekk · Nelaw · Couches · Ni mu def",
     "empty": "Amul dara ci bës bii",
     "empty_hint": "Cuqal butoŋ + ngir yokk mbir.",
     "log_types": {
       "feed": "Biberon / Ween",
       "sleep": "Nelaw",
       "diaper": "Couche",
-      "mood": "Humeur"
+      "mood": "Ni mu def"
     },
     "categories": {
       "petit-dejeuner": "Ndekki",
@@ -583,7 +583,7 @@
     "hero_kicker": "Sama profil",
     "hero_tagline": "Liir yi · Paramètres · Carnet",
     "born_on": "Juddu le",
-    "birth_weight": "Poids ci juddu",
+    "birth_weight": "Diisaay ci juddu",
     "birth_height": "Njoolaay ci juddu",
     "add_baby": "Yokk beneen liir",
     "settings": "Paramètres",
@@ -594,17 +594,17 @@
     "theme_light": "Clair",
     "theme_dark": "Sombre",
     "export_record": "Exporter Carnet de Santé",
-    "danger_zone": "Zone danger",
+    "danger_zone": "Mbir yu sensible",
     "delete_baby": "Dindi liir bii",
     "profile_updated": "Profil bi soppiku na ✓"
   },
   "care": {
     "title": "Soins (toppatoo)",
     "hero_kicker": "Sama trousse pharmacie",
-    "hero_tagline": "Dose · Fièvre · Selles",
+    "hero_tagline": "Natt · Tàngaay · Selles",
     "tabs": {
       "dose": "Dose",
-      "fever": "Fièvre",
+      "fever": "Tàngaay",
       "stool": "Selles"
     },
     "dose": {
@@ -612,18 +612,18 @@
       "weight_of_baby": "Poids liir bi",
       "form": "Melokaan",
       "recommended_dose": "Dose bi ñu digal",
-      "max_interval": "Toutes les 6h maximum ({{count}} yoon ci 24h) · nga méngool ko ak tàngaay bi.",
+      "max_interval": "Diggante 6 waxtu maximum ({{count}} yoon ci 24 waxtu) · soppi ko dëppook tàngaay bi.",
       "ibuprofen_warning": "Bañ ko jox xale bu amul 3 weer, walla ku am varicelle walla yaramam dafa yoox (déshydratation).",
       "record_dose": "Bind garab bi mu jël",
       "last_dose": "Prise bi mujj",
       "next_allowed": "Prise bi di ñëw",
       "too_soon": "Dafa gaaw — xaaral tuuti",
-      "history": "Historique 24h"
+      "history": "Li mu jël ci 24 waxtu"
     },
     "fever": {
       "level_normal": "Normal",
       "level_mild": "Tàngaay bu tuuti",
-      "level_moderate": "Diggu",
+      "level_moderate": "Tàngaay bu tollu ci digg bi",
       "level_high": "Tàngaay bu kawe",
       "baby_under_3m_title": "Liir bu amul 3 weer",
       "baby_under_3m_body": "Tàngaay bu mat 38°C walla lu ko kawe ci liir bu amul 3 weer, urgence la. Demal opital gaaw !",
@@ -652,7 +652,7 @@
     },
     "penta": {
       "why": "Benn pikkiir bu lay aar ci 5 feebar yu metti.",
-      "disease": "Diphtérie (etouffement), Tétanos (contraction muscle yi), Coqueluche (sëq gu tar), Hépatite B, Haemophilus (méningite).",
+      "disease": "Diphtérie (etouffement), Tétanos (këjjug siddit yi), Coqueluche (sëq gu tar), Hépatite B, Haemophilus (méningite).",
       "risk": "Feebar yii yépp mën nañu rey liir bu ndaw.",
       "side_effects": "Tàngaay (mën nga ko jox paracétamol), mettit bu tuuti, walla liir bi dafay mer 24h ba 48h."
     },
@@ -660,7 +660,7 @@
       "why": "Dafay aar ci 6 feebar ci benn pikkiir rekk.",
       "disease": "Diphtérie, Tétanos, Coqueluche, Polio, Hib (méningite), Hépatite B.",
       "risk": "Su amul vaksin, feebar yii mën nañu metti walla mu jur fatu.",
-      "side_effects": "Tàngaay, mettit ci bërëb bi, liir bi di mer 24h-48h. Mën nga ko jox paracétamol su tàggee."
+      "side_effects": "Tàngaay, mettit ci bërëb bi, liir bi di mer 24h-48h. Mën nga ko jox paracétamol su tàngée."
     },
     "pneumo": {
       "why": "Dafay aar poumon yi ak bopp bi ci microbe bu tar.",
@@ -676,15 +676,15 @@
     },
     "ror": {
       "why": "Aar gu tar ci 3 feebar yu yomb a wàlle.",
-      "disease": "Rougeole (xuxur ak tàngaay bu tar), Oreillons (melo yu gaaw), Rubéole (bu metti lool su yaay bi biiree).",
+      "disease": "Rougeole (xuxur ak tàngaay bu tar), Oreillons (mban / baat bu wàcc), Rubéole (bu metti lool su yaay bi ëmbée).",
       "risk": "Rougeole dafa nekk feebar bu yomb a rey xale yi su ñu amul vaksin.",
-      "side_effects": "Tàngaay ak xuxur yu tuuti 7 ba 10 bës ginnaaw pikkiir bi (normal la)."
+      "side_effects": "Tàngaay ak xuxur yu tuuti 7 ba 10 fan ginnaaw pikkiir bi (normal la)."
     },
     "fievre-jaune": {
       "why": "Dafay aar ci feebar bu yoo yi di wàlle, te metti lool ci Afrik.",
       "disease": "Fièvre jaune dafay jur tàngaay, jaunisse, te mën na yàq foie ak rein yi.",
       "risk": "Feebar bu mën a rey la. Mu ngi fi ci réew yu bari ci Afrik.",
-      "side_effects": "Tàngaay bu tuuti 1 ba 2 bës ginnaaw pikkiir bi, ak tayeel."
+      "side_effects": "Tàngaay bu tuuti 1 ba 2 fan ginnaaw pikkiir bi, ak tayeel."
     },
     "meningo-a": {
       "why": "Dafay aar ci méningite ci réewu Sahel yi.",
@@ -718,8 +718,8 @@
     "9": {
       "label": "9 weer",
       "signs": [
-        "Mënul a toog sax su ñu ko soutenu-mee",
-        "Babiller-ul (mamama, papapa)",
+        "Mënul a toog doonte sax dañu ko jàppale",
+        "Dufay wax-waxlu (mamama, papapa)",
         "Tontuwul ci coow walla su ñu wooyee turam",
         "Dufay yékkati mbir dëj ci gémmiñam"
       ]
@@ -738,8 +738,8 @@
       "signs": [
         "Doxul",
         "Mënul a wax 5 baat",
-        "Dufay xam laaj yu yomb (joxal, kaay)",
-        "Dafa wàññi li mu jëkka jàng (dox, wax...)"
+        "Dufay dég ndigël yu yomb (joxal, kaay)",
+        "Dafay fàtte li mu daan def (dox, wax...)"
       ]
     },
     "24": {
@@ -747,17 +747,17 @@
       "signs": [
         "Mënul a boole 2 baat",
         "Dufay jéem a toftal po (misaal togg...)",
-        "Interêt-ul ci yeneen xale",
-        "Dafay def yenn jëf yu bizarre te di ko répéter"
+        "Bëggul a po ak yeneen xale",
+        "Dafay def yenn jëf yu wute te di ko baamtu"
       ]
     }
   },
   "teeth_tips": [
     "🧊 Benn anneau de dentition bu sedd day wàññi mettitug bëñ yi",
-    "👆 Massez gencives yi ak sa baraam bu set",
+    "👆 Fóotal gencives yi ak sa baraam bu set",
     "💊 Jox ko Paracétamol su tàngaay amee ci poussée dentaire bi",
     "🍌 Jox ko lekk yu sedd (compote walla banane bu sedd)",
-    "🚫 Bul jëfandikoo gels anesthésiants — baaxul balaa mu am 2 ans"
+    "🚫 Bul jëfandikoo gels anesthésiants — baaxul balaa mu am 2 at"
   ],
   "emergency": {
     "title": "🚨 Fausse Route - Liir",
@@ -769,7 +769,7 @@
       },
       {
         "title": "Melokaan bi",
-        "desc": "Teggaal liir bi ci sa loxo ci biir, bopp bi wara gën a suufe yaramam, te jàppal sa gémmiñ."
+        "desc": "Tëdalal liir bi ci sa loxo ci biir, bopp bi wara gën a suufe yaramam, te téyéel ngamam."
       },
       {
         "title": "5 tapes ci guinaw",
@@ -777,7 +777,7 @@
       },
       {
         "title": "5 compressions ci dënn bi",
-        "desc": "Dellool liir bi ci guinaw. Defal 5 compressions ci diggante dënnam ak 2 baraam."
+        "desc": "Dellool liir bi ci guinaw (ci sa loxo). Defal 5 compressions ci digg dënnam ak 2 baraam."
       },
       {
         "title": "Répéter walla woote urgences",
@@ -787,14 +787,14 @@
   },
   "fever_advice": {
     "normal": "Amul tàngaay. Toppatoo liir bi bu baax.",
-    "mild": "Summil ko yëre yi, naanloo ko ndox bës bu nekk, topp ko. Paracétamol du obligatoire su fekkee liir bi mi ngi def bu baax.",
-    "moderate_template": "Paracétamol {{doseMg}} mg toutes les 6h. Rafraîchir la pièce (18-20°C).",
-    "high": "Demal opital gaaw, rawatina su liir bi amul 3 weer walla tàngaay bi weesu 48h.",
+    "mild": "Summil ko yëre yi, naanloo ko ndox saa su nekk, topp ko. Paracétamol du obligatoire su fekkee liir bi mi ngi yëngu bu baax.",
+    "moderate_template": "Paracétamol {{doseMg}} mg ci diggante 6 waxtu. Sedalal néeg bi (18-20°C).",
+    "high": "Demal opital gaaw, rawatina su liir bi amul 3 weer walla tàngaay bi weesu 48 waxtu (2 fan).",
     "emergency_signs": [
-      "Convulsions, raideur de la nuque, xuxur ci yaram",
-      "Dafay wome bu bari walla mu bañ a naan ndox",
-      "Nelaw bu yàgg walla jooy yu metti yoy mënula téye",
-      "Tàngaay buy des > 48h te amul wàññi"
+      "Convulsions (yaram buy kàkk), baat bu dëgër, xuxur ci yaram",
+      "Dafay wome saay-su-nekk walla mu bañ a naan ndox",
+      "Nelaw bu yàgg (somnolence) walla jooy yu metti yooy mënuloo téye",
+      "Tàngaay buy des ëpp 2 fan te wàññikuwul"
     ]
   },
   "stool_types": [
@@ -841,7 +841,7 @@
       "level": "alert"
     }
   ],
-  "stool_note": "💧 Diarrhée = ëpp 3 selles yu yomb lool ci bës. Risk yoox (déshydratation) : naanloo ko ndox bës bu nekk, seet couche bi te dem opital su amul wàññi ci 24h.",
+  "stool_note": "💧 Diarrhée = ëpp 3 selles (débi) yu tooy lool ci bës. Risk yaram bu wow (déshydratation) : naanloo ko ndox saay-su-nekk, seetlu couche bi te dem opital su amul wàññi ci 24 waxtu.",
   "stool_consistency_title": "💧 Consistance",
   "storage_rules": [
     {
@@ -858,8 +858,8 @@
           "1 weer"
         ],
         [
-          "Tàng-tàngu néeg",
-          "Bañal"
+          "Tàngayu néeg bi",
+          "Bul ko def"
         ]
       ]
     },
@@ -881,7 +881,7 @@
           "24h"
         ],
         [
-          "Tàng-tàngu néeg",
+          "Tàngayu néeg bi",
           "4h max"
         ]
       ]
@@ -892,7 +892,7 @@
       "detail": "Toggal ko ci waxtu bi, sanni desit bi.",
       "rows": [
         [
-          "Tàng-tàngu néeg",
+          "Tàngayu néeg bi",
           "1h max"
         ],
         [
@@ -900,7 +900,7 @@
           "24h"
         ],
         [
-          "Tàngal te liir bi lekkul",
+          "Tàngal te liir bi naanul",
           "Sanni ko"
         ]
       ]
@@ -957,10 +957,10 @@
     "Tàngal ko benn yoon rekk, ba ci biir (70°C min ngir yàpp/jën).",
     "Sanni desit bu liir bi laal (salive) ginnaaw 1h.",
     "Bindal date bi nga toggé ci pots yi.",
-    "Raxasal sa loxo ak sabu ci 20s balaa ngay togg.",
-    "Setal bérab bi ngay toggé ak jumtukaay yi ak ndox mu tàng ak sabu.",
+    "Raxasal sa loxo ak sabu ci 20s (simili) balaa ngay togg.",
+    "Setal bërëb bi ngay toggée ak jumtukaay yi ak ndox mu tàng ak sabu.",
     "Raxasal fruits ak légumes yi ak ndox mu set.",
-    "Gën na nga jëfandikoo metal walla plastique, bul jëfandikoo garab (wood) ndax dafa jafe setal."
+    "Gën na nga jëfandikoo metal walla plastique, bul jëfandikoo jumtukaay yu garab ndax dafa jafe setal."
   ],
   "hygiene_sections": [
     {
@@ -976,7 +976,7 @@
       "title": "Stérilisation biberons (0-4 weer)",
       "items": [
         "Dindi yépp ci biberon bi (tétine, anneau, capuchon)",
-        "Raxasal pieza bu nekk ak ndox mu tàng ak sabu, te rincer ko",
+        "Raxasal piece bu nekk ak ndox mu tàng ak sabu, te rincer ko",
         "Stériliser ko ci ndox mu tàng 10 min walla stérilisateur vapeur",
         "Bàyyi ko mu wow ci serviette bu set",
         "Ginnaaw 4 weer: lave-vaisselle ci 65°C doy na"
@@ -997,7 +997,7 @@
       "items": [
         "Togg vapeur: day aare vitamines yi (loolu lañu gën a digal)",
         "Bul ko jox frit, grillé walla braisé balaa mu am 2 ans",
-        "Bul jëfandikoo xorom, suukër walla lem balaa mu am 12 weer",
+        "Bul def xorom, suukër walla lem balaa mu am 12 weer",
         "Bul jëfandikoo épices yu tàng (kaani, poivre) balaa mu am 2 ans"
       ]
     }
@@ -1021,7 +1021,7 @@
   "about": {
     "title": "À propos de Dr Helminah",
     "subtitle": "Pédiatre · Ki sos AINA",
-    "bio": "Helminah, juddoo Madagascar, mi ngi defar training pédiatrie ci Dakar. Bës bu nekk dafay gis njaboot yu wut ay tontu te duñu ko am. Créatrice de contenu ak stratège digital depuis 4 ans te bëgg IA — mu dugal dooleem yépp ci AINA ngir wajur yi am tontu bu leer, ci sa làkk, ci waxtu wu nekk.",
+    "bio": "Helminah, juddoo Madagascar, mi ngi def formation pédiatrie ci Dakar. Bës bu nekk dafay gis njaboot yu wut ay tontu te duñu ko am. Créatrice de contenu ak stratège digital depuis 4 ans te bëgg IA — mu dugal dooleem yépp ci AINA ngir wajur yi am tontu bu leer, ci sa làkk, ci waxtu wu nekk.",
     "links_title": "Fima mën a fekk",
     "website": "Site web",
     "instagram": "Instagram",
@@ -1034,7 +1034,7 @@
     "slide1_title": "Dalal ak jamm ci AINA",
     "slide1_body": "Sa assistant pédiatrique, bu pare 24h/24 ci sa làkk. Togg, vaksin, màgg — lépp ngir wér-gu-yaramu sa liir.",
     "slide2_title": "Nutrition locale & IA",
-    "slide2_body": "Bindal ingrédients yi nga yor ci kër gi, AINA dina la sossal togg bu méngoo ak atum sa liir. Dugub, manioc, mangue — lekku sunu réew, du lekk ci téere yi.",
+    "slide2_body": "Bindal ingrédients yi nga yor ci kër gi, AINA dina la sossal togg bu méngoo ak atum sa liir. Dugub, ñambi, mangue — lekku sunu réew, du lekk ci téere yi.",
     "slide3_title": "AINA IA — sa pédiatre ci sa poche",
     "slide3_body": "Laajal laaj yu la soxal, yónnee photo. AINA dina la gindi, waaye du def diagnostic. Ci Wolof, Malgache, Français walla Anglais.",
     "next": "Kanami →",
